@@ -7,25 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        
         .card-shadow { box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        
+        /* REVISI: Set ke 0 agar tidak ada celah sebelum header dimuat */
+        #header-placeholder { min-height: 0; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
 
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-extrabold text-[#1A2A6C]">SMPN 110 JAKARTA</h1>
-            <div class="flex space-x-6 font-semibold text-sm">
-                <a href="index.html" class="hover:text-yellow-600 transition">Beranda</a>
-                <a href="informasi.html" class="hover:text-yellow-600 transition">Informasi</a>
-                <a href="guru.html" class="text-yellow-600 border-b-2 border-yellow-500 pb-1">GTK</a>
-                <a href="galeri.html" class="hover:text-yellow-600 transition">Galeri</a>
-            </div>
-        </div>
-    </nav>
+    <div id="header-placeholder"></div>
 
-    <header class="bg-[#1A2A6C] py-20 text-white text-center relative overflow-hidden">
+    <header class="bg-[#1A2A6C] pt-10 pb-20 text-white text-center relative overflow-hidden mt-0">
         <div class="absolute inset-0 opacity-10">
             <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <circle cx="10" cy="10" r="20" fill="white"/>
@@ -49,79 +43,51 @@
     </section>
 
     <section class="py-20 container mx-auto px-6">
-        <div id="loading-state" class="text-center py-20">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1A2A6C] border-t-transparent"></div>
-            <p class="mt-4 font-bold text-slate-400 text-xs tracking-widest uppercase">Memuat Data GTK...</p>
-        </div>
-
-        <div id="error-state" class="hidden text-center py-20">
-            <p class="text-red-500 font-bold uppercase italic">Koneksi Gagal</p>
-            <p class="text-slate-400 text-[10px] mt-2 font-bold uppercase">Pastikan Google Apps Script Anda Aktif.</p>
-        </div>
-
         <div id="guru-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            </div>
+            <p class="col-span-full text-center text-slate-400 italic">Memuat data guru...</p>
+        </div>
+        
+        <div id="error-state" class="hidden text-center py-20">
+            <p class="text-red-500 font-bold uppercase italic">Gagal memuat data. Periksa koneksi internet.</p>
+        </div>
     </section>
 
-<footer class="bg-[#0f172a] text-white pt-10 pb-6">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                
-                <div class="space-y-4 text-center md:text-left">
-                    <h2 class="text-xl font-black tracking-tighter italic">SMPN 110 <span class="text-yellow-500">JAKARTA</span></h2>
-                    <p class="text-slate-400 text-xs leading-relaxed max-w-xs mx-auto md:mx-0">
-                        Mewujudkan lembaga pendidikan yang unggul dalam prestasi dan berkarakter.
-                    </p>
-                    <div class="flex justify-center md:justify-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-yellow-500 transition-all cursor-pointer group">
-                            <span class="text-[8px] font-bold group-hover:text-navy-900 uppercase">IG</span>
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-yellow-500 transition-all cursor-pointer group">
-                            <span class="text-[8px] font-bold group-hover:text-navy-900 uppercase">FB</span>
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-yellow-500 transition-all cursor-pointer group">
-                            <span class="text-[8px] font-bold group-hover:text-navy-900 uppercase">YT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-4 text-center md:text-left">
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">Navigasi</h3>
-                    <ul class="space-y-2 text-slate-300 text-xs font-semibold">
-                        <li><a href="index.html" class="hover:text-yellow-500 transition-all inline-block">Beranda Utama</a></li>
-                        <li><a href="guru.html" class="hover:text-yellow-500 transition-all inline-block">Daftar GTK</a></li>
-                        <li><a href="galeri.html" class="hover:text-yellow-500 transition-all inline-block">Galeri Aktivitas</a></li>
-                    </ul>
-                </div>
-
-                <div class="space-y-4 text-center md:text-left">
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">Kontak Kami</h3>
-                    <div class="space-y-2 text-slate-300 text-xs">
-                        <p class="flex items-center justify-center md:justify-start gap-2">
-                            <span class="text-yellow-500">📍</span> Petukangan Selatan, Jakarta Selatan
-                        </p>
-                        <p class="flex items-center justify-center md:justify-start gap-2">
-                            <span class="text-yellow-500">📞</span> (021) 7342288
-                        </p>
-                        <p class="flex items-center justify-center md:justify-start gap-2">
-                            <span class="text-yellow-500">✉️</span> smpn110jaksel@gmail.com
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-slate-500 text-[8px] font-black uppercase tracking-[0.2em]">
-                    © 2026 SMP Negeri 110 Jakarta.
-                </p>
-            </div>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script>
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
         let dataGuru = [];
+
+        async function includeLayout() {
+            try {
+                const [hRes, fRes] = await Promise.all([
+                    fetch('header.html'),
+                    fetch('footer.html')
+                ]);
+                
+                document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
+
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach(link => {
+                    link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                    if(link.getAttribute('href') === 'guru.html') {
+                        link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                    }
+                });
+            } catch(e) { console.error("Layout error:", e); }
+        }
+
+        async function loadGuru() {
+            try {
+                const res = await fetch(`${API_BASE}?sheet=Guru`);
+                dataGuru = await res.json();
+                displayGuru(dataGuru);
+            } catch(e) {
+                document.getElementById('error-state').classList.remove('hidden');
+                document.getElementById('guru-container').classList.add('hidden');
+            }
+        }
 
         function fixUrl(url) {
             if (!url) return 'https://via.placeholder.com/300x400?text=No+Photo';
@@ -132,48 +98,40 @@
             return url;
         }
 
-        async function loadGuru() {
-            const loading = document.getElementById('loading-state');
-            const error = document.getElementById('error-state');
-            try {
-                const res = await fetch(`${API_BASE}?sheet=Guru`);
-                dataGuru = await res.json();
-                loading.classList.add('hidden');
-                displayGuru(dataGuru);
-            } catch(e) {
-                loading.classList.add('hidden');
-                error.classList.remove('hidden');
-            }
-        }
-
         function displayGuru(list) {
             const container = document.getElementById('guru-container');
-            container.innerHTML = '';
-            list.forEach(guru => {
-                container.innerHTML += `
-                    <div class="guru-card group bg-white rounded-[32px] overflow-hidden card-shadow transition-all duration-500 hover:-translate-y-2 border border-slate-50">
-                        <div class="h-80 overflow-hidden relative bg-slate-100">
-                            <img src="${fixUrl(guru.foto)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                        <div class="p-6 text-center">
-                            <h3 class="font-black text-[#1A2A6C] text-md leading-tight mb-2 truncate whitespace-nowrap overflow-hidden" title="${guru.nama}">
-                                ${guru.nama}
-                            </h3>
-                            <p class="text-yellow-600 font-bold text-[9px] tracking-widest uppercase">${guru.jabatan || 'GTK'}</p>
-                        </div>
-                    </div>`;
-            });
+            if (list.length === 0) {
+                container.innerHTML = '<p class="text-center col-span-full text-gray-400 py-10">Nama tidak ditemukan.</p>';
+                return;
+            }
+
+            container.innerHTML = list.map(guru => `
+                <div class="guru-card group bg-white rounded-[32px] overflow-hidden card-shadow transition-all duration-500 hover:-translate-y-2 border border-slate-50">
+                    <div class="h-80 overflow-hidden relative bg-slate-100">
+                        <img src="${fixUrl(guru.foto)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${guru.nama}">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="font-black text-[#1A2A6C] text-md leading-tight mb-2 truncate" title="${guru.nama}">
+                            ${guru.nama}
+                        </h3>
+                        <p class="text-yellow-600 font-bold text-[9px] tracking-widest uppercase">${guru.jabatan || 'GTK'}</p>
+                    </div>
+                </div>`).join('');
         }
 
         function filterGuru() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            displayGuru(dataGuru.filter(g => 
+            const filtered = dataGuru.filter(g => 
                 g.nama.toLowerCase().includes(query) || 
                 (g.jabatan && g.jabatan.toLowerCase().includes(query))
-            ));
+            );
+            displayGuru(filtered);
         }
 
-        loadGuru();
+        window.onload = () => {
+            includeLayout();
+            loadGuru();
+        };
     </script>
 </body>
 </html>

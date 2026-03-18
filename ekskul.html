@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekskul - SMPN 110 Jakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .card-shadow { box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        
+        .filter-btn.active {
+            background-color: #eab308;
+            color: white;
+            border-color: #eab308;
+        }
+
+        /* REVISI: Set ke 0 agar tidak ada celah sebelum header dimuat */
+        #header-placeholder { min-height: 0; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-900">
+
+    <div id="header-placeholder"></div>
+
+    <header class="py-16 bg-[#1A2A6C] pt-10 pb-16 text-white text-center mt-0">
+        <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Ekstrakurikuler</h1>
+        <p class="text-yellow-400 font-bold tracking-[0.3em] text-xs uppercase mt-2">Wadah Kreativitas & Prestasi Siswa</p>
+    </header>
+
+    <section class="container mx-auto px-6 pt-10">
+        <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="filterKategori('Semua', this)" class="filter-btn active px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Semua</button>
+            <button onclick="filterKategori('Pencak Silat', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Pencak Silat</button>
+            <button onclick="filterKategori('Drumband', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Drumband</button>
+            <button onclick="filterKategori('Tari', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Tari</button>
+            <button onclick="filterKategori('Basket', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Basket</button>
+            <button onclick="filterKategori('Paskibra', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Paskibra</button>
+            <button onclick="filterKategori('Futsal', this)" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 text-xs font-black uppercase tracking-widest transition-all hover:border-yellow-500">Futsal</button>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 py-10">
+        <div id="container-foto-prestasi" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="skeleton aspect-square rounded-[35px]"></div>
+            <div class="skeleton aspect-square rounded-[35px]"></div>
+            <div class="skeleton aspect-square rounded-[35px]"></div>
+            <div class="skeleton aspect-square rounded-[35px]"></div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
+        let semuaData = [];
+
+        async function includeLayout() {
+            try {
+                const [hRes, fRes] = await Promise.all([
+                    fetch('header.html'),
+                    fetch('footer.html')
+                ]);
+                
+                document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
+
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach(link => {
+                    link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                    if(link.getAttribute('href') === 'ekskul.html') {
+                        link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                    }
+                });
+            } catch(e) { console.error("Layout load error", e); }
+        }
+
+        function fixUrl(url) {
+            if (!url) return 'https://via.placeholder.com/400x400?text=No+Photo';
+            if (url.includes('drive.google.com')) {
+                const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
+                return `https://drive.google.com/uc?export=view&id=${id}`;
+            }
+            return url;
+        }
+
+        async function loadFotoPrestasi() {
+            try {
+                const res = await fetch(`${API_BASE}?sheet=Prestasi`);
+                semuaData = await res.json();
+                displayFoto(semuaData.reverse());
+            } catch (e) {
+                document.getElementById('container-foto-prestasi').innerHTML = "<p class='col-span-full text-center text-red-500 font-bold'>Gagal memuat galeri.</p>";
+            }
+        }
+
+        function displayFoto(data) {
+            const container = document.getElementById('container-foto-prestasi');
+            if(data.length === 0) {
+                container.innerHTML = "<p class='col-span-full text-center text-slate-400 font-bold py-10 uppercase tracking-widest'>Belum ada foto.</p>";
+                return;
+            }
+
+            container.innerHTML = data.map(p => `
+                <div class="bg-white rounded-[35px] overflow-hidden card-shadow flex flex-col group border border-slate-100 transition-all hover:-translate-y-2">
+                    <div class="relative aspect-square overflow-hidden bg-slate-100">
+                        <img src="${fixUrl(p.url_foto)}" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                             alt="${p.judul}">
+                    </div>
+                    <div class="p-4 text-center bg-white">
+                        <h3 class="font-black text-[#1A2A6C] text-[10px] md:text-xs uppercase leading-tight mb-1 truncate px-2">
+                            ${p.judul || 'Aktivitas Siswa'}
+                        </h3>
+                        <p class="text-[8px] text-yellow-600 font-bold uppercase tracking-widest">${p.kategori || 'Kegiatan'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterKategori(kategori, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (kategori === 'Semua') {
+                displayFoto(semuaData);
+            } else {
+                const hasilFilter = semuaData.filter(item => 
+                    item.kategori && item.kategori.toLowerCase() === kategori.toLowerCase()
+                );
+                displayFoto(hasilFilter);
+            }
+        }
+
+        window.onload = () => {
+            includeLayout();
+            loadFotoPrestasi();
+        };
+    </script>
+</body>
+</html>
