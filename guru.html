@@ -11,8 +11,11 @@
         
         .card-shadow { box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
         
-        /* REVISI: Set ke 0 agar tidak ada celah sebelum header dimuat */
+        /* Menghilangkan celah putih di atas sebelum navigasi muncul */
         #header-placeholder { min-height: 0; }
+        
+        /* Mencegah konten melompat saat data muncul */
+        #guru-container { min-height: 60vh; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
@@ -44,11 +47,10 @@
 
     <section class="py-20 container mx-auto px-6">
         <div id="guru-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <p class="col-span-full text-center text-slate-400 italic">Memuat data guru...</p>
-        </div>
+            </div>
         
         <div id="error-state" class="hidden text-center py-20">
-            <p class="text-red-500 font-bold uppercase italic">Gagal memuat data. Periksa koneksi internet.</p>
+            <p class="text-red-500 font-bold uppercase italic">Gagal memuat data terbaru.</p>
         </div>
     </section>
 
@@ -58,6 +60,7 @@
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
         let dataGuru = [];
 
+        // FUNGSI 1: Memanggil Layout (Header & Footer)
         async function includeLayout() {
             try {
                 const [hRes, fRes] = await Promise.all([
@@ -68,24 +71,40 @@
                 document.getElementById('header-placeholder').innerHTML = await hRes.text();
                 document.getElementById('footer-placeholder').innerHTML = await fRes.text();
 
+                // Menandai menu GTK aktif
                 const links = document.querySelectorAll('.nav-link');
                 links.forEach(link => {
-                    link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
                     if(link.getAttribute('href') === 'guru.html') {
                         link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
                     }
                 });
-            } catch(e) { console.error("Layout error:", e); }
+            } catch(e) { console.error("Gagal memuat layout eksternal."); }
         }
 
+        // FUNGSI 2: Mengambil Data Guru dengan Sistem Cache (Anti-Loading)
         async function loadGuru() {
-            try {
-                const res = await fetch(`${API_BASE}?sheet=Guru`);
-                dataGuru = await res.json();
+            const cacheKey = 'cache_data_guru';
+            const cachedData = localStorage.getItem(cacheKey);
+
+            // Tampilkan data dari cache terlebih dahulu jika ada
+            if (cachedData) {
+                dataGuru = JSON.parse(cachedData);
                 displayGuru(dataGuru);
+            }
+
+            try {
+                // Ambil data terbaru dari Google Sheets di latar belakang
+                const res = await fetch(`${API_BASE}?sheet=Guru`);
+                const newData = await res.json();
+                
+                // Jika data berubah, simpan ke cache dan perbarui tampilan
+                if (JSON.stringify(newData) !== cachedData) {
+                    localStorage.setItem(cacheKey, JSON.stringify(newData));
+                    dataGuru = newData;
+                    displayGuru(dataGuru);
+                }
             } catch(e) {
-                document.getElementById('error-state').classList.remove('hidden');
-                document.getElementById('guru-container').classList.add('hidden');
+                if (!cachedData) document.getElementById('error-state').classList.remove('hidden');
             }
         }
 
@@ -101,7 +120,7 @@
         function displayGuru(list) {
             const container = document.getElementById('guru-container');
             if (list.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-gray-400 py-10">Nama tidak ditemukan.</p>';
+                container.innerHTML = '<p class="text-center col-span-full text-gray-400 py-10">Data tidak ditemukan.</p>';
                 return;
             }
 
@@ -128,6 +147,7 @@
             displayGuru(filtered);
         }
 
+        // Jalankan fungsi
         window.onload = () => {
             includeLayout();
             loadGuru();

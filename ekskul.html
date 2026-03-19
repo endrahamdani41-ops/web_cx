@@ -9,17 +9,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
 
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
         .card-shadow { box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
         
         .filter-btn.active {
@@ -28,17 +17,22 @@
             border-color: #eab308;
         }
 
-        /* REVISI: Set ke 0 agar tidak ada celah sebelum header dimuat */
+        /* Menghilangkan celah putih di atas sebelum navigasi dimuat */
         #header-placeholder { min-height: 0; }
+        
+        /* Mencegah konten melompat saat data muncul */
+        #container-foto-prestasi { min-height: 50vh; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
 
     <div id="header-placeholder"></div>
 
-    <header class="py-16 bg-[#1A2A6C] pt-10 pb-16 text-white text-center mt-0">
-        <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Ekstrakurikuler</h1>
-        <p class="text-yellow-400 font-bold tracking-[0.3em] text-xs uppercase mt-2">Wadah Kreativitas & Prestasi Siswa</p>
+    <header class="bg-[#1A2A6C] pt-10 pb-16 text-white text-center mt-0 relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Ekstrakurikuler</h1>
+            <p class="text-yellow-400 font-bold tracking-[0.3em] text-xs uppercase mt-2">Wadah Kreativitas & Prestasi Siswa</p>
+        </div>
     </header>
 
     <section class="container mx-auto px-6 pt-10">
@@ -55,11 +49,7 @@
 
     <main class="container mx-auto px-6 py-10">
         <div id="container-foto-prestasi" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="skeleton aspect-square rounded-[35px]"></div>
-            <div class="skeleton aspect-square rounded-[35px]"></div>
-            <div class="skeleton aspect-square rounded-[35px]"></div>
-            <div class="skeleton aspect-square rounded-[35px]"></div>
-        </div>
+            </div>
     </main>
 
     <div id="footer-placeholder"></div>
@@ -80,12 +70,11 @@
 
                 const links = document.querySelectorAll('.nav-link');
                 links.forEach(link => {
-                    link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
                     if(link.getAttribute('href') === 'ekskul.html') {
                         link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
                     }
                 });
-            } catch(e) { console.error("Layout load error", e); }
+            } catch(e) { console.error("Gagal memuat layout."); }
         }
 
         function fixUrl(url) {
@@ -97,20 +86,37 @@
             return url;
         }
 
+        // Fungsi Anti-Loading dengan Cache
         async function loadFotoPrestasi() {
+            const cacheKey = 'cache_data_ekskul';
+            const cachedData = localStorage.getItem(cacheKey);
+
+            if (cachedData) {
+                semuaData = JSON.parse(cachedData);
+                displayFoto(semuaData);
+            }
+
             try {
                 const res = await fetch(`${API_BASE}?sheet=Prestasi`);
-                semuaData = await res.json();
-                displayFoto(semuaData.reverse());
+                const newData = await res.json();
+                const reversedData = newData.reverse();
+                
+                if (JSON.stringify(reversedData) !== cachedData) {
+                    localStorage.setItem(cacheKey, JSON.stringify(reversedData));
+                    semuaData = reversedData;
+                    displayFoto(semuaData);
+                }
             } catch (e) {
-                document.getElementById('container-foto-prestasi').innerHTML = "<p class='col-span-full text-center text-red-500 font-bold'>Gagal memuat galeri.</p>";
+                if (!cachedData) {
+                    document.getElementById('container-foto-prestasi').innerHTML = "<p class='col-span-full text-center text-red-500 font-bold'>Gagal memuat galeri.</p>";
+                }
             }
         }
 
         function displayFoto(data) {
             const container = document.getElementById('container-foto-prestasi');
             if(data.length === 0) {
-                container.innerHTML = "<p class='col-span-full text-center text-slate-400 font-bold py-10 uppercase tracking-widest'>Belum ada foto.</p>";
+                container.innerHTML = "<p class='col-span-full text-center text-slate-400 py-10 uppercase tracking-widest font-bold'>Belum ada foto.</p>";
                 return;
             }
 

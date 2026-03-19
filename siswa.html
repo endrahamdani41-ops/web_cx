@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Siswa | SMPN 110 Jakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .profile-gradient { background: linear-gradient(135deg, #1A2A6C 0%, #253a8c 100%); }
+        .photo-ratio { aspect-ratio: 3 / 4; }
+    </style>
+</head>
+<body class="text-slate-900 leading-relaxed">
+
+    <div id="header-placeholder"></div>
+
+    <main class="min-h-screen pb-20">
+        <div class="profile-gradient h-72 w-full absolute top-0 left-0 z-0"></div>
+
+        <div class="container mx-auto px-6 relative z-10 pt-32">
+            <div class="max-w-5xl mx-auto">
+                
+                <div class="glass-card rounded-[40px] shadow-2xl overflow-hidden border border-slate-100 mb-8">
+                    <div class="md:flex">
+                        
+                        <div class="md:w-1/3 bg-slate-50/50 p-10 flex flex-col items-center border-r border-slate-100">
+                            <div class="relative mb-6">
+                                <div id="photo-container-large" class="w-40 h-40 rounded-full shadow-2xl overflow-hidden border-4 border-white bg-yellow-400 flex items-center justify-center transform rotate-2 hover:rotate-0 transition-all duration-300">
+                                    <span id="initial-name" class="text-6xl font-black text-[#1A2A6C] opacity-30">?</span>
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 bg-green-500 w-7 h-7 rounded-full border-4 border-white shadow-lg"></div>
+                            </div>
+
+                            <h2 id="display-nama" class="text-xl font-black text-[#1A2A6C] text-center uppercase italic tracking-tighter leading-tight">Memuat...</h2>
+                            <p id="display-nis" class="text-xs font-bold text-slate-400 mt-2 tracking-[0.2em]">NIS: --</p>
+                            
+                            <div class="mt-10 pt-8 border-t border-slate-200 w-full space-y-4">
+                                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                    <span>Status Siswa</span>
+                                    <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[9px]">Aktif</span>
+                                </div>
+                                <button onclick="logout()" class="w-full py-3 px-6 bg-red-50 text-red-500 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2">
+                                    🚪 KELUAR SISTEM
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="md:w-2/3 p-10 md:p-14">
+                            <div class="flex flex-col md:flex-row gap-10">
+                                <div class="flex-grow space-y-8">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-600">Informasi Akademik</h3>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png" class="h-8 opacity-20">
+                                    </div>
+
+                                    <div class="space-y-6">
+                                        <div class="group">
+                                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Nama Lengkap Siswa</label>
+                                            <p id="detail-nama" class="text-xl font-bold text-[#1A2A6C]">--</p>
+                                        </div>
+                                        <div class="group">
+                                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Nomor Induk Siswa (NIS)</label>
+                                            <p id="detail-nis" class="text-xl font-bold text-[#1A2A6C]">--</p>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Tahun Ajaran</label>
+                                                <p class="font-bold text-[#1A2A6C]">2025/2026</p>
+                                            </div>
+                                            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Sekolah</label>
+                                                <p class="font-bold text-[#1A2A6C]">SMPN 110</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="md:w-48 flex-shrink-0">
+                                    <div class="bg-white p-4 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center">
+                                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-3 text-center border-b pb-2 w-full">Foto Resmi</label>
+                                        <div id="photo-card-frame" class="w-full photo-ratio rounded-2xl overflow-hidden bg-slate-100 border flex items-center justify-center">
+                                            <span class="text-[10px] text-slate-400 font-semibold p-4 text-center">Tanpa Foto</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-12 p-6 bg-yellow-50 rounded-[2rem] border border-yellow-100 flex items-start gap-4">
+                                <div class="text-3xl">✨</div>
+                                <div>
+                                    <p class="text-[10px] font-black text-yellow-700 uppercase tracking-widest">Pesan Motivasi untuk <span id="pesan-nama">Siswa</span></p>
+                                    <p class="text-sm italic text-yellow-800 font-medium mt-1">"Kunci keberhasilan adalah kedisiplinan dan rasa ingin tahu yang tiada henti."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
+
+        function fixUrl(url) {
+            if (!url) return '';
+            if (url.includes('drive.google.com')) {
+                const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
+                return `https://drive.google.com/uc?export=view&id=${id}`;
+            }
+            return url;
+        }
+
+        async function loadStudentData() {
+            const namaSiswa = localStorage.getItem('namaSiswa');
+            const nis = localStorage.getItem('nisSiswa');
+
+            if (!nis) { location.href = 'index.html'; return; }
+
+            // Tampilkan data teks segera dari localStorage
+            document.getElementById('display-nama').innerText = namaSiswa;
+            document.getElementById('detail-nama').innerText = namaSiswa;
+            document.getElementById('display-nis').innerText = "NIS: " + nis;
+            document.getElementById('detail-nis').innerText = nis;
+            document.getElementById('initial-name').innerText = namaSiswa.charAt(0).toUpperCase();
+            document.getElementById('pesan-nama').innerText = namaSiswa.split(' ')[0];
+
+            // Ambil data lengkap (termasuk foto) dari Google Sheets
+            try {
+                const res = await fetch(`${API_BASE}?sheet=Siswa`);
+                const data = await res.json();
+                const siswa = data.find(s => s.nis.toString() === nis);
+
+                if (siswa && siswa.url_foto) {
+                    const fotoUrl = fixUrl(siswa.url_foto);
+                    const imgHtml = `<img src="${fotoUrl}" class="w-full h-full object-cover">`;
+                    document.getElementById('photo-container-large').innerHTML = imgHtml;
+                    document.getElementById('photo-card-frame').innerHTML = imgHtml;
+                }
+            } catch(e) { console.error("Gagal memuat foto."); }
+        }
+
+        function logout() { localStorage.clear(); location.href = 'index.html'; }
+
+        async function includeLayout() {
+            try {
+                const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
+                document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
+            } catch (e) {}
+        }
+
+        window.onload = () => { loadStudentData(); includeLayout(); };
+    </script>
+</body>
+</html>

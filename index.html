@@ -8,8 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
         
+        /* Menghilangkan celah putih di atas agar hero menempel ke navigasi */
+        #header-placeholder { min-height: 0; }
+
         #hero-section {
             position: relative;
             height: 80vh;
@@ -18,6 +21,7 @@
             justify-content: center;
             overflow: hidden;
             background-color: #1A2A6C;
+            margin-top: 0;
         }
 
         .slide {
@@ -50,6 +54,16 @@
 
         .hero-content { position: relative; z-index: 2; }
         .glow-hover:hover { transform: translateY(-5px); transition: 0.3s; }
+
+        /* Menghilangkan panah angka (spinner bawaan) pada input NIS */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
@@ -60,8 +74,8 @@
         <div id="slide-container" class="absolute inset-0 w-full h-full"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content text-center px-6 text-white">
-            <h1 class="text-5xl md:text-7xl font-black mb-4 drop-shadow-lg italic uppercase">SMPN 110 Jakarta</h1>
-            <p class="text-lg md:text-xl italic opacity-90">"Terwujudnya insan yang religius, cerdas, dan mandiri"</p>
+            <h1 class="text-5xl md:text-7xl font-black mb-4 drop-shadow-lg italic uppercase tracking-tighter">SMPN 110 Jakarta</h1>
+            <p class="text-lg md:text-xl italic opacity-90 font-medium">"Terwujudnya insan yang religius, cerdas, dan mandiri"</p>
         </div>
     </header>
 
@@ -69,20 +83,20 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div onclick="openModalLogin()" class="glow-hover bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500 cursor-pointer group transition-all">
                 <h3 class="text-4xl font-black text-[#1A2A6C]">500+</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase mt-1">Siswa</p>
+                <p class="text-gray-500 font-bold text-[10px] uppercase mt-1 tracking-widest">Siswa</p>
                 <span class="text-[10px] text-blue-600 font-bold mt-4 block group-hover:underline">Akses Data Siswa →</span>
             </div>
             <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
                 <h3 class="text-4xl font-black text-[#1A2A6C]">45</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase">GTK</p>
+                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">GTK</p>
             </div>
             <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
                 <h3 class="text-4xl font-black text-[#1A2A6C]">18</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase">Rombel</p>
+                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">Rombel</p>
             </div>
             <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
                 <h3 class="text-4xl font-black text-[#1A2A6C]">20+</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase">Prestasi</p>
+                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">Prestasi</p>
             </div>
         </div>
     </section>
@@ -100,21 +114,25 @@
                 </div>
             </div>
             <div class="w-full md:w-2/3 mt-12 md:mt-0 text-center md:text-left">
-                <h2 class="text-4xl font-black text-[#1A2A6C] mb-6 tracking-tighter">Sambutan Kepala Sekolah</h2>
+                <h2 class="text-4xl font-black text-[#1A2A6C] mb-6 tracking-tighter uppercase italic">Sambutan Kepala Sekolah</h2>
                 <div class="h-1 w-20 bg-yellow-400 mb-8 rounded-full mx-auto md:mx-0"></div>
-                <p id="teks-sambutan" class="text-gray-600 leading-relaxed italic text-lg font-medium tracking-tight">Menghubungkan...</p>
+                <p id="teks-sambutan" class="text-gray-600 leading-relaxed italic text-lg font-medium tracking-tight">Menghubungkan ke server...</p>
             </div>
         </div>
     </section>
 
     <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden flex items-center justify-center z-[100] p-6">
         <div class="bg-white w-full max-w-[380px] rounded-[40px] shadow-2xl p-10 relative text-center">
-            <button onclick="closeModalLogin()" class="absolute top-6 right-6 text-slate-300 hover:text-slate-500">✕</button>
-            <h2 class="text-2xl font-black text-[#1A2A6C] mb-8 uppercase italic">Login Siswa</h2>
+            <button onclick="closeModalLogin()" class="absolute top-6 right-6 text-slate-300 hover:text-slate-500 transition-colors">✕</button>
+            <h2 class="text-2xl font-black text-[#1A2A6C] mb-8 uppercase italic tracking-tight">Login Siswa</h2>
             <input type="number" id="input-nis" placeholder="Masukkan NIS..." 
-                   class="w-full px-6 py-4 bg-slate-50 border rounded-2xl mb-4 text-center font-bold outline-none focus:ring-2 focus:ring-yellow-400">
-            <button onclick="verifikasiNIS()" id="btn-login" class="w-full py-4 bg-[#1A2A6C] text-white rounded-2xl font-bold hover:bg-yellow-500 shadow-lg uppercase transition-all">Verifikasi</button>
-            <p id="error-msg" class="text-red-500 text-[10px] mt-4 font-bold hidden italic">NIS Tidak Terdaftar!</p>
+                   class="w-full px-6 py-4 bg-slate-50 border rounded-2xl mb-4 text-center font-bold outline-none focus:ring-2 focus:ring-yellow-400 transition-all">
+            
+            <button onclick="verifikasiNIS()" id="btn-login" class="w-full py-4 bg-[#1A2A6C] text-white rounded-2xl font-bold hover:bg-[#253a8c] shadow-lg uppercase transition-all active:scale-95">
+                Verifikasi
+            </button>
+            
+            <p id="error-msg" class="text-red-500 text-[10px] mt-4 font-bold hidden italic uppercase tracking-wider">NIS Tidak Terdaftar!</p>
         </div>
     </div>
 
@@ -124,29 +142,23 @@
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
         let slides = [];
 
-        // --- FUNGSI BARU UNTUK MEMANGGIL LAYOUT ---
         async function includeLayout() {
             try {
-                // Fetch Header
-                const hRes = await fetch('header.html');
-                const hData = await hRes.text();
-                document.getElementById('header-placeholder').innerHTML = hData;
+                const [hRes, fRes] = await Promise.all([
+                    fetch('header.html'),
+                    fetch('footer.html')
+                ]);
+                
+                document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
 
-                // Tandai Menu Beranda Aktif
                 const links = document.querySelectorAll('.nav-link');
                 links.forEach(link => {
                     if(link.getAttribute('href') === 'index.html') {
                         link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
                     }
                 });
-
-                // Fetch Footer
-                const fRes = await fetch('footer.html');
-                const fData = await fRes.text();
-                document.getElementById('footer-placeholder').innerHTML = fData;
-            } catch (err) {
-                console.warn("Gagal memuat header/footer. Pastikan file ada dan gunakan Live Server.");
-            }
+            } catch (err) { console.warn("Layout tidak ditemukan."); }
         }
 
         function fixUrl(url) {
@@ -158,15 +170,14 @@
             return url;
         }
 
-        // --- INISIALISASI ---
         function initApp() {
-            includeLayout(); // Memanggil layout header/footer
-            
+            includeLayout();
             const cachedHero = localStorage.getItem('hero_data');
             if (cachedHero) {
                 renderData(JSON.parse(cachedHero));
             }
             loadFromSheets();
+            setTimeout(prefetchOtherPages, 2000);
         }
 
         async function loadFromSheets() {
@@ -175,7 +186,7 @@
                 const data = await res.json();
                 localStorage.setItem('hero_data', JSON.stringify(data));
                 renderData(data);
-            } catch(e) { console.error("API Error"); }
+            } catch(e) { console.error("Gagal mengambil data."); }
         }
 
         function renderData(data) {
@@ -195,6 +206,8 @@
 
         function initSlideshow(urls) {
             const container = document.getElementById('slide-container');
+            container.innerHTML = "";
+            slides = [];
             urls.forEach((url, i) => {
                 const img = new Image();
                 img.src = url;
@@ -202,6 +215,7 @@
                 container.appendChild(img);
                 slides.push(img);
             });
+            
             if (slides.length > 1) {
                 let current = 0;
                 setInterval(() => {
@@ -217,8 +231,12 @@
             if(!nis) return;
             
             const btn = document.getElementById('btn-login');
-            btn.innerText = "MENGECEK...";
+            const errorMsg = document.getElementById('error-msg');
+            
+            errorMsg.classList.add('hidden');
+            btn.innerText = "MENGECEK..."; 
             btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
 
             try {
                 const res = await fetch(`${API_BASE}?sheet=Siswa`);
@@ -228,22 +246,34 @@
                 if(siswa) {
                     localStorage.setItem('namaSiswa', siswa.nama);
                     localStorage.setItem('nisSiswa', siswa.nis);
-                    location.href = 'informasi.html'; // Sesuaikan tujuan link jika perlu
+                    location.href = 'siswa.html';
                 } else {
-                    document.getElementById('error-msg').classList.remove('hidden');
+                    errorMsg.classList.remove('hidden');
                     btn.innerText = "VERIFIKASI";
                     btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
                 }
             } catch(e) { 
-                alert("Koneksi Error"); 
+                alert("Gangguan koneksi."); 
+                btn.innerText = "VERIFIKASI";
                 btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
             }
+        }
+
+        function prefetchOtherPages() {
+            const sheets = ['Guru', 'Prestasi'];
+            sheets.forEach(sh => {
+                fetch(`${API_BASE}?sheet=${sh}`).then(r => r.json()).then(d => {
+                    const key = sh === 'Guru' ? 'cache_data_guru' : 'cache_data_ekskul';
+                    localStorage.setItem(key, JSON.stringify(d));
+                }).catch(()=>{});
+            });
         }
 
         function openModalLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
         function closeModalLogin() { document.getElementById('modal-login').classList.add('hidden'); }
 
-        // Mulai aplikasi
         initApp();
     </script>
 </body>
