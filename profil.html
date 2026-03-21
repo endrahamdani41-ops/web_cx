@@ -32,7 +32,6 @@
             cursor: pointer;
         }
 
-        /* REVISI: Set ke 0 agar tidak ada celah putih sebelum navigasi dimuat */
         #header-placeholder { min-height: 0; }
     </style>
 </head>
@@ -40,61 +39,84 @@
 
     <div id="header-placeholder"></div>
 
-    <header class="bg-[#1A2A6C] pt-10 pb-24 text-white text-center relative overflow-hidden mt-0">
+    <header class="bg-[#1A2A6C] py-16 md:py-20 text-white text-center relative overflow-hidden mt-0">
         <div class="absolute inset-0 opacity-10">
             <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <circle cx="10" cy="10" r="20" fill="white"/>
                 <circle cx="90" cy="80" r="25" fill="white"/>
             </svg>
         </div>
-        <div class="relative z-10">
-            <h1 class="text-4xl md:text-6xl font-black tracking-tighter italic uppercase">Profil Sekolah</h1>
-            <p class="text-yellow-400 font-bold tracking-[0.3em] text-xs uppercase mt-4">Mengenal Lebih Dekat SMPN 110 Jakarta</p>
+        
+        <div class="relative z-10 container mx-auto px-6 flex flex-col items-center justify-center">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tighter italic uppercase leading-none mb-3">
+                Profil <span class="text-white">Sekolah</span>
+            </h1>
+            <p class="text-yellow-400 font-bold tracking-[0.3em] text-[10px] md:text-xs uppercase opacity-90">
+                Mengenal Lebih Dekat SMPN 110 Jakarta
+            </p>
         </div>
     </header>
 
     <main class="container mx-auto px-6 py-20">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             
+            <div class="glow-card p-10 rounded-[45px] flex flex-col justify-between">
+                <div>
+                    <div class="text-5xl mb-6">📖</div>
+                    <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Sejarah</h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        SMP Negeri 110, dengan NPSN 20102527, merupakan sekolah menengah pertama negeri yang berlokasi 
+                        di Jl. Kemajuan No. 48 RT. 006 RW. 004, Petukangan Selatan, Kecamatan Pesanggrahan, Jakarta Selatan. 
+                        Sekolah ini berdiri sejak tahun 1978 dan telah diakreditasi A dengan nomor 255/BAP-SM/DKI/2017. 
+                    </p>
+                </div>
+            </div>
+
+            <div class="glow-card p-10 rounded-[45px] lg:col-span-2">
+                <div class="flex flex-col md:flex-row gap-10 h-full items-stretch">
+                    <div class="md:w-1/2 flex flex-col justify-center">
+                        <div class="text-5xl mb-6">👁️</div>
+                        <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Visi</h2>
+                        <p class="text-slate-500 text-lg italic leading-relaxed font-medium">
+                            "Terwujudnya insan yang religius, cerdas, mandiri, dan berwawasan lingkungan."
+                        </p>
+                    </div>
+                    
+                    <div class="md:w-1/2 border-t md:border-t-0 md:border-l border-slate-100 pt-8 md:pt-0 md:pl-10 flex flex-col justify-center">
+                        <div class="text-5xl mb-6">🎯</div>
+                        <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Misi</h2>
+                        <ul class="text-slate-500 text-sm space-y-3 font-semibold list-disc ml-4">
+                            <li>Meningkatkan ketaqwaan terhadap Tuhan YME.</li>
+                            <li>Melaksanakan pembelajaran efektif & inovatif.</li>
+                            <li>Mengembangkan potensi diri siswa secara mandiri.</li>
+                            <li>Menumbuhkan budaya peduli lingkungan.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="glow-card p-10 rounded-[45px]">
                 <div class="text-5xl mb-6">📜</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Sejarah</h2>
-                <p class="text-slate-500 text-sm leading-relaxed">Berdiri sebagai institusi yang berdedikasi mencetak generasi unggul di Jakarta Selatan melalui pendidikan berkualitas dan pembentukan karakter sejak dini.</p>
-            </div>
-
-            <div class="glow-card p-10 rounded-[45px]">
-                <div class="text-5xl mb-6">🎯</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Visi</h2>
-                <p class="text-slate-500 text-sm italic leading-relaxed">"Terwujudnya insan yang religius, cerdas, mandiri, dan berwawasan lingkungan."</p>
-            </div>
-
-            <div class="glow-card p-10 rounded-[45px]">
-                <div class="text-5xl mb-6">🚀</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Misi</h2>
-                <ul class="text-slate-500 text-[11px] space-y-2 font-semibold list-disc ml-4">
-                    <li>Meningkatkan ketaqwaan terhadap Tuhan YME.</li>
-                    <li>Melaksanakan pembelajaran efektif & inovatif.</li>
-                    <li>Mengembangkan potensi diri siswa secara mandiri.</li>
-                    <li>Menumbuhkan budaya peduli lingkungan.</li>
-                </ul>
-            </div>
-
-            <div class="glow-card p-10 rounded-[45px]">
-                <div class="text-5xl mb-6">📚</div>
                 <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Kurikulum</h2>
-                <p class="text-slate-500 text-sm">Penerapan Kurikulum Merdeka secara penuh dengan fokus pada pengembangan karakter Projek P5.</p>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    Penerapan Kurikulum Merdeka secara penuh dengan fokus pada pengembangan karakter Projek P5.
+                </p>
             </div>
 
             <div class="glow-card p-10 rounded-[45px]">
                 <div class="text-5xl mb-6">🏫</div>
                 <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Fasilitas</h2>
-                <p class="text-slate-500 text-sm">Laboratorium komputer, Perpustakaan, Lapangan Olahraga, dan ruang kelas berbasis teknologi.</p>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    Laboratorium komputer, Perpustakaan, Lapangan Olahraga, dan ruang kelas berbasis teknologi.
+                </p>
             </div>
 
             <div class="glow-card p-10 rounded-[45px]">
-                <div class="text-5xl mb-6">🎨</div>
+                <div class="text-5xl mb-6">🏀</div>
                 <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Ekskul</h2>
-                <p class="text-slate-500 text-sm">Berbagai wadah kreativitas mulai dari Pramuka, Paskibra, Seni Tari, hingga klub olahraga.</p>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    Wadah kreativitas mulai dari Pramuka, Paskibra, Seni Tari, hingga berbagai klub olahraga.
+                </p>
             </div>
 
         </div>
@@ -113,7 +135,6 @@
                 document.getElementById('header-placeholder').innerHTML = await hRes.text();
                 document.getElementById('footer-placeholder').innerHTML = await fRes.text();
 
-                // Logika Menu Aktif
                 const links = document.querySelectorAll('.nav-link');
                 links.forEach(link => {
                     link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
@@ -125,7 +146,6 @@
                 console.error("Gagal memuat layout:", e); 
             }
         }
-
         window.onload = includeLayout;
     </script>
 </body>

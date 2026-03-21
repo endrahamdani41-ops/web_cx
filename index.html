@@ -4,24 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMPN 110 Jakarta | Unggul & Berkarakter</title>
-    <link rel="preconnect" href="https://i.ibb.co">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
         
-        /* Menghilangkan celah putih di atas agar hero menempel ke navigasi */
-        #header-placeholder { min-height: 0; }
-
         #hero-section {
             position: relative;
-            height: 80vh;
+            height: 85vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             background-color: #1A2A6C;
-            margin-top: 0;
         }
 
         .slide {
@@ -31,39 +26,38 @@
             height: 100%;
             object-fit: cover;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.2s ease-in-out;
             z-index: 0;
         }
 
-        .slide.active { opacity: 1; }
+        .slide.active { opacity: 0.75; }
 
         @keyframes slowZoom {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
 
-        .zoom-effect { animation: slowZoom 15s ease-in-out infinite; }
+        .zoom-effect { animation: slowZoom 20s linear infinite alternate; }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
             z-index: 1;
         }
 
         .hero-content { position: relative; z-index: 2; }
-        .glow-hover:hover { transform: translateY(-5px); transition: 0.3s; }
+        
+        .glow-hover {
+            transition: all 0.4s ease;
+        }
 
-        /* Menghilangkan panah angka (spinner bawaan) pada input NIS */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        .glow-hover:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.5);
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+
+        .news-card:hover .img-container img { transform: scale(1.05); }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
@@ -74,95 +68,105 @@
         <div id="slide-container" class="absolute inset-0 w-full h-full"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content text-center px-6 text-white">
-            <h1 class="text-5xl md:text-7xl font-black mb-4 drop-shadow-lg italic uppercase tracking-tighter">SMPN 110 Jakarta</h1>
-            <p class="text-lg md:text-xl italic opacity-90 font-medium">"Terwujudnya insan yang religius, cerdas, dan mandiri"</p>
+            <h1 class="text-5xl md:text-8xl font-black mb-4 drop-shadow-2xl italic tracking-tighter leading-none uppercase">
+                SMPN <span class="text-yellow-400">110</span> Jakarta
+            </h1>
+            <p class="text-lg md:text-2xl italic font-bold drop-shadow-md tracking-tight">
+                "Terwujudnya insan yang religius, cerdas, dan mandiri"
+            </p>
+            <div class="mt-10">
+                <a href="#berita" class="px-8 py-4 bg-yellow-500 text-black font-black tracking-widest rounded-2xl hover:bg-white transition-all duration-300 shadow-xl shadow-yellow-500/20 uppercase inline-block">
+                    Lihat Berita Terbaru
+                </a>
+            </div>
         </div>
     </header>
 
     <section class="relative z-20 py-16 container mx-auto px-6 -mt-24">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div onclick="openModalLogin()" class="glow-hover bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500 cursor-pointer group transition-all">
-                <h3 class="text-4xl font-black text-[#1A2A6C]">500+</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase mt-1 tracking-widest">Siswa</p>
-                <span class="text-[10px] text-blue-600 font-bold mt-4 block group-hover:underline">Akses Data Siswa →</span>
+            
+            <div onclick="openModalLogin()" class="glow-hover bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-yellow-500 cursor-pointer group transition-all duration-500">
+                <h3 class="text-5xl font-black text-[#1A2A6C]">600+</h3>
+                <p class="text-gray-500 font-bold text-[10px] mt-1 tracking-widest uppercase text-center">Siswa</p>
+                <span class="text-[10px] text-blue-600 font-bold mt-4 block group-hover:underline uppercase text-center">Login Siswa →</span>
             </div>
-            <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
-                <h3 class="text-4xl font-black text-[#1A2A6C]">45</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">GTK</p>
+
+            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-blue-600">
+                <h3 class="text-5xl font-black text-[#1A2A6C]">45</h3>
+                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">GTK</p>
             </div>
-            <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
-                <h3 class="text-4xl font-black text-[#1A2A6C]">18</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">Rombel</p>
+            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-yellow-500">
+                <h3 class="text-5xl font-black text-[#1A2A6C]">18</h3>
+                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">Rombel</p>
             </div>
-            <div class="bg-white p-8 rounded-[32px] shadow-xl text-center border-b-4 border-yellow-500">
-                <h3 class="text-4xl font-black text-[#1A2A6C]">20+</h3>
-                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-widest">Prestasi</p>
+            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-blue-600">
+                <h3 class="text-5xl font-black text-[#1A2A6C]">30+</h3>
+                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">Prestasi</p>
             </div>
         </div>
     </section>
 
-    <section id="sambutan" class="py-24 bg-white">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
-            <div class="w-full md:w-1/3 flex flex-col items-center">
-                <div class="relative group">
-                    <img id="foto-kepala-img" src="https://via.placeholder.com/400x500?text=Memuat..." 
-                         class="rounded-[40px] shadow-2xl w-full h-[450px] object-contain bg-gray-100 border-4 border-white transition-opacity duration-300">
-                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[90%] bg-white p-6 rounded-3xl shadow-xl text-center border border-slate-50">
-                        <h3 id="nama-kepala-text" class="text-md font-black text-[#1A2A6C] leading-tight italic">Memuat...</h3>
-                        <p class="text-[9px] font-bold text-gray-400 tracking-widest uppercase mt-2">Kepala Sekolah</p>
+    <section id="berita" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div class="text-center md:text-left">
+                    <h2 class="text-5xl font-black text-[#1A2A6C] tracking-tighter italic leading-none uppercase">Berita <span class="text-yellow-500">Terbaru</span></h2>
+                    <div class="h-2 w-24 bg-yellow-400 mt-4 rounded-full mx-auto md:mx-0"></div>
+                </div>
+                <a href="berita.html" class="text-[#1A2A6C] font-black tracking-widest text-xs border-b-2 border-[#1A2A6C] pb-1 hover:text-yellow-500 transition-all uppercase">Lihat Semua Berita</a>
+            </div>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
+        </div>
+    </section>
+
+    <section id="sambutan" class="py-12 bg-gray-50">
+        <div class="container-fluid px-4 md:px-10">
+            <div class="max-w-[1600px] mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row items-center p-3 md:p-6 border border-slate-100 gap-6">
+                <div class="w-full md:w-[30%] p-2"> 
+                    <div class="relative rounded-[30px] overflow-hidden shadow-xl aspect-[3/4] group border-4 border-gray-50 bg-slate-100">
+                        <img id="foto-kepala-img" src="" class="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1A2A6C]/90 via-transparent to-transparent pointer-events-none"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
+                            <h3 id="nama-kepala-text" class="text-base md:text-xl font-black text-white leading-tight italic tracking-tighter block truncate">Memuat...</h3>
+                            <div class="h-1 w-12 bg-yellow-400 mx-auto mt-2 rounded-full"></div>
+                            <p class="text-yellow-400 text-[10px] md:text-[11px] font-bold tracking-[0.3em] mt-2 uppercase text-center">Kepala Sekolah</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-full md:w-2/3 mt-12 md:mt-0 text-center md:text-left">
-                <h2 class="text-4xl font-black text-[#1A2A6C] mb-6 tracking-tighter uppercase italic">Sambutan Kepala Sekolah</h2>
-                <div class="h-1 w-20 bg-yellow-400 mb-8 rounded-full mx-auto md:mx-0"></div>
-                <p id="teks-sambutan" class="text-gray-600 leading-relaxed italic text-lg font-medium tracking-tight">Menghubungkan ke server...</p>
+                <div class="w-full md:w-[70%] px-6 md:px-12 py-2 flex flex-col justify-center">
+                    <div class="mb-5 text-center md:text-left">
+                        <span class="text-yellow-500 text-6xl font-serif opacity-20 leading-none">“</span>
+                        <h2 class="text-3xl md:text-4xl font-black text-[#1A2A6C] italic tracking-tighter -mt-10 leading-none uppercase">
+                            Sambutan <span class="text-yellow-500">Kepala Sekolah</span>
+                        </h2>
+                    </div>
+                    <p id="teks-sambutan" class="text-slate-600 text-lg md:text-xl leading-relaxed italic font-medium border-l-4 border-yellow-400 pl-8 py-2">Memuat pesan...</p>
+                </div>
             </div>
         </div>
     </section>
-
-    <div id="modal-login" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden flex items-center justify-center z-[100] p-6">
-        <div class="bg-white w-full max-w-[380px] rounded-[40px] shadow-2xl p-10 relative text-center">
-            <button onclick="closeModalLogin()" class="absolute top-6 right-6 text-slate-300 hover:text-slate-500 transition-colors">✕</button>
-            <h2 class="text-2xl font-black text-[#1A2A6C] mb-8 uppercase italic tracking-tight">Login Siswa</h2>
-            <input type="number" id="input-nis" placeholder="Masukkan NIS..." 
-                   class="w-full px-6 py-4 bg-slate-50 border rounded-2xl mb-4 text-center font-bold outline-none focus:ring-2 focus:ring-yellow-400 transition-all">
-            
-            <button onclick="verifikasiNIS()" id="btn-login" class="w-full py-4 bg-[#1A2A6C] text-white rounded-2xl font-bold hover:bg-[#253a8c] shadow-lg uppercase transition-all active:scale-95">
-                Verifikasi
-            </button>
-            
-            <p id="error-msg" class="text-red-500 text-[10px] mt-4 font-bold hidden italic uppercase tracking-wider">NIS Tidak Terdaftar!</p>
-        </div>
-    </div>
 
     <div id="footer-placeholder"></div>
     
     <script>
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
-        let slides = [];
+        let allNewsData = [];
+
+        // FUNGSI UNTUK LOGIN (MENGARAH KE LOGIN.HTML)
+        function openModalLogin() {
+            window.location.href = 'login.html';
+        }
 
         async function includeLayout() {
             try {
-                const [hRes, fRes] = await Promise.all([
-                    fetch('header.html'),
-                    fetch('footer.html')
-                ]);
-                
+                const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
                 document.getElementById('header-placeholder').innerHTML = await hRes.text();
                 document.getElementById('footer-placeholder').innerHTML = await fRes.text();
-
-                const links = document.querySelectorAll('.nav-link');
-                links.forEach(link => {
-                    if(link.getAttribute('href') === 'index.html') {
-                        link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
-                    }
-                });
-            } catch (err) { console.warn("Layout tidak ditemukan."); }
+            } catch (err) { console.warn("Layout missing."); }
         }
 
         function fixUrl(url) {
-            if (!url) return '';
+            if (!url) return 'https://via.placeholder.com/800x600?text=No+Image';
             if (url.includes('drive.google.com')) {
                 const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
                 return `https://drive.google.com/uc?export=view&id=${id}`;
@@ -170,109 +174,82 @@
             return url;
         }
 
-        function initApp() {
-            includeLayout();
-            const cachedHero = localStorage.getItem('hero_data');
-            if (cachedHero) {
-                renderData(JSON.parse(cachedHero));
-            }
-            loadFromSheets();
-            setTimeout(prefetchOtherPages, 2000);
+        function getKategoriColor(kat) {
+            if (!kat) return 'bg-slate-800 text-white';
+            const kategori = kat.toLowerCase().trim();
+            if (kategori === 'prestasi') return 'bg-yellow-400 text-black';
+            if (kategori === 'kegiatan') return 'bg-blue-600 text-white';
+            if (kategori === 'pengumuman') return 'bg-red-500 text-white';
+            return 'bg-slate-800 text-white';
         }
 
-        async function loadFromSheets() {
+        async function loadBerita() {
             try {
-                const res = await fetch(`${API_BASE}?sheet=Hero`);
-                const data = await res.json();
-                localStorage.setItem('hero_data', JSON.stringify(data));
-                renderData(data);
-            } catch(e) { console.error("Gagal mengambil data."); }
+                const res = await fetch(`${API_BASE}?sheet=Berita`);
+                allNewsData = await res.json();
+                const container = document.getElementById('news-container');
+                const latest = [...allNewsData].reverse().slice(0, 3);
+                
+                container.innerHTML = latest.map(item => {
+                    const originalIndex = allNewsData.indexOf(item);
+                    return `
+                    <div onclick="location.href='detail-berita.html?id=${originalIndex}'" class="news-card group cursor-pointer">
+                        <div class="img-container relative h-72 rounded-[40px] overflow-hidden mb-6 shadow-lg bg-slate-100 flex items-center justify-center">
+                            <img src="${fixUrl(item.url_foto)}" class="max-w-full max-h-full object-contain p-2 transition-transform duration-700">
+                            <div class="absolute top-6 left-6 ${getKategoriColor(item.kategori)} text-[10px] font-black px-4 py-2 rounded-xl tracking-widest z-10 shadow-lg uppercase">
+                                ${item.kategori}
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-black text-[#1A2A6C] italic leading-tight group-hover:text-yellow-600 transition-colors uppercase text-center">${item.judul}</h3>
+                        <p class="text-slate-500 text-sm mt-3 line-clamp-2 text-center">${item.ringkasan}</p>
+                    </div>
+                `}).join('');
+            } catch(e) { console.error("Berita gagal dimuat"); }
         }
 
-        function renderData(data) {
+        function renderHero(data) {
             const main = data.find(i => i.kunci === 'background_utama');
             if (main) {
                 document.getElementById('foto-kepala-img').src = fixUrl(main.foto_kepala);
                 document.getElementById('teks-sambutan').innerText = main.isi_sambutan;
                 document.getElementById('nama-kepala-text').innerText = main.nama_kepala;
             }
-
-            const container = document.getElementById('slide-container');
-            if (container.children.length === 0) {
-                const urls = data.filter(i => i.url_gambar).map(i => fixUrl(i.url_gambar));
-                initSlideshow(urls);
-            }
+            const urls = data.filter(i => i.url_gambar).map(i => fixUrl(i.url_gambar));
+            initSlideshow(urls);
         }
 
         function initSlideshow(urls) {
             const container = document.getElementById('slide-container');
             container.innerHTML = "";
-            slides = [];
-            urls.forEach((url, i) => {
-                const img = new Image();
+            let slides = urls.map((url, i) => {
+                const img = document.createElement('img');
                 img.src = url;
                 img.className = `slide zoom-effect ${i === 0 ? 'active' : ''}`;
                 container.appendChild(img);
-                slides.push(img);
+                return img;
             });
-            
+            let current = 0;
             if (slides.length > 1) {
-                let current = 0;
                 setInterval(() => {
-                    if(slides[current]) slides[current].classList.remove('active');
+                    slides[current].classList.remove('active');
                     current = (current + 1) % slides.length;
-                    if(slides[current]) slides[current].classList.add('active');
-                }, 5000);
+                    slides[current].classList.add('active');
+                }, 6000);
             }
         }
 
-        async function verifikasiNIS() {
-            const nis = document.getElementById('input-nis').value;
-            if(!nis) return;
-            
-            const btn = document.getElementById('btn-login');
-            const errorMsg = document.getElementById('error-msg');
-            
-            errorMsg.classList.add('hidden');
-            btn.innerText = "MENGECEK..."; 
-            btn.disabled = true;
-            btn.classList.add('opacity-70', 'cursor-not-allowed');
-
+        async function initApp() {
+            includeLayout();
+            const cachedData = localStorage.getItem('hero_data');
+            if (cachedData) renderHero(JSON.parse(cachedData));
+            loadBerita();
             try {
-                const res = await fetch(`${API_BASE}?sheet=Siswa`);
-                const data = await res.json();
-                const siswa = data.find(s => s.nis.toString() === nis);
-
-                if(siswa) {
-                    localStorage.setItem('namaSiswa', siswa.nama);
-                    localStorage.setItem('nisSiswa', siswa.nis);
-                    location.href = 'siswa.html';
-                } else {
-                    errorMsg.classList.remove('hidden');
-                    btn.innerText = "VERIFIKASI";
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
-                }
-            } catch(e) { 
-                alert("Gangguan koneksi."); 
-                btn.innerText = "VERIFIKASI";
-                btn.disabled = false;
-                btn.classList.remove('opacity-70', 'cursor-not-allowed');
-            }
+                const res = await fetch(`${API_BASE}?sheet=Hero`);
+                const newData = await res.json();
+                localStorage.setItem('hero_data', JSON.stringify(newData));
+                if (!cachedData) renderHero(newData);
+            } catch(e) {}
         }
-
-        function prefetchOtherPages() {
-            const sheets = ['Guru', 'Prestasi'];
-            sheets.forEach(sh => {
-                fetch(`${API_BASE}?sheet=${sh}`).then(r => r.json()).then(d => {
-                    const key = sh === 'Guru' ? 'cache_data_guru' : 'cache_data_ekskul';
-                    localStorage.setItem(key, JSON.stringify(d));
-                }).catch(()=>{});
-            });
-        }
-
-        function openModalLogin() { document.getElementById('modal-login').classList.remove('hidden'); }
-        function closeModalLogin() { document.getElementById('modal-login').classList.add('hidden'); }
 
         initApp();
     </script>

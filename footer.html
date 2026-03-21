@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <footer class="bg-[#050505] text-white pt-24 pb-12 relative overflow-hidden">
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[150px]"></div>
     <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-yellow-500/10 rounded-full blur-[150px]"></div>
@@ -6,25 +8,40 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
             
             <div class="lg:col-span-5 space-y-8">
-                <div>
-                    <h2 class="text-3xl font-black italic tracking-tighter uppercase leading-none flex items-center gap-3">
-                        <span class="bg-yellow-500 text-black px-2 py-1 rounded-lg not-italic text-2xl">110</span>
-                        <span>Jakarta</span>
-                    </h2>
-                    <p class="text-slate-500 font-bold text-[10px] tracking-[0.4em] uppercase mt-3 ml-1">Maju Bersama Raih Prestasi</p>
+<a href="index.html" class="flex items-center gap-4 group">
+            <div class="relative">
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md border border-slate-100 transform group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
+                         alt="Logo SMPN 110" 
+                         class="w-10 h-10 object-contain">
                 </div>
+            </div>
+            
+            <div class="flex flex-col">
+                <h1 class="text-xl font-black text-[#1A2A6C] tracking-tighter italic uppercase leading-none">
+                    SMPN 110 <span class="text-yellow-500">Jakarta</span>
+                </h1>
+                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Maju Bersama Raih Prestasi</p>
+            </div>
+        </a>
                 <p class="text-slate-400 text-base leading-relaxed max-w-md">
                     Berkomitmen untuk menciptakan ekosistem belajar yang adaptif terhadap teknologi dengan tetap menjunjung tinggi nilai-nilai religius dan karakter bangsa.
                 </p>
+                
                 <div class="flex gap-4">
-                    <a href="https://www.instagram.com/smpn_110jkt/" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
-                        <span class="text-[10px] font-black uppercase">Ig</span>
+                    <a href="https://www.instagram.com/smpn_110jkt/" target="_blank" 
+                       class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#E1306C] hover:border-[#E1306C] transition-all duration-500 group shadow-lg">
+                        <i class="fa-brands fa-instagram text-xl group-hover:scale-110 transition-transform"></i>
                     </a>
-                    <a href="https://www.facebook.com/groups/116500428420838/" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
-                        <span class="text-[10px] font-black uppercase">Fb</span>
+
+                    <a href="https://www.facebook.com/groups/116500428420838/" target="_blank" 
+                       class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-500 group shadow-lg">
+                        <i class="fa-brands fa-facebook-f text-lg group-hover:scale-110 transition-transform"></i>
                     </a>
-                    <a href="https://www.youtube.com/@smpn110jkt4" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
-                        <span class="text-[10px] font-black uppercase">Yt</span>
+
+                    <a href="https://www.youtube.com/@smpn110jkt4" target="_blank" 
+                       class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#FF0000] hover:border-[#FF0000] transition-all duration-500 group shadow-lg">
+                        <i class="fa-brands fa-youtube text-lg group-hover:scale-110 transition-transform"></i>
                     </a>
                 </div>
             </div>
@@ -51,17 +68,29 @@
                 <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] backdrop-blur-sm">
                     <h3 class="text-yellow-500 text-xs font-black uppercase tracking-[0.3em] mb-6">Hubungi Kami</h3>
                     <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <span class="text-xl">📍</span>
-                            <p class="text-slate-400 text-sm leading-relaxed">Jl. Kemajuan No. 48, Petukangan Selatan, Pesanggrahan, Jakarta Selatan</p>
-                        </div>
+                        
+                        <a href="https://www.google.com/maps/search/SMP+Negeri+110+Jakarta" 
+                           target="_blank" 
+                           class="flex items-start gap-4 group cursor-pointer">
+                            <span class="text-xl group-hover:scale-125 transition-transform duration-300">📍</span>
+                            <div class="flex-grow">
+                                <p class="text-slate-400 text-sm leading-relaxed group-hover:text-white transition-colors">
+                                    Jl. Kemajuan No. 48, Petukangan Selatan, Pesanggrahan, Jakarta Selatan
+                                </p>
+                                <span class="text-[9px] text-yellow-500 font-black uppercase tracking-widest mt-2 block opacity-0 group-hover:opacity-100 transition-all transform translate-y-1 group-hover:translate-y-0">
+                                    Lihat di Google Maps →
+                                </span>
+                            </div>
+                        </a>
+
                         <div class="flex items-center gap-4">
                             <span class="text-xl">📞</span>
-                            <p class="text-slate-400 text-sm font-bold">(021) 7342288</p>
+                            <p class="text-slate-400 text-sm font-bold group-hover:text-white transition-colors">(021) 7342288</p>
                         </div>
+
                         <div class="flex items-center gap-4">
                             <span class="text-xl">✉️</span>
-                            <p class="text-slate-400 text-sm">smpn110jaksel@gmail.com</p>
+                            <p class="text-slate-400 text-sm group-hover:text-white transition-colors">smpn110jaksel@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -73,7 +102,13 @@
                 <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.2em]">
                     © 2026 SMP Negeri 110 Jakarta.
                 </p>
-                <p class="text-slate-700 text-[8px] mt-1 font-bold italic uppercase">Mewujudkan Insan Religius, Cerdas, dan Mandiri</p>
+                <p class="text-slate-700 text-[8px] mt-1 font-bold italic uppercase tracking-wider">Mewujudkan Insan Religius, Cerdas, dan Mandiri</p>
+            </div>
+            
+            <div class="flex items-center gap-3 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                <img src="https://unbp.ac.id/images/logo2.png" class="h-6" alt="Tut Wuri">
+                <div class="h-4 w-[1px] bg-white mx-1"></div>
+                <span class="text-[8px] font-black uppercase tracking-[0.2em]">Pusat Data Digital</span>
             </div>
         </div>
     </div>
