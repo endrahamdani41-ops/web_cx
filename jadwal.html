@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Pelajaran | SMPN 110 Jakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .navy-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        
+        /* Skeleton Shimmer */
+        .skeleton {
+            background: #eee;
+            background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+            border-radius: 40px;
+            background-size: 200% 100%;
+            animation: 1.5s shine linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position-x: -200%; }
+        }
+
+        .img-display {
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+            cursor: zoom-in;
+        }
+
+        .img-display.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <nav class="navy-gradient text-white py-5 px-8 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="dashboard-siswa.html" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-xl transition-all active:scale-90">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <h1 class="font-black italic uppercase tracking-tighter text-lg">Jadwal <span class="text-yellow-400">Pelajaran</span></h1>
+            </div>
+            <a href="https://i.ibb.co.com/MyWBBXD6/Whats-App-Image-2026-03-04-at-18-35-05.jpg" download class="bg-yellow-400 text-black p-2.5 rounded-xl shadow-lg active:scale-95 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="relative bg-white rounded-[45px] p-3 shadow-2xl shadow-slate-200 border border-white">
+            
+            <div id="skeleton" class="skeleton w-full aspect-[3/4] md:aspect-video"></div>
+
+            <img 
+                id="main-img"
+                src="https://i.ibb.co.com/MyWBBXD6/Whats-App-Image-2026-03-04-at-18-35-05.jpg" 
+                class="img-display w-full h-auto rounded-[35px]" 
+                alt="Jadwal Pelajaran"
+                onload="showImage()"
+                onclick="window.open(this.src, '_blank')"
+            >
+        </div>
+        
+        <p class="text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-8">
+            Klik gambar untuk memperbesar
+        </p>
+    </main>
+
+    <script>
+        function showImage() {
+            const img = document.getElementById('main-img');
+            const skeleton = document.getElementById('skeleton');
+            
+            // Sembunyikan skeleton dan munculkan gambar
+            skeleton.style.display = 'none';
+            img.classList.add('loaded');
+        }
+
+        // Antisipasi jika gambar gagal load atau butuh waktu
+        window.addEventListener('load', () => {
+            const img = document.getElementById('main-img');
+            if (img.complete) showImage();
+        });
+    </script>
+</body>
+</html>

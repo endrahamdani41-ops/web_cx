@@ -48,16 +48,26 @@
 
         .hero-content { position: relative; z-index: 2; }
         
-        .glow-hover {
-            transition: all 0.4s ease;
-        }
-
+        .glow-hover { transition: all 0.4s ease; }
         .glow-hover:hover { 
             transform: translateY(-10px); 
             box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.5);
         }
 
-        .news-card:hover .img-container img { transform: scale(1.05); }
+        /* --- SKELETON ANIMATION --- */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .news-card { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+        .news-card.loaded { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900">
@@ -84,13 +94,11 @@
 
     <section class="relative z-20 py-16 container mx-auto px-6 -mt-24">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            
             <div onclick="openModalLogin()" class="glow-hover bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-yellow-500 cursor-pointer group transition-all duration-500">
                 <h3 class="text-5xl font-black text-[#1A2A6C]">600+</h3>
                 <p class="text-gray-500 font-bold text-[10px] mt-1 tracking-widest uppercase text-center">Siswa</p>
                 <span class="text-[10px] text-blue-600 font-bold mt-4 block group-hover:underline uppercase text-center">Login Siswa →</span>
             </div>
-
             <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-blue-600">
                 <h3 class="text-5xl font-black text-[#1A2A6C]">45</h3>
                 <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">GTK</p>
@@ -115,7 +123,27 @@
                 </div>
                 <a href="berita.html" class="text-[#1A2A6C] font-black tracking-widest text-xs border-b-2 border-[#1A2A6C] pb-1 hover:text-yellow-500 transition-all uppercase">Lihat Semua Berita</a>
             </div>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
+
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="skeleton-item">
+                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
+                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
+                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
+                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
+                </div>
+                <div class="skeleton-item">
+                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
+                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
+                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
+                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
+                </div>
+                <div class="skeleton-item">
+                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
+                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
+                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
+                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -152,10 +180,7 @@
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
         let allNewsData = [];
 
-        // FUNGSI UNTUK LOGIN (MENGARAH KE LOGIN.HTML)
-        function openModalLogin() {
-            window.location.href = 'login.html';
-        }
+        function openModalLogin() { window.location.href = 'login.html'; }
 
         async function includeLayout() {
             try {
@@ -184,18 +209,35 @@
         }
 
         async function loadBerita() {
+            const container = document.getElementById('news-container');
+            
             try {
+                // Gunakan cache jika ada agar tampil instan
+                const cachedNews = localStorage.getItem('berita_cache');
+                if (cachedNews) renderNewsHTML(JSON.parse(cachedNews));
+
                 const res = await fetch(`${API_BASE}?sheet=Berita`);
                 allNewsData = await res.json();
-                const container = document.getElementById('news-container');
-                const latest = [...allNewsData].reverse().slice(0, 3);
                 
-                container.innerHTML = latest.map(item => {
-                    const originalIndex = allNewsData.indexOf(item);
-                    return `
+                // Simpan ke cache untuk kunjungan berikutnya
+                localStorage.setItem('berita_cache', JSON.stringify(allNewsData));
+                
+                renderNewsHTML(allNewsData);
+            } catch(e) { 
+                console.error("Berita gagal dimuat"); 
+            }
+        }
+
+        function renderNewsHTML(data) {
+            const container = document.getElementById('news-container');
+            const latest = [...data].reverse().slice(0, 3);
+            
+            const html = latest.map((item, index) => {
+                const originalIndex = data.indexOf(item);
+                return `
                     <div onclick="location.href='detail-berita.html?id=${originalIndex}'" class="news-card group cursor-pointer">
                         <div class="img-container relative h-72 rounded-[40px] overflow-hidden mb-6 shadow-lg bg-slate-100 flex items-center justify-center">
-                            <img src="${fixUrl(item.url_foto)}" class="max-w-full max-h-full object-contain p-2 transition-transform duration-700">
+                            <img src="${fixUrl(item.url_foto)}" class="max-w-full max-h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
                             <div class="absolute top-6 left-6 ${getKategoriColor(item.kategori)} text-[10px] font-black px-4 py-2 rounded-xl tracking-widest z-10 shadow-lg uppercase">
                                 ${item.kategori}
                             </div>
@@ -203,8 +245,17 @@
                         <h3 class="text-xl font-black text-[#1A2A6C] italic leading-tight group-hover:text-yellow-600 transition-colors uppercase text-center">${item.judul}</h3>
                         <p class="text-slate-500 text-sm mt-3 line-clamp-2 text-center">${item.ringkasan}</p>
                     </div>
-                `}).join('');
-            } catch(e) { console.error("Berita gagal dimuat"); }
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+
+            // Berikan sedikit delay agar transisi fade-in berjalan smooth
+            setTimeout(() => {
+                document.querySelectorAll('.news-card').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('loaded'), i * 100);
+                });
+            }, 50);
         }
 
         function renderHero(data) {
@@ -240,14 +291,17 @@
 
         async function initApp() {
             includeLayout();
-            const cachedData = localStorage.getItem('hero_data');
-            if (cachedData) renderHero(JSON.parse(cachedData));
+            const cachedHero = localStorage.getItem('hero_data');
+            if (cachedHero) renderHero(JSON.parse(cachedHero));
+            
+            // Panggil Berita
             loadBerita();
+
             try {
                 const res = await fetch(`${API_BASE}?sheet=Hero`);
                 const newData = await res.json();
                 localStorage.setItem('hero_data', JSON.stringify(newData));
-                if (!cachedData) renderHero(newData);
+                if (!cachedHero) renderHero(newData);
             } catch(e) {}
         }
 
