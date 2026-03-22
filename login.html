@@ -16,79 +16,98 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        /* Menghapus spinner di kotak NIS */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
 
     <div class="glass-card w-full max-w-[400px] rounded-[40px] shadow-2xl overflow-hidden p-10 md:p-12 transform transition-all">
-        
         <div class="text-center mb-10">
-            <div class="w-20 h-20 bg-yellow-400 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-400/20">
-                <span class="text-4xl">🎓</span>
-            </div>
-            <h2 class="text-3xl font-black text-slate-800 tracking-tighter italic uppercase leading-none">
-                Login <span class="text-indigo-600">Siswa</span>
-            </h2>
-            <p class="text-slate-400 text-[10px] mt-3 font-bold tracking-[0.2em] uppercase">Portal Akademik 110</p>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tighter italic">E-REPORT</h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">SMPN 110 Jakarta</p>
         </div>
 
-        <form id="loginForm" class="space-y-6">
+        <form id="login-form" class="space-y-6">
             <div>
- 
-                <input type="text" id="nis" required 
-                    placeholder="Masukkan NIS Anda"
-                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm font-semibold text-slate-700 text-center tracking-widest">
+                <label class="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Nomor Induk Siswa (NIS)</label>
+                <input type="number" id="nis" 
+                    class="w-full p-4 bg-slate-100 border-2 border-transparent focus:border-indigo-500 focus:bg-white rounded-2xl outline-none font-bold transition-all text-center" 
+                    placeholder="Masukkan NIS" required>
             </div>
 
-            <button type="submit" 
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 active:scale-95 uppercase tracking-widest text-xs mt-2">
-                Masuk Ke Dashboard
+            <button type="submit" id="submit-btn" 
+                class="w-full bg-slate-900 text-white font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all uppercase tracking-widest text-xs">
+                Masuk ke Dashboard
             </button>
         </form>
 
-        <div class="mt-10 text-center">
-            <a href="index.html" class="text-slate-400 hover:text-indigo-600 text-[10px] font-bold uppercase tracking-widest transition-colors">
-                ← Kembali ke Beranda
-            </a>
+        <div id="error-msg" class="hidden mt-6 p-4 bg-red-50 text-red-600 rounded-2xl text-center text-[10px] font-bold uppercase italic tracking-widest">
+            NIS Tidak Ditemukan!
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxRC4tISO2LFTfu9YlwdUIu9I4LJOOwzkDtPcrkZ_lU-fUaUJBgQbU_BIDK9t9wqkjl/exec';
+        // PASTIKAN URL API ANDA SUDAH BENAR
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxCHOmBjU3pQ9eRC76b4Xw1NoXQCM2_ugnsmYTXdBFEWdYauqvqBgRVPvMWBp0xOBU9/exec';
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitBtn = e.target.querySelector('button');
-            const nis = document.getElementById('nis').value;
+            const submitBtn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-msg');
+            const nisInput = document.getElementById('nis').value.trim();
 
-            // Efek Loading
+            // Reset Tampilan & Efek Loading
             submitBtn.disabled = true;
             submitBtn.innerText = 'MENGECEK DATA...';
-            submitBtn.classList.add('opacity-50');
+            errorMsg.classList.add('hidden');
 
             try {
-                // Fetch data siswa dari Google Sheets
+                // Fetch data dari tab 'Siswa'
                 const response = await fetch(`${API_URL}?sheet=Siswa`);
-                const data = await response.json();
+                const rawData = await response.json();
                 
-                // Cari siswa berdasarkan NIS saja
-                const user = data.find(u => u.nis == nis);
+                // Normalisasi Key menjadi huruf kecil untuk menghindari error Case-Sensitive
+                const dataSiswa = rawData.map(item => {
+                    let normalized = {};
+                    for (let key in item) {
+                        normalized[key.toLowerCase().trim()] = item[key];
+                    }
+                    return normalized;
+                });
+
+                // Pencarian NIS yang lebih kuat (membandingkan string yang sudah di-trim)
+                const user = dataSiswa.find(u => String(u.nis).trim() === nisInput);
 
                 if (user) {
-                    // Simpan data user ke localStorage
+                    // Simpan data user lengkap ke localStorage
                     localStorage.setItem('user_login', JSON.stringify(user));
-                    window.location.href = 'dashboard-siswa.html';
+                    
+                    submitBtn.innerText = 'BERHASIL! MENGALIHKAN...';
+                    setTimeout(() => {
+                        window.location.href = 'dashboard-siswa.html';
+                    }, 500);
                 } else {
-                    alert('NIS tidak ditemukan! Pastikan NIS sudah benar.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'MASUK KE DASHBOARD';
-                    submitBtn.classList.remove('opacity-50');
+                    throw new Error("NOT_FOUND");
                 }
             } catch (error) {
-                alert('Gagal terhubung ke server. Periksa koneksi internet Anda.');
+                console.error(error);
+                errorMsg.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'MASUK KE DASHBOARD';
-                submitBtn.classList.remove('opacity-50');
+                
+                if (error.message === "NOT_FOUND") {
+                    errorMsg.innerText = "NIS TIDAK DITEMUKAN!";
+                } else {
+                    errorMsg.innerText = "GANGGUAN KONEKSI SERVER";
+                }
             }
         });
     </script>

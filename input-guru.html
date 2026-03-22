@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru Portal | Elegant Input Nilai</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f0f4f8;
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* 1. MENGHAPUS ICON SPINNER DI KOTAK NIS */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* 2. EFEK GLASSMORPHISM */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .custom-input:focus {
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* 3. TOMBOL ELEGAN */
+        .btn-elegant {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
+        }
+
+        .status-animate {
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="mb-8 text-center">
+        <div class="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 mb-4">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Portal Guru Online</span>
+        </div>
+        <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">SMPN 110 <span class="text-indigo-600">Jakarta</span></h1>
+    </div>
+
+    <div class="max-w-lg w-full glass-card rounded-[2.5rem] shadow-[0_22px_70px_4px_rgba(0,0,0,0.07)] p-10 relative overflow-hidden">
+        <div class="relative">
+            <div class="mb-10">
+                <h2 class="text-xl font-bold text-slate-800">Manajemen Nilai</h2>
+                <p class="text-sm text-slate-400 font-medium">Silahkan input data akademik siswa</p>
+            </div>
+            
+            <form id="form-nilai" class="space-y-6">
+                <div class="space-y-2">
+
+                    <input type="number" id="nis" 
+                        class="custom-input w-full p-4 bg-slate-50/50 border border-slate-200 rounded-2xl outline-none font-bold text-slate-700 focus:border-indigo-400 focus:bg-white" 
+                        placeholder="Ketik NIS Siswa..." required>
+                    
+                    <div id="status-siswa" class="hidden status-animate space-y-2">
+                        <div class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-indigo-50 border border-indigo-100">
+                            <span id="text-nama" class="text-xs font-bold text-indigo-600 uppercase italic tracking-tighter"></span>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-indigo-50 border border-indigo-100">
+                            <span class="text-[10px]"></span>
+                            <span id="text-kelas" class="text-xs font-bold text-indigo-600 uppercase italic tracking-tighter"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+
+                    <select id="mapel" 
+                        class="custom-input w-full p-4 bg-slate-50/50 border border-slate-200 rounded-2xl outline-none font-bold text-slate-700 cursor-pointer focus:border-indigo-400 focus:bg-white">
+                        <option value="" disabled selected>Pilih Mata Pelajaran</option>
+                        <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
+                        <option value="PENDIDIKAN PANCASILA">PENDIDIKAN PANCASILA</option>
+                        <option value="MATEMATIKA">MATEMATIKA</option>
+                        <option value="BAHASA INDONESIA">BAHASA INDONESIA</option>
+                        <option value="IPA">IPA</option>
+                        <option value="IPS">IPS</option>
+                        <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
+                        <option value="PJOK">PJOK</option>
+                        <option value="INFORMATIKA">INFORMATIKA</option>
+                        <option value="SENI BUDAYA">SENI BUDAYA</option>		
+
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">PH-1</label>
+                        <input type="number" id="ph1" class="custom-input w-full p-3 bg-slate-50 border rounded-xl outline-none font-bold" placeholder="0" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">PH-2</label>
+                        <input type="number" id="ph2" class="custom-input w-full p-3 bg-slate-50 border rounded-xl outline-none font-bold" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">UTS</label>
+                        <input type="number" id="uts" class="custom-input w-full p-3 bg-slate-50 border rounded-xl outline-none font-bold" placeholder="0" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">UAS</label>
+                        <input type="number" id="uas" class="custom-input w-full p-3 bg-slate-50 border rounded-xl outline-none font-bold" placeholder="0" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-simpan" 
+                    class="btn-elegant w-full text-white font-bold py-5 rounded-[1.5rem] active:scale-95 transition-all disabled:opacity-30 uppercase tracking-[0.2em] text-xs mt-4" 
+                    disabled>
+                    Simpan Nilai
+                </button>
+            </form>
+
+            <div id="notif" class="mt-8 text-center hidden p-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest"></div>
+        </div>
+    </div>
+
+    <p class="mt-10 text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">© 2025 E-Report System</p>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCHOmBjU3pQ9eRC76b4Xw1NoXQCM2_ugnsmYTXdBFEWdYauqvqBgRVPvMWBp0xOBU9/exec';
+
+        const nisInput = document.getElementById('nis');
+        const statusSiswa = document.getElementById('status-siswa');
+        const textNama = document.getElementById('text-nama');
+        const textKelas = document.getElementById('text-kelas');
+        const btnSimpan = document.getElementById('btn-simpan');
+        
+        let currentStudentData = null;
+
+        // FUNGSI CARI SISWA OTOMATIS
+        nisInput.addEventListener('input', async (e) => {
+            const nis = e.target.value;
+            if (nis.length >= 4) {
+                statusSiswa.classList.remove('hidden');
+                textNama.innerText = "🔍 Mencari data...";
+                textKelas.innerText = "---";
+                btnSimpan.disabled = true;
+
+                try {
+                    const response = await fetch(`${APPS_SCRIPT_URL}?sheet=Siswa`);
+                    const allSiswa = await response.json();
+                    
+                    // Normalisasi data untuk menghindari error kapital/spasi
+                    const siswa = allSiswa.find(s => String(s.nis).trim() === nis.trim());
+
+                    if (siswa) {
+                        textNama.innerText = `${siswa.nama}`;
+                        textKelas.innerText = `KELAS ${siswa.kelas || '???'}`;
+                        currentStudentData = siswa;
+                        btnSimpan.disabled = false;
+                    } else {
+                        textNama.innerText = "❌ NIS Tidak Terdaftar";
+                        textKelas.innerText = "TIDAK DITEMUKAN";
+                        btnSimpan.disabled = true;
+                    }
+                } catch (err) { 
+                    textNama.innerText = "⚠️ Gangguan Koneksi"; 
+                }
+            } else {
+                statusSiswa.classList.add('hidden');
+                btnSimpan.disabled = true;
+            }
+        });
+
+        // FUNGSI SIMPAN DATA
+        document.getElementById('form-nilai').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const notif = document.getElementById('notif');
+            btnSimpan.innerText = 'Tunggu Sebentar...';
+            btnSimpan.disabled = true;
+
+            const payload = {
+                nis: nisInput.value,
+                nama: currentStudentData.nama,
+                kelas: currentStudentData.kelas,
+                mapel: document.getElementById('mapel').value,
+                nilai_ph1: parseInt(document.getElementById('ph1').value),
+                nilai_ph2: parseInt(document.getElementById('ph2').value),
+                nilai_uts: parseInt(document.getElementById('uts').value),
+                nilai_uas: parseInt(document.getElementById('uas').value)
+            };
+
+            try {
+                // Menggunakan mode no-cors untuk Google Apps Script
+                await fetch(APPS_SCRIPT_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload) 
+                });
+                
+                notif.innerText = "Sukses Disimpan ke Database";
+                notif.className = "mt-8 text-center p-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 block status-animate";
+                
+                document.getElementById('form-nilai').reset();
+                statusSiswa.classList.add('hidden');
+                setTimeout(() => notif.classList.add('hidden'), 5000);
+            } catch (err) {
+                notif.innerText = "Gagal Menyambung ke Server";
+                notif.className = "mt-8 text-center p-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest bg-rose-50 text-rose-600 border border-rose-100 block status-animate";
+            } finally {
+                btnSimpan.innerText = 'Simpan Nilai';
+            }
+        });
+    </script>
+</body>
+</html>

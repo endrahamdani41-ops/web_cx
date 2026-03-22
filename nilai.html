@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Nilai Real-Time | SMPN 110 Jakarta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .navy-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+
+        /* HEADER AREA */
+        .header-container { margin-bottom: 20px; color: #000000; }
+        .judul-utama {
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 25px;
+            text-decoration: underline;
+        }
+
+        /* LAYOUT IDENTITAS */
+        .identitas-wrapper {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1.5px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .info-grid-left, .info-grid-right {
+            display: grid;
+            grid-template-columns: 110px 15px auto;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            line-height: 1.8;
+        }
+
+        .titik-dua { text-align: center; }
+
+        /* TABEL STYLING */
+        table { width: 100%; border-collapse: collapse; background-color: white; border: 2px solid #000000; }
+        th { 
+            background-color: #f1f5f9; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            font-size: 10px; 
+            padding: 10px 2px;
+            border: 1px solid #000000;
+        }
+        td { border: 1px solid #000000; padding: 8px 4px; text-align: center; font-size: 11px; color: #000000; }
+        .text-left-important { text-align: left !important; padding-left: 8px; font-weight: 700; }
+
+        /* ANIMASI UPDATE */
+        .row-update { animation: highlight 2s ease-out; }
+        @keyframes highlight {
+            0% { background-color: #fef08a; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-10">
+
+    <nav class="navy-gradient text-white py-5 px-6 sticky top-0 z-50 shadow-lg mb-6">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="dashboard-siswa.html" class="bg-white/10 p-2 rounded-xl active:scale-90 transition-all border border-white/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+                </a>
+                <h1 class="font-black italic uppercase tracking-tighter text-xl text-white">E-REPORT <span class="text-yellow-400">LIVE</span></h1>
+            </div>
+            <div id="sync-indicator" class="flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                </span>
+                <div class="text-[9px] font-black text-yellow-400 tracking-widest uppercase">Monitoring Mode</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-4xl">
+        <div class="header-container">
+            <h2 class="judul-utama">LAPORAN HASIL BELAJAR (RAPOR)</h2>
+            <div class="identitas-wrapper">
+                <div class="info-grid-left">
+                    <div>NAMA</div><div class="titik-dua">:</div><div id="display-nama">...</div>
+                    <div>NIS / NISN</div><div class="titik-dua">:</div><div id="display-nis">...</div>
+                    <div>NAMA SEKOLAH</div><div class="titik-dua">:</div><div>SMPN 110 JAKARTA</div>
+                    <div>ALAMAT</div><div class="titik-dua">:</div><div>JL. KEMAJUAN NO. 48, PETUKANGAN SELATAN</div>
+                </div>
+                <div class="info-grid-right">
+                    <div>KELAS</div><div class="titik-dua">:</div><div id="display-kelas">...</div>
+                    <div>FASE</div><div class="titik-dua">:</div><div>D</div>
+                    <div>SEMESTER</div><div class="titik-dua">:</div><div>GENAP</div>
+                    <div>TAHUN PELAJARAN</div><div class="titik-dua">:</div><div>2025/2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-sm overflow-hidden">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th class="text-left-important">Mata Pelajaran</th>
+                        <th width="12%">PH-1</th>
+                        <th width="12%">PH-2</th>
+                        <th width="12%">UTS</th>
+                        <th width="12%">UAS</th>
+                        <th width="12%">AKHIR</th>
+                    </tr>
+                </thead>
+                <tbody id="nilai-body">
+                    <tr><td colspan="7" class="py-10 text-slate-400 italic">Menghubungkan ke database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="total-card" class="mt-6 hidden">
+             <div class="bg-slate-900 p-6 rounded-2xl shadow-xl flex justify-between items-center text-white border-b-4 border-yellow-400">
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">Rata-Rata Nilai Akhir</p>
+                    <h2 id="final-status" class="text-sm font-black italic uppercase text-yellow-400 tracking-tighter">Memproses...</h2>
+                </div>
+                <div id="grand-total" class="text-5xl font-black tracking-tighter italic">0</div>
+             </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwP4Z1XfgCA2s_HxcUeODJ60xr-GY7zXv6guUNL63w3gGlV00YOOTsrH3Op5a4OK83Z/exec';
+        
+        const URUTAN_MAPEL = {
+            "PENDIDIKAN AGAMA ISLAM": 1, "PENDIDIKAN PANCASILA": 2, "MATEMATIKA": 3,
+            "BAHASA INDONESIA": 4, "IPA": 5, "IPS": 6, "BAHASA INGGRIS": 7,
+            "PJOK": 8, "INFORMATIKA": 9, "SENI BUDAYA": 10
+        };
+
+        let lastDataHash = ""; // Untuk mengecek apakah ada perubahan data nyata
+
+        async function initNilai() {
+            const userData = JSON.parse(localStorage.getItem('user_login'));
+            if (!userData) { window.location.href = 'index.html'; return; }
+            
+            document.getElementById('display-nama').innerText = userData.nama || "-";
+            document.getElementById('display-kelas').innerText = userData.kelas || "-";
+            document.getElementById('display-nis').innerText = userData.nis || "-";
+
+            const nisUser = String(userData.nis).trim();
+            
+            // Panggilan pertama
+            fetchFromCloud(nisUser);
+
+            // AUTO REFRESH: Cek data setiap 10 detik
+            setInterval(() => {
+                fetchFromCloud(nisUser);
+            }, 10000); 
+        }
+
+        async function fetchFromCloud(nisUser) {
+            try {
+                const response = await fetch(`${API_URL}?sheet=Nilai`);
+                const allData = await response.json();
+                const dataSiswa = allData.filter(item => String(item.nis).trim() === nisUser);
+                
+                // Cek apakah data berubah dari sebelumnya agar tidak flicker (kedip) terus
+                const currentHash = JSON.stringify(dataSiswa);
+                if (currentHash !== lastDataHash) {
+                    lastDataHash = currentHash;
+                    renderTable(dataSiswa);
+                    console.log("Data diperbarui: ", new Date().toLocaleTimeString());
+                }
+            } catch (e) { 
+                console.error("Gagal sinkronisasi data."); 
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('nilai-body');
+            const totalCard = document.getElementById('total-card');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="py-10 text-red-500 font-bold uppercase tracking-widest">Data nilai belum masuk</td></tr>';
+                totalCard.classList.add('hidden');
+                return;
+            }
+
+            // Urutkan Mapel
+            data.sort((a, b) => {
+                const indexA = URUTAN_MAPEL[(a.mapel || "").toUpperCase().trim()] || 99;
+                const indexB = URUTAN_MAPEL[(b.mapel || "").toUpperCase().trim()] || 99;
+                return indexA - indexB;
+            });
+
+            let totalNilai = 0;
+            tbody.innerHTML = data.map((item, index) => {
+                const n1 = parseInt(item.nilai_ph1) || 0;
+                const n2 = parseInt(item.nilai_ph2) || 0;
+                const uts = parseInt(item.nilai_uts) || 0;
+                const uas = parseInt(item.nilai_uas) || 0;
+                const avg = Math.round((n1 + n2 + uts + uas) / 4);
+                totalNilai += avg;
+
+                return `
+                    <tr class="row-update">
+                        <td class="font-bold">${index + 1}</td>
+                        <td class="text-left-important uppercase italic tracking-tighter font-black">${item.mapel}</td>
+                        <td>${n1}</td>
+                        <td>${n2}</td>
+                        <td>${uts}</td>
+                        <td>${uas}</td>
+                        <td class="bg-yellow-50 font-black text-indigo-800">${avg}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            const finalAvg = Math.round(totalNilai / data.length);
+            document.getElementById('grand-total').innerText = finalAvg;
+            totalCard.classList.remove('hidden');
+            document.getElementById('final-status').innerText = finalAvg >= 75 ? "KOMPETEN" : "PERLU BIMBINGAN";
+        }
+
+        window.onload = initNilai;
+    </script>
+</body>
+</html>
