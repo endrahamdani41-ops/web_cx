@@ -9,14 +9,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background-color: #0f172a; /* Warna gelap sesuai screenshot */
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #f8fafc;
+            border-radius: 50px;
         }
-        /* Menghapus spinner di kotak NIS */
+        /* Menghilangkan spinner di kotak NIS */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -29,22 +28,30 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
 
-    <div class="glass-card w-full max-w-[400px] rounded-[40px] shadow-2xl overflow-hidden p-10 md:p-12 transform transition-all">
-        <div class="text-center mb-10">
-            <h1 class="text-3xl font-black text-slate-800 tracking-tighter italic">E-REPORT</h1>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">SMPN 110 Jakarta</p>
+    <div class="glass-card relative w-full max-w-[450px] shadow-2xl overflow-hidden p-12 md:p-16 transform transition-all">
+        
+        <a href="index.html" class="absolute top-10 left-10 text-slate-400 hover:text-blue-600 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+        </a>
+
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-black italic uppercase tracking-tighter text-slate-900">
+                SISWA <span class="text-blue-600">PORTAL</span>
+            </h1>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-2">Masuk ke Dashboard Nilai</p>
         </div>
 
-        <form id="login-form" class="space-y-6">
-            <div>
-                <label class="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Nomor Induk Siswa (NIS)</label>
+        <form id="login-form" class="space-y-8">
+            <div class="relative">
                 <input type="number" id="nis" 
-                    class="w-full p-4 bg-slate-100 border-2 border-transparent focus:border-indigo-500 focus:bg-white rounded-2xl outline-none font-bold transition-all text-center" 
-                    placeholder="Masukkan NIS" required>
+                    class="w-full p-6 bg-white border-2 border-blue-500 rounded-3xl outline-none font-bold text-xl text-center text-slate-700 shadow-sm focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-300" 
+                    placeholder="Masukkan NIS Anda..." required>
             </div>
 
             <button type="submit" id="submit-btn" 
-                class="w-full bg-slate-900 text-white font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all uppercase tracking-widest text-xs">
+                class="w-full bg-[#0f172a] text-white font-black py-5 rounded-3xl shadow-xl active:scale-95 transition-all uppercase tracking-[0.2em] text-xs">
                 Masuk ke Dashboard
             </button>
         </form>
@@ -52,10 +59,16 @@
         <div id="error-msg" class="hidden mt-6 p-4 bg-red-50 text-red-600 rounded-2xl text-center text-[10px] font-bold uppercase italic tracking-widest">
             NIS Tidak Ditemukan!
         </div>
+
+        <div class="mt-20 text-center">
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-loose">
+                &copy; 2026 SMP NEGERI 110 JAKARTA<br>
+                SISTEM INFORMASI AKADEMIK TERPADU
+            </p>
+        </div>
     </div>
 
     <script>
-        // PASTIKAN URL API ANDA SUDAH BENAR
         const API_URL = 'https://script.google.com/macros/s/AKfycbxCHOmBjU3pQ9eRC76b4Xw1NoXQCM2_ugnsmYTXdBFEWdYauqvqBgRVPvMWBp0xOBU9/exec';
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -64,17 +77,14 @@
             const errorMsg = document.getElementById('error-msg');
             const nisInput = document.getElementById('nis').value.trim();
 
-            // Reset Tampilan & Efek Loading
             submitBtn.disabled = true;
-            submitBtn.innerText = 'MENGECEK DATA...';
+            submitBtn.innerText = 'MEMVERIFIKASI...';
             errorMsg.classList.add('hidden');
 
             try {
-                // Fetch data dari tab 'Siswa'
                 const response = await fetch(`${API_URL}?sheet=Siswa`);
                 const rawData = await response.json();
                 
-                // Normalisasi Key menjadi huruf kecil untuk menghindari error Case-Sensitive
                 const dataSiswa = rawData.map(item => {
                     let normalized = {};
                     for (let key in item) {
@@ -83,14 +93,11 @@
                     return normalized;
                 });
 
-                // Pencarian NIS yang lebih kuat (membandingkan string yang sudah di-trim)
                 const user = dataSiswa.find(u => String(u.nis).trim() === nisInput);
 
                 if (user) {
-                    // Simpan data user lengkap ke localStorage
                     localStorage.setItem('user_login', JSON.stringify(user));
-                    
-                    submitBtn.innerText = 'BERHASIL! MENGALIHKAN...';
+                    submitBtn.innerText = 'BERHASIL!';
                     setTimeout(() => {
                         window.location.href = 'dashboard-siswa.html';
                     }, 500);
@@ -98,16 +105,10 @@
                     throw new Error("NOT_FOUND");
                 }
             } catch (error) {
-                console.error(error);
                 errorMsg.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'MASUK KE DASHBOARD';
-                
-                if (error.message === "NOT_FOUND") {
-                    errorMsg.innerText = "NIS TIDAK DITEMUKAN!";
-                } else {
-                    errorMsg.innerText = "GANGGUAN KONEKSI SERVER";
-                }
+                errorMsg.innerText = error.message === "NOT_FOUND" ? "NIS TIDAK DITEMUKAN!" : "GANGGUAN KONEKSI SERVER";
             }
         });
     </script>
