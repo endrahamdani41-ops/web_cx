@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#eab308">
+<link rel="apple-touch-icon" href="icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Nilai | SMPN 110 Jakarta</title>
@@ -87,9 +90,17 @@
 
     <nav class="bg-[#0f172a] text-white py-4 px-6 sticky top-0 z-50 shadow-xl mb-10 no-print">
         <div class="container mx-auto flex items-center justify-between">
-            <h1 class="font-black italic uppercase tracking-tighter text-xl text-yellow-400">
-                E-REPORT <span class="text-white">STUDENT</span>
-            </h1>
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12">
+                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
+                         alt="Logo SMPN 110" 
+                         class="w-10 h-10 object-contain">
+                </div>
+                <div>
+                    <h1 class="text-xs font-black uppercase tracking-widest leading-none">Portal Siswa</h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
+                </div>
+            </div>
             
             <div class="flex gap-3">
                 <button onclick="window.location.href='halaman-siswa.html'" class="btn-header bg-slate-700 text-white" title="Kembali ke Halaman Sebelumnya">
