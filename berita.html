@@ -3,53 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berita & Kegiatan | SMPN 110 Jakarta</title>
+    <title>Warta Sekolah | SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #020617; 
+            color: #f8fafc;
+        }
+        
+        /* Tombol Filter Aktif */
         .filter-btn.active {
-            background-color: #1A2A6C;
-            color: white;
-            box-shadow: 0 10px 20px -5px rgba(26, 42, 108, 0.3);
-            border-color: #1A2A6C;
+            background-color: #eab308;
+            color: #020617;
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.3);
+            border-color: #eab308;
         }
 
-        .news-card { cursor: pointer; }
-        .news-card:hover img { transform: scale(1.05); }
+        /* Card Berita */
+        .news-card { 
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .news-card:hover { 
+            transform: translateY(-12px);
+            border-color: rgba(234, 179, 8, 0.4);
+            background: rgba(30, 41, 59, 0.7);
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900">
+<body class="min-h-screen">
 
     <div id="header-placeholder"></div>
 
-    <section class="pt-32 pb-12 bg-[#1A2A6C] text-white text-center px-6">
-        <h1 class="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-4">
-            Berita & <span class="text-yellow-400">Kegiatan</span>
+    <section class="pt-40 pb-16 bg-gradient-to-b from-slate-900 to-[#020617] text-center px-6">
+        <h1 class="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mb-6">
+            WARTA <span class="text-yellow-500">SEKOLAH</span>
         </h1>
-        <p class="text-slate-300 max-w-2xl mx-auto italic font-medium text-sm md:text-base">
+        <p class="text-slate-400 max-w-2xl mx-auto italic font-bold text-sm md:text-lg tracking-wide">
             Informasi terbaru mengenai prestasi, kegiatan, dan pengumuman resmi SMPN 110 Jakarta.
         </p>
     </section>
 
-    <nav class="sticky top-0 z-30 bg-white border-b border-slate-100 shadow-sm">
-        <div class="container mx-auto px-6 py-4">
+    <nav class="relative z-20 border-y border-white/5 bg-slate-900/30 backdrop-blur-md">
+        <div class="container mx-auto px-6 py-6">
             <div class="flex flex-wrap justify-center items-center gap-3" id="filter-container">
-                <button onclick="filterBerita('Semua')" class="filter-btn active px-5 py-2 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border-2 border-slate-100 bg-white">Semua</button>
-                <button onclick="filterBerita('Kegiatan')" class="filter-btn px-5 py-2 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border-2 border-slate-100 bg-white hover:bg-slate-50">Kegiatan</button>
-                <button onclick="filterBerita('Prestasi')" class="filter-btn px-5 py-2 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border-2 border-slate-100 bg-white hover:bg-slate-50">Prestasi</button>
-                <button onclick="filterBerita('Pengumuman')" class="filter-btn px-5 py-2 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border-2 border-slate-100 bg-white hover:bg-slate-50">Pengumuman</button>
+                <button onclick="filterBerita('Semua')" class="filter-btn active px-6 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/10 bg-slate-800 text-white">Semua</button>
+                <button onclick="filterBerita('Kegiatan')" class="filter-btn px-6 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/10 bg-slate-800 text-white hover:bg-slate-700">Kegiatan</button>
+                <button onclick="filterBerita('Prestasi')" class="filter-btn px-6 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/10 bg-slate-800 text-white hover:bg-slate-700">Prestasi</button>
+                <button onclick="filterBerita('Pengumuman')" class="filter-btn px-6 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/10 bg-slate-800 text-white hover:bg-slate-700">Pengumuman</button>
             </div>
         </div>
     </nav>
 
-    <main class="py-12 container mx-auto px-6">
+    <main class="py-20 container mx-auto px-6 max-w-7xl">
         <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div class="col-span-full text-center py-20">
-                <div class="animate-spin inline-block w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full mb-4"></div>
-                <p class="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Memuat Data...</p>
-            </div>
+            <div class="h-[450px] rounded-[45px] skeleton"></div>
+            <div class="h-[450px] rounded-[45px] skeleton shadow-xl"></div>
+            <div class="h-[450px] rounded-[45px] skeleton"></div>
         </div>
     </main>
 
@@ -57,19 +89,18 @@
 
     <script>
         const API_BASE = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
-        let allNews = []; // Data asli dari GS (urutan tetap)
-        let displayedNews = []; // Data untuk ditampilkan (bisa difilter/reverse)
+        let allNews = []; 
 
         async function includeLayout() {
             try {
                 const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
-                document.getElementById('header-placeholder').innerHTML = await hRes.text();
-                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
-            } catch (err) { console.warn("Layout missing."); }
+                if(hRes.ok) document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                if(fRes.ok) document.getElementById('footer-placeholder').innerHTML = await fRes.text();
+            } catch (err) { console.warn("Layout error."); }
         }
 
         function fixUrl(url) {
-            if (!url) return 'https://via.placeholder.com/800x600?text=No+Image';
+            if (!url) return 'https://via.placeholder.com/800x600?text=Gambar+Tidak+Tersedia';
             if (url.includes('drive.google.com')) {
                 const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
                 return `https://drive.google.com/uc?export=view&id=${id}`;
@@ -82,54 +113,59 @@
             return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
-        function getKategoriColor(kat) {
-            if (!kat) return 'bg-slate-800 text-white';
-            const kategori = kat.toLowerCase().trim();
-            if (kategori === 'prestasi') return 'bg-yellow-400 text-black';
+        function getKategoriStyle(kat) {
+            const kategori = (kat || "").toLowerCase().trim();
+            if (kategori === 'prestasi') return 'bg-yellow-500 text-slate-950';
             if (kategori === 'kegiatan') return 'bg-blue-600 text-white';
-            if (kategori === 'pengumuman') return 'bg-red-500 text-white';
-            return 'bg-slate-800 text-white';
+            if (kategori === 'pengumuman') return 'bg-red-600 text-white';
+            return 'bg-slate-700 text-slate-200';
         }
 
         async function loadData() {
             try {
-                const res = await fetch(`${API_BASE}?sheet=Berita`);
+                const res = await fetch(`${API_BASE}?sheet=Berita&t=${Date.now()}`);
                 allNews = await res.json();
-                // Tampilkan data terbaru (reverse)
                 renderCards([...allNews].reverse()); 
             } catch(e) {
-                document.getElementById('news-grid').innerHTML = `<p class="col-span-full text-center text-red-500 font-bold">Gagal mengambil data.</p>`;
+                document.getElementById('news-grid').innerHTML = `<p class="col-span-full text-center text-red-500 font-bold">Gagal memuat berita.</p>`;
             }
         }
 
         function renderCards(data) {
             const grid = document.getElementById('news-grid');
             if (data.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center py-20 text-slate-400 font-bold italic text-sm">Tidak ada berita.</p>`;
+                grid.innerHTML = `<p class="col-span-full text-center py-20 text-slate-500 font-bold italic uppercase tracking-widest">Belum ada warta untuk kategori ini.</p>`;
                 return;
             }
 
             grid.innerHTML = data.map(item => {
-                const colorClass = getKategoriColor(item.kategori);
-                // Cari index asli untuk link ID detail
+                const styleClass = getKategoriStyle(item.kategori || item.KATEGORI);
+                const judul = item.judul || item.JUDUL;
+                const ringkasan = item.ringkasan || item.RINGKASAN || "";
                 const originalIndex = allNews.indexOf(item);
                 
                 return `
                 <article onclick="location.href='detail-berita.html?id=${originalIndex}'" 
-                         class="news-card bg-white rounded-[40px] shadow-sm border border-slate-100 overflow-hidden group transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-                    <div class="relative h-64 bg-slate-50 flex items-center justify-center overflow-hidden">
-                        <img src="${fixUrl(item.url_foto)}" class="w-full h-full object-contain p-4 transition-transform duration-700">
-                        <div class="absolute top-6 left-6 ${colorClass} text-[9px] font-black px-4 py-2 rounded-xl uppercase tracking-widest shadow-lg z-10">
-                            ${item.kategori}
+                         class="news-card rounded-[45px] overflow-hidden group cursor-pointer shadow-xl">
+                    <div class="relative h-64 overflow-hidden bg-slate-950">
+                        <img src="${fixUrl(item.url_foto || item.URL_FOTO)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100" loading="lazy">
+                        <div class="absolute top-5 left-5 ${styleClass} text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-lg z-10">
+                            ${item.kategori || item.KATEGORI}
                         </div>
                     </div>
                     <div class="p-8">
-                        <p class="text-slate-400 text-[10px] font-bold mb-3 uppercase tracking-widest italic">📅 ${formatIndoDate(item.tanggal)}</p>
-                        <h2 class="text-xl font-black text-[#1A2A6C] uppercase italic leading-tight mb-4 group-hover:text-yellow-600 transition-colors">${item.judul}</h2>
-                        <p class="text-slate-500 text-sm line-clamp-3 mb-6 leading-relaxed">${item.ringkasan}</p>
-                        <div class="pt-4 border-t border-slate-50 flex items-center gap-3">
-                            <div class="h-1 w-6 bg-yellow-400 rounded-full"></div>
-                            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A2A6C]">Baca Selengkapnya</span>
+                        <div class="flex items-center gap-2 mb-4">
+                           <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+                           <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest italic">${formatIndoDate(item.tanggal || item.TANGGAL)}</p>
+                        </div>
+                        <h2 class="text-xl font-black text-white uppercase italic leading-tight mb-4 group-hover:text-yellow-500 transition-colors">${judul}</h2>
+                        <p class="text-slate-400 text-sm line-clamp-3 mb-8 leading-relaxed font-medium">${ringkasan}</p>
+                        
+                        <div class="pt-6 border-t border-white/5 flex justify-between items-center">
+                            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-yellow-500">Baca Berita</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-yellow-500 group-hover:text-slate-950 transition-all text-xs">
+                                ➔
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -142,7 +178,7 @@
                 b.classList.remove('active');
                 if (b.innerText === kat) b.classList.add('active');
             });
-            const filtered = kat === 'Semua' ? [...allNews] : allNews.filter(n => n.kategori.trim().toLowerCase() === kat.toLowerCase());
+            const filtered = kat === 'Semua' ? [...allNews] : allNews.filter(n => (n.kategori || n.KATEGORI || "").trim().toLowerCase() === kat.toLowerCase());
             renderCards(filtered.reverse());
         }
 
