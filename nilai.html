@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#eab308">
-<link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Nilai | SMPN 110 Jakarta</title>
@@ -11,72 +11,101 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
+        :root {
+            --bg-main: #0f172a;       /* Dark Blue-Black */
+            --bg-card: #1e293b;       /* Lighter Slate */
+            --text-primary: #f1f5f9;  /* Off White */
+            --text-secondary: #94a3b8;/* Muted Grey */
+            --border-color: #64748b;  /* Medium Slate - High Contrast Border */
+            --accent-blue: #38bdf8;   /* Sky Blue */
+        }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8fafc; 
-            color: #0f172a; 
+            background-color: var(--bg-main); 
+            color: var(--text-primary); 
+            transition: background-color 0.3s ease;
         }
         
-        /* Tabel Nilai Utama */
-        .table-nilai { width: 100%; border-collapse: collapse; background-color: white; border: 2px solid #000; }
+        /* Tabel Nilai Dark Mode */
+        .table-nilai { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background-color: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
         .table-nilai th { 
-            background-color: #f1f5f9; 
-            font-weight: 900; 
+            background-color: #334155; 
+            color: var(--accent-blue);
+            font-weight: 800; 
             text-transform: uppercase; 
             font-size: 11px; 
-            padding: 12px 5px;
-            border: 1px solid #000;
+            padding: 15px 5px;
+            border: 1px solid var(--border-color);
             text-align: center;
         }
-        .table-nilai td { border: 1px solid #000; padding: 10px 5px; text-align: center; font-size: 13px; color: #000; }
+        .table-nilai td { 
+            border: 1px solid var(--border-color); 
+            padding: 12px 5px; 
+            text-align: center; 
+            font-size: 13px; 
+            color: var(--text-primary); 
+        }
         
         .text-center-mapel { 
             text-align: center !important; 
-            font-weight: 800; 
-            text-transform: uppercase; 
+            font-weight: 700; 
+            color: var(--text-primary);
         }
 
         /* Tabel Info Siswa */
         .table-info { border: none !important; width: auto; border-collapse: collapse; }
-        .table-info td { border: none !important; padding: 2px 0; font-size: 11px; vertical-align: top; }
-        .label-width { width: 100px; text-align: left; }
-        .label-width-kanan { width: 80px; text-align: left; }
+        .table-info td { border: none !important; padding: 4px 0; font-size: 12px; color: var(--text-secondary); vertical-align: top; }
+        .label-width { width: 110px; font-weight: 600; text-align: left; }
+        .label-width-kanan { width: 90px; text-align: left; }
         .separator { width: 15px; text-align: center; }
 
         .nama-siswa-style {
-            color: #1d4ed8; 
+            color: var(--accent-blue); 
             font-weight: 900;
             font-style: italic;
             text-transform: uppercase;
         }
 
-        /* Warna Status Nilai */
-        .text-remedial { color: #dc2626 !important; font-weight: 900 !important; }
-        .text-tuntas { color: #1e40af !important; font-weight: 900 !important; }
+        /* Warna Status Nilai (High Contrast untuk Dark Mode) */
+        .text-remedial { color: #f87171 !important; font-weight: 900 !important; } /* Red-400 */
+        .text-tuntas { color: #4ade80 !important; font-weight: 900 !important; }   /* Green-400 */
+
+        /* Kolom Khusus */
+        .bg-kkm { background-color: rgba(234, 179, 8, 0.1) !important; color: #facc15 !important; }
+        .bg-akhir { background-color: rgba(255, 255, 255, 0.03) !important; }
 
         /* Tombol Header */
         .btn-header {
             width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; transition: all 0.2s; cursor: pointer;
+            border-radius: 10px; transition: all 0.2s; cursor: pointer;
+            border: 1px solid var(--border-color);
         }
-        .btn-header:hover { transform: translateY(-2px); filter: brightness(1.2); }
+        .btn-header:hover { transform: translateY(-2px); filter: brightness(1.2); background-color: #334155; }
 
         @media print {
             nav, .no-print { display: none !important; }
-            body { background-color: white !important; padding: 0 !important; }
+            body { background-color: white !important; color: #000 !important; padding: 0 !important; }
             main { margin: 0 !important; padding: 5mm !important; max-width: 100% !important; }
-            .table-nilai { border: 2px solid #000 !important; }
+            
+            .table-nilai { border: 2px solid #000 !important; background-color: white !important; }
+            .table-nilai th { background-color: #f1f5f9 !important; color: #000 !important; border: 1px solid #000 !important; }
+            .table-nilai td { border: 1px solid #000 !important; color: #000 !important; }
             
             .text-remedial { color: #dc2626 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .text-tuntas { color: #1e40af !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .nama-siswa-style { color: #1d4ed8 !important; }
+            .table-info td { color: #000 !important; }
             
-            .info-container { 
-                display: flex !important; 
-                flex-direction: row !important; 
-                justify-content: space-between !important; 
-                align-items: flex-start !important;
-            }
+            .info-container { display: flex !important; flex-direction: row !important; justify-content: space-between !important; }
         }
     </style>
 </head>
@@ -88,27 +117,25 @@
         const user = JSON.parse(sessionData);
     </script>
 
-    <nav class="bg-[#0f172a] text-white py-4 px-6 sticky top-0 z-50 shadow-xl mb-10 no-print">
+    <nav class="bg-[#0f172a]/80 backdrop-blur-md text-white py-4 px-6 sticky top-0 z-50 shadow-xl mb-10 no-print">
         <div class="container mx-auto flex items-center justify-between">
              <div class="flex items-center gap-4">
                 <div class="w-12 h-12">
-                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
-                         alt="Logo SMPN 110" 
-                         class="w-10 h-10 object-contain">
+                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10 object-contain">
                 </div>
                 <div>
-                    <h1 class="text-xs font-black uppercase tracking-widest leading-none">Portal Siswa</h1>
+                    <h1 class="text-xs font-black uppercase tracking-widest leading-none text-sky-400">Portal Siswa</h1>
                     <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
                 </div>
             </div>
             
             <div class="flex gap-3">
-                <button onclick="window.location.href='halaman-siswa.html'" class="btn-header bg-slate-700 text-white" title="Kembali ke Halaman Sebelumnya">
+                <button onclick="window.location.href='halaman-siswa.html'" class="btn-header bg-slate-800 text-white" title="Kembali">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </button>
-                <button onclick="window.print()" class="btn-header bg-blue-600 text-white" title="Cetak Laporan">
+                <button onclick="window.print()" class="btn-header bg-sky-600 text-white" title="Cetak Laporan">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
@@ -118,11 +145,11 @@
     </nav>
 
     <main class="container mx-auto px-4 max-w-5xl">
-        <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-black border-b-4 border-black inline-block pb-1 uppercase italic tracking-tighter text-slate-900">Laporan Hasil Belajar</h2>
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-3xl font-black border-b-4 border-sky-500 inline-block pb-1 uppercase italic tracking-tighter text-white">Laporan Hasil Belajar</h2>
         </div>
 
-        <div class="info-container flex flex-row justify-between mb-6 font-bold uppercase tracking-tight">
+        <div class="info-container flex flex-col md:flex-row justify-between mb-8 font-bold uppercase tracking-tight gap-4">
             <table class="table-info">
                 <tr>
                     <td class="label-width">NAMA SISWA</td>
@@ -132,12 +159,12 @@
                 <tr>
                     <td class="label-width">NIS / NISN</td>
                     <td class="separator">:</td>
-                    <td id="display-nis">...</td>
+                    <td id="display-nis" class="text-white">...</td>
                 </tr>
                 <tr>
                     <td class="label-width">SEKOLAH</td>
                     <td class="separator">:</td>
-                    <td>SMPN 110 JAKARTA</td>
+                    <td class="text-white">SMPN 110 JAKARTA</td>
                 </tr>
             </table>
 
@@ -145,42 +172,42 @@
                 <tr>
                     <td class="label-width-kanan">KELAS</td>
                     <td class="separator">:</td>
-                    <td id="display-kelas">...</td>
+                    <td id="display-kelas" class="text-white">...</td>
                 </tr>
                 <tr>
                     <td class="label-width-kanan">SEMESTER</td>
                     <td class="separator">:</td>
-                    <td class="whitespace-nowrap">2 (GENAP)</td>
+                    <td class="whitespace-nowrap text-white">2 (GENAP)</td>
                 </tr>
                 <tr>
                     <td class="label-width-kanan">TAHUN</td>
                     <td class="separator">:</td>
-                    <td class="whitespace-nowrap">2025/2026</td>
+                    <td class="whitespace-nowrap text-white">2025/2026</td>
                 </tr>
             </table>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto rounded-xl shadow-2xl">
             <table class="table-nilai">
                 <thead>
                     <tr>
                         <th width="5%">NO</th>
                         <th>MATA PELAJARAN</th>
-                        <th width="8%" class="bg-yellow-50">KKM</th>
+                        <th width="8%" class="bg-yellow-900/20">KKM</th>
                         <th width="10%">PH-1</th>
                         <th width="10%">PH-2</th>
                         <th width="10%">UTS</th>
                         <th width="10%">UAS</th>
-                        <th width="15%" class="bg-slate-100 text-sm">AKHIR</th>
+                        <th width="15%" class="bg-white/5 text-sm">AKHIR</th>
                     </tr>
                 </thead>
                 <tbody id="nilai-body">
-                    <tr><td colspan="8" class="py-12 text-slate-400 italic">Mengambil data...</td></tr>
+                    <tr><td colspan="8" class="py-12 text-slate-500 italic">Mengambil data dari server...</td></tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="hidden print:grid grid-cols-2 mt-16 text-center text-[13px] font-bold">
+        <div class="hidden print:grid grid-cols-2 mt-20 text-center text-[13px] font-bold">
             <div>
                 <p>Mengetahui,</p><p>Orang Tua/Wali Murid</p>
                 <div class="h-24"></div>
@@ -195,7 +222,7 @@
     </main>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbw8RRnxDbWemcm2XN5FsXsz27-RWzcIA0vnTVM374YJdNFJf5dl5OGsRCD5RnkC3_ND/exec';
 
         async function init() {
             document.getElementById('display-nama').innerText = user.nama || user.NAMA || "DATA SISWA";
@@ -219,7 +246,7 @@
                 });
 
                 if(myNilai.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-500 font-bold uppercase text-center text-xs">Data nilai tidak ditemukan</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-400 font-bold uppercase text-center text-xs">Data nilai tidak ditemukan</td></tr>';
                     return;
                 }
 
@@ -235,17 +262,17 @@
                         <tr>
                             <td>${index + 1}</td>
                             <td class="text-center-mapel">${item.mapel || '-'}</td>
-                            <td class="bg-yellow-50 font-bold">${KKM_STANDAR}</td>
+                            <td class="bg-kkm font-bold">${KKM_STANDAR}</td>
                             <td>${n1}</td>
                             <td>${n2}</td>
                             <td>${n3}</td>
                             <td>${n4}</td>
-                            <td class="bg-slate-50 text-lg ${colorClass}">${rataRata}</td>
+                            <td class="bg-akhir text-lg ${colorClass}">${rataRata}</td>
                         </tr>
                     `;
                 }).join('');
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-500 font-bold text-center">Gagal memuat data</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-400 font-bold text-center">Gagal memuat data. Periksa koneksi internet.</td></tr>';
             }
         }
         window.onload = init;
