@@ -194,7 +194,7 @@
             const btn = document.getElementById('btnVerifyGuru');
             const err = document.getElementById('errorGuru');
             if(!val) return alert("Isi NIP/Username!");
-            btn.innerText = "MENGECEK...";
+            btn.innerText = "Sabar ya !";
             btn.disabled = true;
             try {
                 const r = await fetch(`${API_BASE}?sheet=Guru`);

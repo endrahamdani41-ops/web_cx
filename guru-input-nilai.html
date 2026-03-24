@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Nilai Massal | SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
@@ -14,83 +18,89 @@
             color: #f8fafc;
         }
 
-        /* Hilangkan panah input number */
+        /* Custom SweetAlert Style */
+        .swal2-popup {
+            border-radius: 24px !important;
+            background: #0f172a !important;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
         input[type=number] { -moz-appearance: textfield; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         .input-nilai {
-            width: 55px;
-            padding: 6px;
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 800;
-            color: #eab308;
-            font-size: 13px;
-            outline: none;
-            transition: all 0.2s;
+            width: 52px; padding: 7px; background-color: #1e293b;
+            border: 1px solid #334155; border-radius: 10px;
+            text-align: center; font-weight: 800; color: #eab308;
+            font-size: 14px; outline: none; transition: all 0.2s;
         }
         .input-nilai:focus { 
-            border-color: #eab308; 
-            background-color: #0f172a; 
-            box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
+            border-color: #eab308; background-color: #0f172a; 
+            box-shadow: 0 0 12px rgba(234, 179, 8, 0.3);
         }
 
-        th, td { padding: 8px 12px !important; }
-        tr:hover { background-color: rgba(30, 41, 59, 0.5); }
+        th, td { padding: 12px 15px !important; }
+        tr:hover { background-color: rgba(30, 41, 59, 0.4); }
         
         .btn-back {
             display: flex; align-items: center; justify-content: center;
-            width: 38px; height: 38px;
-            background-color: #1e293b; border-radius: 12px;
-            transition: all 0.3s; color: white;
+            width: 42px; height: 42px; background-color: #1e293b; 
+            border-radius: 14px; transition: all 0.3s; color: white;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-back:hover { background-color: #334155; transform: translateX(-3px); }
     </style>
 </head>
-<body class="p-4 md:p-6">
+<body class="p-4 md:p-8">
 
-    <div class="max-w-5xl mx-auto">
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center gap-4">
-                <button onclick="window.history.back()" class="btn-back" title="Kembali">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-5">
+                <button onclick="window.history.back()" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>
                 </button>
-                <div>
-                    <h1 class="text-2xl font-black italic uppercase tracking-tighter">
-                        Input <span class="text-yellow-500">Nilai</span>
-                    </h1>
-                </div>
+                <h1 class="text-3xl font-black italic uppercase tracking-tighter">
+                    INPUT <span class="text-yellow-500">NILAI</span>
+                </h1>
             </div>
-            <p id="info-guru" class="hidden md:block text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">
-                Memuat data profil...
-            </p>
+            <p id="info-guru" class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest text-right">Memuat...</p>
         </div>
 
-        <div class="bg-slate-900/50 border border-white/5 p-4 rounded-[25px] mb-6 shadow-xl">
+        <div class="bg-slate-900/40 border border-white/5 p-5 rounded-[30px] mb-8 shadow-2xl">
             <div class="max-w-xs">
-                <label class="block text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">Pilih Target Kelas</label>
-                <select id="select-kelas" onchange="loadSiswaDanNilai()" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl font-bold text-xs text-white outline-none focus:border-yellow-500 cursor-pointer appearance-none">
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Pilih Target Kelas</label>
+                <select id="select-kelas" onchange="loadSiswaDanNilai()" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-2xl font-bold text-sm text-white outline-none focus:border-yellow-500 cursor-pointer">
                     <option value="">-- Pilih Kelas --</option>
-                    <option value="7A">Kelas 7A</option>
-                    <option value="7B">Kelas 7B</option>
-                    <option value="7C">Kelas 7C</option>
-                    <option value="8A">Kelas 8A</option>
-                    <option value="9A">Kelas 9A</option>
+                    <optgroup label="KELAS 7" class="bg-slate-900 text-yellow-500">
+                        <option value="7A">Kelas 7A</option><option value="7B">Kelas 7B</option>
+                        <option value="7C">Kelas 7C</option><option value="7D">Kelas 7D</option>
+                        <option value="7E">Kelas 7E</option><option value="7F">Kelas 7F</option>
+                    </optgroup>
+
+                    <optgroup label="KELAS 8" class="bg-slate-900 text-yellow-500">
+                        <option value="8A">Kelas 8A</option><option value="8B">Kelas 8B</option>
+                        <option value="8C">Kelas 8C</option><option value="8D">Kelas 8D</option>
+                        <option value="8E">Kelas 8E</option><option value="8F">Kelas 8F</option>
+                    </optgroup>
+
+                    <optgroup label="KELAS 9" class="bg-slate-900 text-yellow-500">
+                        <option value="9A">Kelas 9A</option><option value="9B">Kelas 9B</option>
+                        <option value="9C">Kelas 9C</option><option value="9D">Kelas 9D</option>
+                        <option value="9E">Kelas 9E</option><option value="9F">Kelas 9F</option>
+                    </optgroup>
                 </select>
             </div>
         </div>
 
-        <div class="bg-slate-900/80 rounded-[30px] border border-white/5 overflow-hidden shadow-2xl">
+        <div class="bg-slate-900/60 rounded-[35px] border border-white/5 overflow-hidden shadow-2xl">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-800/50 border-b border-white/5">
-                            <th class="text-[10px] font-black uppercase tracking-widest text-slate-500">Nama Siswa</th>
+                        <tr class="bg-slate-800/40 border-b border-white/10">
+                            <th class="text-center text-[10px] font-black uppercase text-slate-500 w-16">No</th>
+                            <th class="text-[10px] font-black uppercase text-slate-500 w-32">NIS</th>
+                            <th class="text-[10px] font-black uppercase text-slate-500">Nama Siswa</th>
                             <th class="text-center text-[10px] font-black uppercase text-yellow-500">PH1</th>
                             <th class="text-center text-[10px] font-black uppercase text-yellow-500">PH2</th>
                             <th class="text-center text-[10px] font-black uppercase text-blue-500">UTS</th>
@@ -98,94 +108,97 @@
                         </tr>
                     </thead>
                     <tbody id="siswa-list">
-                        <tr><td colspan="5" class="p-10 text-center text-slate-500 text-xs italic">Silakan pilih kelas.</td></tr>
+                        <tr><td colspan="7" class="p-20 text-center text-slate-600 text-sm italic">Pilih kelas untuk memuat data.</td></tr>
                     </tbody>
                 </table>
             </div>
             
-            <div class="p-4 bg-slate-900/50 border-t border-white/5 flex justify-end">
-                <button id="btn-simpan" onclick="simpanKeCloud()" class="hidden bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-8 py-3 rounded-xl uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all">
-                    Simpan Perubahan Nilai
+            <div class="p-6 bg-slate-900/80 border-t border-white/5 flex justify-between items-center gap-4">
+                <button onclick="downloadExcel()" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white font-bold px-6 py-3.5 rounded-2xl uppercase text-[11px] flex items-center gap-2 transition-all border border-emerald-600/30">
+                    Backup .xlsx
+                </button>
+                <button id="btn-simpan" onclick="konfirmasiSimpan()" class="hidden bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-10 py-3.5 rounded-2xl uppercase text-[11px] transition-all shadow-lg shadow-yellow-500/10">
+                    Simpan Nilai
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // MASUKKAN URL WEB APP GAS ANDA DI SINI
         const API_URL = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
-        
-        // Ambil data guru dari login sebelumnya
-        const GURU = JSON.parse(localStorage.getItem('userGuru')) || { nama: "GURU TEST", mapel_aktif: "Informatika" };
-        document.getElementById('info-guru').innerText = `${GURU.nama} | MAPEL: ${GURU.mapel_aktif}`;
+        const GURU = JSON.parse(localStorage.getItem('userGuru')) || { nama: "ENDRA TRIYANTO HAMDANI, S.KOM.", mapel_aktif: "INFORMATIKA" };
+        document.getElementById('info-guru').innerText = `${GURU.nama} | ${GURU.mapel_aktif}`;
+
+        const Toast = Swal.mixin({
+            toast: true, position: 'top-end', showConfirmButton: false, timer: 2000,
+            timerProgressBar: true, background: '#1e293b', color: '#f8fafc'
+        });
 
         async function loadSiswaDanNilai() {
             const kelas = document.getElementById('select-kelas').value;
             const container = document.getElementById('siswa-list');
-            const btnSimpan = document.getElementById('btn-simpan');
-            
             if(!kelas) return;
             
-            container.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-xs font-bold text-yellow-500 animate-pulse uppercase">Sinkronisasi Cloud...</td></tr>';
-            btnSimpan.classList.add('hidden');
+            container.innerHTML = '<tr><td colspan="7" class="p-20 text-center text-xs font-black text-yellow-500 animate-pulse uppercase tracking-widest">Sinkronisasi Data...</td></tr>';
             
             try {
-                // Ambil data siswa dan data nilai sekaligus
                 const [resSiswa, resNilai] = await Promise.all([
-                    fetch(`${API_URL}?sheet=Siswa`),
-                    fetch(`${API_URL}?sheet=Nilai`)
+                    fetch(`${API_URL}?sheet=Siswa`), fetch(`${API_URL}?sheet=Nilai`)
                 ]);
-
                 const allSiswa = await resSiswa.json();
                 const allNilai = await resNilai.json();
-                
-                // Filter siswa berdasarkan kelas
-                const filteredSiswa = allSiswa.filter(s => String(s.kelas || s.KELAS || '').toUpperCase() === kelas.toUpperCase());
-                
-                if(filteredSiswa.length === 0) {
-                    container.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-red-400 font-bold uppercase text-xs">Data kelas ini kosong.</td></tr>';
-                    return;
-                }
+                const filtered = allSiswa.filter(s => String(s.kelas || s.KELAS || '').toUpperCase() === kelas.toUpperCase());
 
-                // Tampilkan ke tabel
-                container.innerHTML = filteredSiswa.map(s => {
-                    const nisn = String(s.nisn || s.NISN);
-                    // Cari apakah nilai sudah ada di database untuk mapel ini
-                    const exist = allNilai.find(n => String(n.nisn) === nisn && n.mapel === GURU.mapel_aktif);
-
+                container.innerHTML = filtered.map((s, i) => {
+                    // Pindah NIS yang tadinya di bawah nama ke kolom NIS
+                    const idSiswa = String(s.nis || s.NIS || s.nisn || s.NISN || '-');
+                    const namaSiswa = s.nama || s.NAMA || 'Tanpa Nama';
+                    const nisnRecord = String(s.nisn || s.NISN || ''); // Tetap simpan NISN asli untuk database
+                    
+                    const exist = allNilai.find(n => String(n.nisn) === nisnRecord && n.mapel === GURU.mapel_aktif);
+                    
                     return `
-                        <tr class="border-b border-white/5 item-siswa" data-nis="${nisn}" data-nama="${s.nama || s.NAMA}" data-kelas="${kelas}">
+                        <tr class="item-siswa" data-no="${i+1}" data-nis="${idSiswa}" data-nisn="${nisnRecord}" data-nama="${namaSiswa}" data-kelas="${kelas}">
+                            <td class="text-center text-[12px] text-slate-500 font-bold">${i+1}</td>
+                            <td class="text-[13px] text-slate-300 font-mono font-bold">${idSiswa}</td>
                             <td>
-                                <div class="font-bold text-white uppercase text-[11px]">${s.nama || s.NAMA}</div>
-                                <div class="text-[9px] text-slate-500">${nisn}</div>
+                                <div class="font-bold text-white text-[14px] uppercase tracking-tight">${namaSiswa}</div>
                             </td>
-                            <td class="text-center"><input type="number" class="input-nilai ph1" value="${exist ? exist.nilai_ph1 : ''}" placeholder="0"></td>
-                            <td class="text-center"><input type="number" class="input-nilai ph2" value="${exist ? exist.nilai_ph2 : ''}" placeholder="0"></td>
-                            <td class="text-center"><input type="number" class="input-nilai uts" value="${exist ? exist.nilai_uts : ''}" placeholder="0"></td>
-                            <td class="text-center"><input type="number" class="input-nilai uas" value="${exist ? exist.nilai_uas : ''}" placeholder="0"></td>
-                        </tr>
-                    `;
+                            <td class="text-center"><input type="number" class="input-nilai ph1" value="${exist ? exist.nilai_ph1 : ''}"></td>
+                            <td class="text-center"><input type="number" class="input-nilai ph2" value="${exist ? exist.nilai_ph2 : ''}"></td>
+                            <td class="text-center"><input type="number" class="input-nilai uts" value="${exist ? exist.nilai_uts : ''}"></td>
+                            <td class="text-center"><input type="number" class="input-nilai uas" value="${exist ? exist.nilai_uas : ''}"></td>
+                        </tr>`;
                 }).join('');
-                
-                btnSimpan.classList.remove('hidden');
+                document.getElementById('btn-simpan').classList.remove('hidden');
             } catch(e) { 
-                container.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-red-500 font-bold text-xs uppercase">Koneksi Gagal.</td></tr>'; 
+                Swal.fire('Error', 'Gagal memuat data!', 'error');
             }
+        }
+
+        function konfirmasiSimpan() {
+            Swal.fire({
+                title: 'Simpan Nilai?',
+                text: "Data akan diperbarui di Cloud.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#eab308',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => { if (result.isConfirmed) simpanKeCloud(); });
         }
 
         async function simpanKeCloud() {
             const btn = document.getElementById('btn-simpan');
             const rows = document.querySelectorAll('.item-siswa');
             const dataKirim = [];
-
-            btn.innerText = "SEDANG MENYIMPAN...";
-            btn.disabled = true;
+            btn.innerText = "PROSES..."; btn.disabled = true;
 
             rows.forEach(row => {
                 dataKirim.push({
-                    nisn: row.getAttribute('data-nis'),
+                    nisn: row.getAttribute('data-nisn'), 
                     nama: row.getAttribute('data-nama'),
-                    kelas: row.getAttribute('data-kelas'),
+                    kelas: row.getAttribute('data-kelas'), 
                     mapel: GURU.mapel_aktif,
                     nilai_ph1: row.querySelector('.ph1').value || 0,
                     nilai_ph2: row.querySelector('.ph2').value || 0,
@@ -195,19 +208,34 @@
             });
 
             try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(dataKirim)
-                });
-                const result = await response.text();
-                alert(result);
-                btn.innerText = "Simpan Perubahan Nilai";
-                btn.disabled = false;
+                await fetch(API_URL, { method: 'POST', body: JSON.stringify(dataKirim) });
+                Toast.fire({ icon: 'success', title: 'Berhasil disimpan!' });
             } catch (err) {
-                alert("Gagal menyimpan ke Google Sheets!");
-                btn.innerText = "Simpan Perubahan Nilai";
-                btn.disabled = false;
+                Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+            } finally {
+                btn.innerText = "Simpan Nilai"; btn.disabled = false;
             }
+        }
+
+        function downloadExcel() {
+            const rows = document.querySelectorAll('.item-siswa');
+            const kelas = document.getElementById('select-kelas').value;
+            if (rows.length === 0) return Swal.fire('Oops', 'Data kosong!', 'warning');
+
+            const data = [["NO", "NIS/NISN", "NAMA SISWA", "KELAS", "MAPEL", "PH1", "PH2", "UTS", "UAS"]];
+            rows.forEach(r => {
+                data.push([
+                    r.getAttribute('data-no'), r.getAttribute('data-nis'), r.getAttribute('data-nama'),
+                    r.getAttribute('data-kelas'), GURU.mapel_aktif,
+                    r.querySelector('.ph1').value || 0, r.querySelector('.ph2').value || 0,
+                    r.querySelector('.uts').value || 0, r.querySelector('.uas').value || 0
+                ]);
+            });
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, "Rekap Nilai");
+            XLSX.writeFile(wb, `Backup_Nilai_${GURU.mapel_aktif}_${kelas}.xlsx`);
         }
     </script>
 </body>
