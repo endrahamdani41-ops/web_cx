@@ -7,89 +7,111 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #020617; /* Navy Gelap */
+            color: #f8fafc;
+        }
 
-        /* --- SISTEM ULTRA GLOW --- */
+        /* --- SISTEM ULTRA GLOW DARK MODE --- */
         .glow-card {
-            transition: all 0.5s ease;
-            background: white;
-            box-shadow: 0 0 20px 2px rgba(59, 130, 246, 0.15);
-            animation: pulse-glow 3s infinite ease-in-out;
-            border: none !important;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #1e293b; /* Slate 800 */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: pulse-glow-dark 4s infinite ease-in-out;
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 15px 2px rgba(59, 130, 246, 0.2); }
-            50% { box-shadow: 0 0 35px 10px rgba(59, 130, 246, 0.4); }
+        @keyframes pulse-glow-dark {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(234, 179, 8, 0.2); } /* Glow Kuning Lembut */
         }
 
-        .glow-card:nth-child(even) { animation-delay: 1.5s; }
+        .glow-card:nth-child(even) { animation-delay: 2s; }
 
         .glow-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 0 50px 15px rgba(59, 130, 246, 0.6) !important;
+            transform: translateY(-12px);
+            box-shadow: 0 0 40px rgba(234, 179, 8, 0.3) !important;
+            border-color: rgba(234, 179, 8, 0.4);
             animation: none;
             cursor: pointer;
+        }
+
+        .section-divider {
+            height: 4px;
+            width: 60px;
+            background: #eab308;
+            border-radius: 99px;
+            margin: 1rem 0 1.5rem 0;
         }
 
         #header-placeholder { min-height: 0; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900">
+<body class="text-slate-200">
 
     <div id="header-placeholder"></div>
 
-    <header class="bg-[#1A2A6C] py-16 md:py-20 text-white text-center relative overflow-hidden mt-0">
-        <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <circle cx="10" cy="10" r="20" fill="white"/>
-                <circle cx="90" cy="80" r="25" fill="white"/>
-            </svg>
+    <header class="relative py-20 md:py-32 text-center overflow-hidden bg-[#020617]">
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="absolute top-0 left-1/4 w-64 h-64 bg-blue-600 rounded-full filter blur-[120px]"></div>
+            <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-yellow-600 rounded-full filter blur-[120px]"></div>
         </div>
         
-        <div class="relative z-10 container mx-auto px-6 flex flex-col items-center justify-center">
-            <h1 class="text-4xl md:text-6xl font-black tracking-tighter italic uppercase leading-none mb-3">
-                Profil <span class="text-white">Sekolah</span>
+        <div class="relative z-10 container mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none mb-4">
+                Profil <span class="text-yellow-500">Sekolah</span>
             </h1>
-            <p class="text-yellow-400 font-bold tracking-[0.3em] text-[10px] md:text-xs uppercase opacity-90">
+            <p class="text-slate-400 font-bold tracking-[0.4em] text-[10px] md:text-xs uppercase">
                 Mengenal Lebih Dekat SMPN 110 Jakarta
             </p>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+    <main class="container mx-auto px-6 pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             
-            <div class="glow-card p-10 rounded-[45px] flex flex-col justify-between">
-                <div>
-                    <div class="text-5xl mb-6">📖</div>
-                    <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Sejarah</h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        SMP Negeri 110, dengan NPSN 20102527, merupakan sekolah menengah pertama negeri yang berlokasi 
-                        di Jl. Kemajuan No. 48 RT. 006 RW. 004, Petukangan Selatan, Kecamatan Pesanggrahan, Jakarta Selatan. 
-                        Sekolah ini berdiri sejak tahun 1978 dan telah diakreditasi A dengan nomor 255/BAP-SM/DKI/2017. 
-                    </p>
-                </div>
+            <div class="glow-card p-10 rounded-[45px] flex flex-col">
+                <div class="text-5xl mb-6">📖</div>
+                <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Sejarah</h2>
+                <div class="section-divider"></div>
+                <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                    SMP Negeri 110 Jakarta merupakan sekolah menengah pertama negeri yang berlokasi di Petukangan Selatan, Jakarta Selatan. 
+                    Berdiri sejak tahun 1978, sekolah ini telah mengukir sejarah panjang dalam mencetak putra-putri berprestasi dan kini telah terakreditasi A secara konsisten.
+                </p>
             </div>
 
             <div class="glow-card p-10 rounded-[45px] lg:col-span-2">
-                <div class="flex flex-col md:flex-row gap-10 h-full items-stretch">
-                    <div class="md:w-1/2 flex flex-col justify-center">
+                <div class="flex flex-col md:flex-row gap-10 h-full items-start">
+                    <div class="md:w-1/2">
                         <div class="text-5xl mb-6">👁️</div>
-                        <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Visi</h2>
-                        <p class="text-slate-500 text-lg italic leading-relaxed font-medium">
+                        <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Visi</h2>
+                        <div class="section-divider"></div>
+                        <p class="text-slate-200 text-xl italic leading-relaxed font-bold">
                             "Terwujudnya insan yang religius, cerdas, mandiri, dan berwawasan lingkungan."
                         </p>
                     </div>
                     
-                    <div class="md:w-1/2 border-t md:border-t-0 md:border-l border-slate-100 pt-8 md:pt-0 md:pl-10 flex flex-col justify-center">
+                    <div class="md:w-1/2 border-t md:border-t-0 md:border-l border-slate-700 pt-8 md:pt-0 md:pl-10">
                         <div class="text-5xl mb-6">🎯</div>
-                        <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Misi</h2>
-                        <ul class="text-slate-500 text-sm space-y-3 font-semibold list-disc ml-4">
-                            <li>Meningkatkan ketaqwaan terhadap Tuhan YME.</li>
-                            <li>Melaksanakan pembelajaran efektif & inovatif.</li>
-                            <li>Mengembangkan potensi diri siswa secara mandiri.</li>
-                            <li>Menumbuhkan budaya peduli lingkungan.</li>
+                        <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Misi</h2>
+                        <div class="section-divider"></div>
+                        <ul class="text-slate-400 text-sm space-y-3 font-semibold list-none">
+                            <li class="flex items-start gap-2">
+                                <span class="text-yellow-500">✔</span> Meningkatkan ketaqwaan terhadap Tuhan YME.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-yellow-500">✔</span> Melaksanakan pembelajaran efektif & inovatif.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-yellow-500">✔</span> Mengembangkan potensi diri siswa secara mandiri.
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-yellow-500">✔</span> Menumbuhkan budaya peduli lingkungan.
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -97,25 +119,28 @@
 
             <div class="glow-card p-10 rounded-[45px]">
                 <div class="text-5xl mb-6">📜</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Kurikulum</h2>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    Penerapan Kurikulum Merdeka secara penuh dengan fokus pada pengembangan karakter Projek P5.
+                <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Kurikulum</h2>
+                <div class="section-divider"></div>
+                <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                    Penerapan Kurikulum Merdeka secara penuh dengan fokus pada pengembangan karakter melalui Projek Penguatan Profil Pelajar Pancasila (P5).
                 </p>
             </div>
 
             <div class="glow-card p-10 rounded-[45px]">
                 <div class="text-5xl mb-6">🏫</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Fasilitas</h2>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    Laboratorium komputer, Perpustakaan, Lapangan Olahraga, dan ruang kelas berbasis teknologi.
+                <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Fasilitas</h2>
+                <div class="section-divider"></div>
+                <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                    Laboratorium Komputer modern, Perpustakaan Digital, Lapangan Olahraga luas, dan ruang kelas interaktif berbasis teknologi tinggi.
                 </p>
             </div>
 
             <div class="glow-card p-10 rounded-[45px]">
                 <div class="text-5xl mb-6">🏀</div>
-                <h2 class="text-2xl font-black text-[#1A2A6C] mb-4 uppercase italic">Ekskul</h2>
-                <p class="text-slate-500 text-sm leading-relaxed">
-                    Wadah kreativitas mulai dari Pramuka, Paskibra, Seni Tari, hingga berbagai klub olahraga.
+                <h2 class="text-2xl font-black text-white mb-2 uppercase italic">Ekskul</h2>
+                <div class="section-divider"></div>
+                <p class="text-slate-400 text-sm leading-relaxed font-medium">
+                    Wadah kreativitas mulai dari Pramuka, Paskibra, Seni Tari, hingga klub Robotik dan berbagai cabang olahraga prestasi.
                 </p>
             </div>
 
@@ -135,11 +160,12 @@
                 document.getElementById('header-placeholder').innerHTML = await hRes.text();
                 document.getElementById('footer-placeholder').innerHTML = await fRes.text();
 
+                // Aktifkan indikator navigasi
                 const links = document.querySelectorAll('.nav-link');
                 links.forEach(link => {
-                    link.classList.remove('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                    link.classList.remove('text-yellow-500', 'border-b-2', 'border-yellow-500', 'pb-1');
                     if(link.getAttribute('href') === 'profil.html') {
-                        link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
+                        link.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500', 'pb-1');
                     }
                 });
             } catch(e) { 

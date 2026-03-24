@@ -7,305 +7,258 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
-        #hero-section {
-            position: relative;
-            height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background-color: #1A2A6C;
-        }
-
-        .slide {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            z-index: 0;
-        }
-
-        .slide.active { opacity: 0.75; }
-
-        @keyframes slowZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        .zoom-effect { animation: slowZoom 20s linear infinite alternate; }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
-            z-index: 1;
-        }
-
-        .hero-content { position: relative; z-index: 2; }
+        /* Hero & Slideshow */
+        #hero-section { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s; z-index: 0; filter: brightness(0.4); }
+        .slide.active { opacity: 1; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,6,23,0.1), rgba(2,6,23,0.9)); z-index: 1; }
         
-        .glow-hover { transition: all 0.4s ease; }
-        .glow-hover:hover { 
-            transform: translateY(-10px); 
-            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.5);
-        }
-
-        /* --- SKELETON ANIMATION --- */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-        }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .news-card { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
-        .news-card.loaded { opacity: 1; transform: translateY(0); }
+        /* Cards */
+        .dark-card { background: #1e293b; border: 1px solid rgba(255,255,255,0.05); transition: all 0.4s; cursor: pointer; }
+        .dark-card:hover { transform: translateY(-10px); border-color: rgba(234, 179, 8, 0.4); }
+        
+        /* Modal System */
+        .modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        
+        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.5rem center; background-size: 1rem; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900">
+<body>
 
     <div id="header-placeholder"></div>
+
+    <div id="modalSiswa" class="modal-overlay p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-[40px] p-10 relative text-center">
+            <button onclick="closeModal('modalSiswa')" class="absolute top-6 right-6 text-slate-500 hover:text-white">✕</button>
+            <div class="text-5xl mb-4">👨‍🎓</div>
+            <h2 class="text-3xl font-black text-white italic centralized mb-8">Portal <span class="text-yellow-500">Siswa</span></h2>
+            <div class="space-y-4">
+                <input type="text" id="nisnInput" placeholder="MASUKKAN NIS" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-yellow-500 outline-none">
+                <button id="btnSiswa" onclick="validateLogin('Siswa', 'nisnInput', 'errorSiswa', 'btnSiswa', 'userSiswa', 'halaman-siswa.html')" class="w-full bg-yellow-500 text-slate-950 font-black py-5 rounded-2xl centralized text-sm tracking-widest hover:bg-yellow-400 transition-all">Masuk Portal</button>
+                <p id="errorSiswa" class="text-red-500 text-[10px] font-black centralized hidden animate-pulse">⚠️ NISN Tidak Ditemukan!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalGuru" class="modal-overlay p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-[40px] p-10 relative">
+            <button onclick="closeModal('modalGuru')" class="absolute top-6 right-6 text-slate-500 hover:text-white">✕</button>
+            <div id="guruStep1" class="text-center">
+                <div class="text-5xl mb-4">👨‍🏫</div>
+                <h2 class="text-3xl font-black text-white italic centralized mb-8">Portal <span class="text-blue-500">Guru</span></h2>
+                <div class="space-y-4">
+                    <input type="text" id="nipInput" placeholder="USERNAME" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-blue-500 outline-none">
+                    <button id="btnVerifyGuru" onclick="verifyGuruNip()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl centralized text-sm tracking-widest hover:bg-blue-500 transition-all">Lanjut Verifikasi</button>
+                    <p id="errorGuru" class="text-red-500 text-[10px] font-black centralized hidden animate-pulse">⚠️ Data Guru Tidak Ditemukan!</p>
+                </div>
+            </div>
+            <div id="guruStep2" class="hidden text-center">
+                <h2 class="text-2xl font-black text-white italic centralized mb-2">Pilih <span class="text-blue-500">Mapel</span></h2>
+                <p id="welcomeGuru" class="text-slate-400 text-xs font-bold centralized mb-8 tracking-widest"></p>
+                <div class="space-y-4 text-left">
+                    <select id="mapelSelect" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white font-bold outline-none focus:border-blue-500 cursor-pointer">
+                        <option value="" disabled selected>-- PILIH MATA PELAJARAN --</option>
+                        <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
+                        <option value="PENDIDIKAN PANCASILA">PENDIDIKAN PANCASILA</option>
+                        <option value="MATEMATIKA">MATEMATIKA</option>
+                        <option value="BAHASA INDONESIA">BAHASA INDONESIA</option>
+                        <option value="IPA">IPA</option>
+                        <option value="IPS">IPS</option>
+                        <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
+                        <option value="PJOK">PJOK</option>
+                        <option value="INFORMATIKA">INFORMATIKA</option>
+                        <option value="SENI BUDAYA">SENI BUDAYA</option>
+                    </select>
+                    <button onclick="finalLoginGuru()" class="w-full bg-green-600 text-white font-black py-5 rounded-2xl centralized text-sm tracking-widest hover:bg-green-500 transition-all">Masuk Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <header id="hero-section">
         <div id="slide-container" class="absolute inset-0 w-full h-full"></div>
         <div class="hero-overlay"></div>
-        <div class="hero-content text-center px-6 text-white">
-            <h1 class="text-5xl md:text-8xl font-black mb-4 drop-shadow-2xl italic tracking-tighter leading-none uppercase">
-                SMPN <span class="text-yellow-400">110</span> Jakarta
+        <div class="hero-content text-center px-6 relative z-10">
+            <h1 class="text-6xl md:text-9xl font-black mb-4 italic tracking-tighter centralized leading-none">
+                <span class="text-[#1E90FF]">SMPN 110</span> 
+                <span class="text-yellow-500">Jakarta</span>
             </h1>
-            <p class="text-lg md:text-2xl italic font-bold drop-shadow-md tracking-tight">
-                "Terwujudnya insan yang religius, cerdas, dan mandiri"
+            <p class="text-lg md:text-2xl italic font-bold text-slate-200 centralized tracking-widest mb-10">
+                "Unggul dalam prestasi, santun dalam budi pekerti"
             </p>
-            <div class="mt-10">
-                <a href="#berita" class="px-8 py-4 bg-yellow-500 text-black font-black tracking-widest rounded-2xl hover:bg-white transition-all duration-300 shadow-xl shadow-yellow-500/20 uppercase inline-block">
-                    Lihat Berita Terbaru
-                </a>
-            </div>
+            <a href="#berita" class="inline-block bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-10 py-4 rounded-2xl centralized tracking-widest text-sm transition-all transform hover:scale-105 shadow-2xl">
+                Lihat Berita Terbaru
+            </a>
         </div>
     </header>
 
-    <section class="relative z-20 py-16 container mx-auto px-6 -mt-24">
+    <section class="relative z-20 py-16 container mx-auto px-6 -mt-32">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div onclick="openModalLogin()" class="glow-hover bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-yellow-500 cursor-pointer group transition-all duration-500">
-                <h3 class="text-5xl font-black text-[#1A2A6C]">600+</h3>
-                <p class="text-gray-500 font-bold text-[10px] mt-1 tracking-widest uppercase text-center">Siswa</p>
-                <span class="text-[10px] text-blue-600 font-bold mt-4 block group-hover:underline uppercase text-center">Login Siswa →</span>
+            <div onclick="openModal('modalSiswa')" class="dark-card bg-slate-800/90 p-10 rounded-[45px] text-center border-b-8 border-yellow-500 group">
+                <h3 class="text-5xl font-black text-white group-hover:text-yellow-500 transition-colors">600+</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 centralized italic">Akses Siswa</p>
             </div>
-            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-blue-600">
-                <h3 class="text-5xl font-black text-[#1A2A6C]">45</h3>
-                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">GTK</p>
+            <div onclick="openModal('modalGuru')" class="dark-card bg-slate-800/90 p-10 rounded-[45px] text-center border-b-8 border-blue-600 group">
+                <h3 class="text-5xl font-black text-white group-hover:text-blue-500 transition-colors">45</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 centralized italic">Akses Guru</p>
             </div>
-            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-yellow-500">
-                <h3 class="text-5xl font-black text-[#1A2A6C]">18</h3>
-                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">Rombel</p>
+            <div class="dark-card bg-slate-800/90 p-10 rounded-[45px] text-center border-b-8 border-yellow-500">
+                <h3 class="text-5xl font-black text-white">18</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 centralized italic">Ruang Kelas</p>
             </div>
-            <div class="bg-white p-8 rounded-[40px] shadow-2xl text-center border-b-8 border-blue-600">
-                <h3 class="text-5xl font-black text-[#1A2A6C]">30+</h3>
-                <p class="text-gray-500 font-bold text-[10px] tracking-widest uppercase text-center">Prestasi</p>
+            <div class="dark-card bg-slate-800/90 p-10 rounded-[45px] text-center border-b-8 border-blue-600">
+                <h3 class="text-5xl font-black text-white">A</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 centralized italic">Akreditasi</p>
             </div>
         </div>
     </section>
 
-    <section id="berita" class="py-24 bg-white">
+    <section id="sambutan" class="py-20">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                <div class="text-center md:text-left">
-                    <h2 class="text-5xl font-black text-[#1A2A6C] tracking-tighter italic leading-none uppercase">Berita <span class="text-yellow-500">Terbaru</span></h2>
-                    <div class="h-2 w-24 bg-yellow-400 mt-4 rounded-full mx-auto md:mx-0"></div>
-                </div>
-                <a href="berita.html" class="text-[#1A2A6C] font-black tracking-widest text-xs border-b-2 border-[#1A2A6C] pb-1 hover:text-yellow-500 transition-all uppercase">Lihat Semua Berita</a>
-            </div>
-
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="skeleton-item">
-                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
-                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
-                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
-                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
-                </div>
-                <div class="skeleton-item">
-                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
-                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
-                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
-                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
-                </div>
-                <div class="skeleton-item">
-                    <div class="h-72 w-full skeleton rounded-[40px] mb-6"></div>
-                    <div class="h-6 w-3/4 skeleton rounded mx-auto mb-3"></div>
-                    <div class="h-4 w-full skeleton rounded mx-auto mb-2"></div>
-                    <div class="h-4 w-2/3 skeleton rounded mx-auto"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="sambutan" class="py-12 bg-gray-50">
-        <div class="container-fluid px-4 md:px-10">
-            <div class="max-w-[1600px] mx-auto bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row items-center p-3 md:p-6 border border-slate-100 gap-6">
-                <div class="w-full md:w-[30%] p-2"> 
-                    <div class="relative rounded-[30px] overflow-hidden shadow-xl aspect-[3/4] group border-4 border-gray-50 bg-slate-100">
-                        <img id="foto-kepala-img" src="" class="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#1A2A6C]/90 via-transparent to-transparent pointer-events-none"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
-                            <h3 id="nama-kepala-text" class="text-base md:text-xl font-black text-white leading-tight italic tracking-tighter block truncate">Memuat...</h3>
-                            <div class="h-1 w-12 bg-yellow-400 mx-auto mt-2 rounded-full"></div>
-                            <p class="text-yellow-400 text-[10px] md:text-[11px] font-bold tracking-[0.3em] mt-2 uppercase text-center">Kepala Sekolah</p>
+            <div class="bg-slate-900 rounded-[60px] p-10 flex flex-col md:flex-row items-center gap-12 border border-white/5 shadow-2xl">
+                <div class="w-full md:w-[30%] bg-slate-800 p-4 rounded-[40px]">
+                    <div class="relative h-[400px] rounded-[30px] overflow-hidden bg-black">
+                        <img id="foto-kepala-img" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700" onload="this.style.opacity='1'">
+                        <div class="absolute bottom-0 w-full p-6 text-center bg-gradient-to-t from-black">
+                            <h3 id="nama-kepala-text" class="text-white font-black centralized italic text-sm">Loading...</h3>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-[70%] px-6 md:px-12 py-2 flex flex-col justify-center">
-                    <div class="mb-5 text-center md:text-left">
-                        <span class="text-yellow-500 text-6xl font-serif opacity-20 leading-none">“</span>
-                        <h2 class="text-3xl md:text-4xl font-black text-[#1A2A6C] italic tracking-tighter -mt-10 leading-none uppercase">
-                            Sambutan <span class="text-yellow-500">Kepala Sekolah</span>
-                        </h2>
-                    </div>
-                    <p id="teks-sambutan" class="text-slate-600 text-lg md:text-xl leading-relaxed italic font-medium border-l-4 border-yellow-400 pl-8 py-2">Memuat pesan...</p>
+                <div class="w-full md:w-[70%]">
+                    <p id="teks-sambutan" class="text-slate-300 text-lg md:text-xl leading-relaxed italic border-l-8 border-yellow-500 pl-8">
+                        Memuat sambutan...
+                    </p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="berita" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-black text-white centralized italic mb-12">Warta <span class="text-yellow-500">Sekolah</span></h2>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
         </div>
     </section>
 
     <div id="footer-placeholder"></div>
-    
+
     <script>
-        const API_BASE = 'https://script.google.com/macros/s/AKfycbxCHOmBjU3pQ9eRC76b4Xw1NoXQCM2_ugnsmYTXdBFEWdYauqvqBgRVPvMWBp0xOBU9/exec';
-        let allNewsData = [];
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
+        let temporaryGuruData = null;
 
-        function openModalLogin() { window.location.href = 'login.html'; }
+        async function includeLayouts() {
+            const sections = [{ id: 'header-placeholder', file: 'header.html' }, { id: 'footer-placeholder', file: 'footer.html' }];
+            for (const s of sections) {
+                try {
+                    const r = await fetch(s.file);
+                    if (r.ok) document.getElementById(s.id).innerHTML = await r.text();
+                } catch (e) { console.warn("Layout error."); }
+            }
+        }
 
-        async function includeLayout() {
+        function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active'); 
+            document.body.style.overflow = 'auto'; 
+            document.getElementById('guruStep1').classList.remove('hidden');
+            document.getElementById('guruStep2').classList.add('hidden');
+        }
+
+        async function validateLogin(sheetName, inputId, errorId, btnId, storageKey, redirectUrl) {
+            const val = document.getElementById(inputId).value.trim();
+            const btn = document.getElementById(btnId);
+            const err = document.getElementById(errorId);
+            if(!val) return alert("Harap isi ID Anda!");
+            btn.innerText = "VERIFIKASI...";
+            btn.disabled = true;
             try {
-                const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
-                document.getElementById('header-placeholder').innerHTML = await hRes.text();
-                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
-            } catch (err) { console.warn("Layout missing."); }
+                const r = await fetch(`${API_BASE}?sheet=${sheetName}`);
+                const data = await r.json();
+                const user = data.find(u => String(u.nisn || u.NISN).trim() === val);
+                if(user) {
+                    localStorage.setItem(storageKey, JSON.stringify(user));
+                    window.location.href = redirectUrl;
+                } else {
+                    err.classList.remove('hidden');
+                    btn.innerText = "MASUK PORTAL";
+                    btn.disabled = false;
+                }
+            } catch (e) { alert("Error Server"); btn.disabled = false; }
         }
 
-        function fixUrl(url) {
-            if (!url) return 'https://via.placeholder.com/800x600?text=No+Image';
-            if (url.includes('drive.google.com')) {
-                const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
-                return `https://drive.google.com/uc?export=view&id=${id}`;
-            }
-            return url;
-        }
-
-        function getKategoriColor(kat) {
-            if (!kat) return 'bg-slate-800 text-white';
-            const kategori = kat.toLowerCase().trim();
-            if (kategori === 'prestasi') return 'bg-yellow-400 text-black';
-            if (kategori === 'kegiatan') return 'bg-blue-600 text-white';
-            if (kategori === 'pengumuman') return 'bg-red-500 text-white';
-            return 'bg-slate-800 text-white';
-        }
-
-        async function loadBerita() {
-            const container = document.getElementById('news-container');
-            
+        async function verifyGuruNip() {
+            const val = document.getElementById('nipInput').value.trim();
+            const btn = document.getElementById('btnVerifyGuru');
+            const err = document.getElementById('errorGuru');
+            if(!val) return alert("Isi NIP/Username!");
+            btn.innerText = "MENGECEK...";
+            btn.disabled = true;
             try {
-                // Gunakan cache jika ada agar tampil instan
-                const cachedNews = localStorage.getItem('berita_cache');
-                if (cachedNews) renderNewsHTML(JSON.parse(cachedNews));
-
-                const res = await fetch(`${API_BASE}?sheet=Berita`);
-                allNewsData = await res.json();
-                
-                // Simpan ke cache untuk kunjungan berikutnya
-                localStorage.setItem('berita_cache', JSON.stringify(allNewsData));
-                
-                renderNewsHTML(allNewsData);
-            } catch(e) { 
-                console.error("Berita gagal dimuat"); 
-            }
+                const r = await fetch(`${API_BASE}?sheet=Guru`);
+                const data = await r.json();
+                const user = data.find(u => String(u.nip || u.NIP || u.username).trim() === val);
+                if(user) {
+                    temporaryGuruData = user;
+                    document.getElementById('guruStep1').classList.add('hidden');
+                    document.getElementById('guruStep2').classList.remove('hidden');
+                    document.getElementById('welcomeGuru').innerText = `Halo, ${user.nama || user.NAMA}`;
+                } else {
+                    err.classList.remove('hidden');
+                    btn.innerText = "LANJUT VERIFIKASI";
+                    btn.disabled = false;
+                }
+            } catch (e) { alert("Error Server"); btn.disabled = false; }
         }
 
-        function renderNewsHTML(data) {
-            const container = document.getElementById('news-container');
-            const latest = [...data].reverse().slice(0, 3);
-            
-            const html = latest.map((item, index) => {
-                const originalIndex = data.indexOf(item);
-                return `
-                    <div onclick="location.href='detail-berita.html?id=${originalIndex}'" class="news-card group cursor-pointer">
-                        <div class="img-container relative h-72 rounded-[40px] overflow-hidden mb-6 shadow-lg bg-slate-100 flex items-center justify-center">
-                            <img src="${fixUrl(item.url_foto)}" class="max-w-full max-h-full object-contain p-2 transition-transform duration-700 group-hover:scale-105">
-                            <div class="absolute top-6 left-6 ${getKategoriColor(item.kategori)} text-[10px] font-black px-4 py-2 rounded-xl tracking-widest z-10 shadow-lg uppercase">
-                                ${item.kategori}
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-black text-[#1A2A6C] italic leading-tight group-hover:text-yellow-600 transition-colors uppercase text-center">${item.judul}</h3>
-                        <p class="text-slate-500 text-sm mt-3 line-clamp-2 text-center">${item.ringkasan}</p>
-                    </div>
-                `;
-            }).join('');
-
-            container.innerHTML = html;
-
-            // Berikan sedikit delay agar transisi fade-in berjalan smooth
-            setTimeout(() => {
-                document.querySelectorAll('.news-card').forEach((card, i) => {
-                    setTimeout(() => card.classList.add('loaded'), i * 100);
-                });
-            }, 50);
+        function finalLoginGuru() {
+            const mapel = document.getElementById('mapelSelect').value;
+            if(!mapel) return alert("Pilih Mata Pelajaran!");
+            const finalData = { ...temporaryGuruData, mapel_aktif: mapel };
+            localStorage.setItem('userGuru', JSON.stringify(finalData));
+            window.location.href = 'halaman-guru.html';
         }
 
-        function renderHero(data) {
-            const main = data.find(i => i.kunci === 'background_utama');
-            if (main) {
-                document.getElementById('foto-kepala-img').src = fixUrl(main.foto_kepala);
-                document.getElementById('teks-sambutan').innerText = main.isi_sambutan;
-                document.getElementById('nama-kepala-text').innerText = main.nama_kepala;
-            }
-            const urls = data.filter(i => i.url_gambar).map(i => fixUrl(i.url_gambar));
-            initSlideshow(urls);
-        }
-
-        function initSlideshow(urls) {
-            const container = document.getElementById('slide-container');
-            container.innerHTML = "";
-            let slides = urls.map((url, i) => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.className = `slide zoom-effect ${i === 0 ? 'active' : ''}`;
-                container.appendChild(img);
-                return img;
-            });
-            let current = 0;
-            if (slides.length > 1) {
+        function displayContent(type, data) {
+            if (type === 'hero') {
+                const main = data.find(i => (i.kunci || i.KUNCI) === 'background_utama');
+                if (main) {
+                    document.getElementById('foto-kepala-img').src = main.foto_kepala || main.FOTO_KEPALA;
+                    document.getElementById('teks-sambutan').innerText = main.isi_sambutan || main.ISI_SAMBUTAN;
+                    document.getElementById('nama-kepala-text').innerText = main.nama_kepala || main.NAMA_KEPALA;
+                }
+                const slides = data.filter(i => (i.url_gambar || i.URL_GAMBAR)).map(i => i.url_gambar || i.URL_GAMBAR);
+                document.getElementById('slide-container').innerHTML = slides.map((s, i) => `<img src="${s}" class="slide ${i === 0 ? 'active' : ''}">`).join('');
+                let current = 0;
                 setInterval(() => {
-                    slides[current].classList.remove('active');
-                    current = (current + 1) % slides.length;
-                    slides[current].classList.add('active');
-                }, 6000);
+                    const imgs = document.querySelectorAll('.slide');
+                    if(imgs.length < 2) return;
+                    imgs[current].classList.remove('active');
+                    current = (current + 1) % imgs.length;
+                    imgs[current].classList.add('active');
+                }, 5000);
+            }
+            if (type === 'berita') {
+                document.getElementById('news-container').innerHTML = data.reverse().slice(0, 3).map(n => `
+                    <div class="dark-card p-6 rounded-[40px] group">
+                        <div class="overflow-hidden rounded-[30px] mb-4"><img src="${n.url_foto || n.URL_FOTO}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"></div>
+                        <p class="text-yellow-500 text-[9px] font-black centralized tracking-widest mb-2">Informasi Terbaru</p>
+                        <h3 class="text-white font-black centralized italic leading-tight">${n.judul || n.JUDUL}</h3>
+                    </div>`).join('');
             }
         }
 
         async function initApp() {
-            includeLayout();
-            const cachedHero = localStorage.getItem('hero_data');
-            if (cachedHero) renderHero(JSON.parse(cachedHero));
-            
-            // Panggil Berita
-            loadBerita();
-
+            includeLayouts();
             try {
-                const res = await fetch(`${API_BASE}?sheet=Hero`);
-                const newData = await res.json();
-                localStorage.setItem('hero_data', JSON.stringify(newData));
-                if (!cachedHero) renderHero(newData);
-            } catch(e) {}
+                const [rh, rb] = await Promise.all([ fetch(`${API_BASE}?sheet=Hero&t=${Date.now()}`), fetch(`${API_BASE}?sheet=Berita&t=${Date.now()}`) ]);
+                const dh = await rh.json(); const db = await rb.json();
+                displayContent('hero', dh); displayContent('berita', db);
+            } catch (e) {}
         }
-
-        initApp();
+        window.onload = initApp;
     </script>
 </body>
 </html>

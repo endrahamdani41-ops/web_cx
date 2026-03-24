@@ -7,109 +7,104 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
         
-        .card-shadow { box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #020617; 
+            color: #f8fafc;
+        }
         
-        /* Menghilangkan celah putih di atas sebelum navigasi muncul */
+        .guru-card {
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 35px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .guru-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(234, 179, 8, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
         #header-placeholder { min-height: 0; }
-        
-        /* Mencegah konten melompat saat data muncul */
         #guru-container { min-height: 60vh; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #eab308; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900">
+<body class="text-slate-200">
 
     <div id="header-placeholder"></div>
 
-    <header class="bg-[#1A2A6C] pt-10 pb-20 text-white text-center relative overflow-hidden mt-0">
-        <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <circle cx="10" cy="10" r="20" fill="white"/>
-                <circle cx="90" cy="80" r="25" fill="white"/>
-            </svg>
-        </div>
+    <header class="relative py-20 text-center overflow-hidden bg-[#020617]">
         <div class="relative z-10 container mx-auto px-6">
-            <h1 class="text-4xl md:text-5xl font-black mb-4 uppercase italic">Guru & Tenaga Kependidikan</h1>
-            <p class="text-yellow-400 font-bold tracking-[0.3em] text-xs uppercase">Dedikasi Untuk Mencerdaskan Bangsa</p>
+            <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-4 leading-none text-white">
+                Guru & <span class="text-yellow-500">Tenaga Kependidikan</span>
+            </h1>
+            <p class="text-yellow-500 font-bold tracking-[0.4em] text-[10px] md:text-xs uppercase opacity-80">
+                Dedikasi Untuk Mencerdaskan Bangsa
+            </p>
         </div>
     </header>
 
-    <section class="container mx-auto px-6 -mt-8 relative z-20">
+    <section class="container mx-auto px-6 -mt-10 relative z-20">
         <div class="max-w-md mx-auto">
-            <div class="bg-white p-4 rounded-full shadow-2xl flex items-center px-8 border border-slate-100">
-                <span class="text-xl mr-2">🔍</span>
-                <input type="text" id="search-input" onkeyup="filterGuru()" placeholder="Cari nama guru..." 
-                       class="w-full outline-none font-medium text-slate-600 text-center placeholder:text-slate-400">
+            <div class="bg-slate-900/90 backdrop-blur-md p-2 rounded-2xl shadow-2xl flex items-center px-6 border border-slate-700 focus-within:border-yellow-500 transition-all">
+                <span class="text-xl mr-3 opacity-50">🔍</span>
+                <input type="text" id="search-input" onkeyup="filterGuru()" placeholder="Cari nama atau bidang studi..." 
+                       class="w-full bg-transparent outline-none py-3 font-medium text-white placeholder:text-slate-500">
             </div>
         </div>
     </section>
 
-    <section class="py-20 container mx-auto px-6">
-        <div id="guru-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section class="py-24 container mx-auto px-6">
+        <div id="guru-container" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+            <div class="col-span-full text-center py-20">
+                <p class="animate-pulse text-slate-500 font-bold uppercase tracking-widest">Mengambil Data Guru...</p>
             </div>
+        </div>
         
         <div id="error-state" class="hidden text-center py-20">
-            <p class="text-red-500 font-bold uppercase italic">Gagal memuat data terbaru.</p>
+            <p class="text-red-400 font-bold uppercase italic tracking-widest">Gagal memuat data dari database.</p>
         </div>
     </section>
 
     <div id="footer-placeholder"></div>
 
     <script>
-        const API_BASE = 'https://script.google.com/macros/s/AKfycbwP4Z1XfgCA2s_HxcUeODJ60xr-GY7zXv6guUNL63w3gGlV00YOOTsrH3Op5a4OK83Z/exec';
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
         let dataGuru = [];
 
-        // FUNGSI 1: Memanggil Layout (Header & Footer)
         async function includeLayout() {
             try {
-                const [hRes, fRes] = await Promise.all([
-                    fetch('header.html'),
-                    fetch('footer.html')
-                ]);
-                
-                document.getElementById('header-placeholder').innerHTML = await hRes.text();
-                document.getElementById('footer-placeholder').innerHTML = await fRes.text();
-
-                // Menandai menu GTK aktif
-                const links = document.querySelectorAll('.nav-link');
-                links.forEach(link => {
-                    if(link.getAttribute('href') === 'guru.html') {
-                        link.classList.add('text-yellow-600', 'border-b-2', 'border-yellow-500', 'pb-1');
-                    }
-                });
-            } catch(e) { console.error("Gagal memuat layout eksternal."); }
+                const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
+                if(hRes.ok) document.getElementById('header-placeholder').innerHTML = await hRes.text();
+                if(fRes.ok) document.getElementById('footer-placeholder').innerHTML = await fRes.text();
+            } catch(e) { console.error("Error layout"); }
         }
 
-        // FUNGSI 2: Mengambil Data Guru dengan Sistem Cache (Anti-Loading)
         async function loadGuru() {
-            const cacheKey = 'cache_data_guru';
-            const cachedData = localStorage.getItem(cacheKey);
-
-            // Tampilkan data dari cache terlebih dahulu jika ada
-            if (cachedData) {
-                dataGuru = JSON.parse(cachedData);
-                displayGuru(dataGuru);
-            }
-
             try {
-                // Ambil data terbaru dari Google Sheets di latar belakang
                 const res = await fetch(`${API_BASE}?sheet=Guru`);
-                const newData = await res.json();
-                
-                // Jika data berubah, simpan ke cache dan perbarui tampilan
-                if (JSON.stringify(newData) !== cachedData) {
-                    localStorage.setItem(cacheKey, JSON.stringify(newData));
-                    dataGuru = newData;
-                    displayGuru(dataGuru);
-                }
+                dataGuru = await res.json();
+                displayGuru(dataGuru);
             } catch(e) {
-                if (!cachedData) document.getElementById('error-state').classList.remove('hidden');
+                document.getElementById('error-state').classList.remove('hidden');
+                document.getElementById('guru-container').innerHTML = '';
             }
         }
 
         function fixUrl(url) {
-            if (!url) return 'https://via.placeholder.com/300x400?text=No+Photo';
+            if (!url) return 'https://via.placeholder.com/400x400?text=No+Photo';
             if (url.includes('drive.google.com')) {
                 const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
                 return `https://drive.google.com/uc?export=view&id=${id}`;
@@ -120,34 +115,47 @@
         function displayGuru(list) {
             const container = document.getElementById('guru-container');
             if (list.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-gray-400 py-10">Data tidak ditemukan.</p>';
+                container.innerHTML = '<p class="text-center col-span-full text-slate-500 py-20 font-bold italic uppercase tracking-widest">Data tidak ditemukan.</p>';
                 return;
             }
 
-            container.innerHTML = list.map(guru => `
-                <div class="guru-card group bg-white rounded-[32px] overflow-hidden card-shadow transition-all duration-500 hover:-translate-y-2 border border-slate-50">
-                    <div class="h-80 overflow-hidden relative bg-slate-100">
-                        <img src="${fixUrl(guru.foto)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${guru.nama}">
+            container.innerHTML = list.map(guru => {
+                // MENGUBAH TENAGA PENDIDIK MENJADI BIDANG STUDI (MAPEL)
+                const mapelText = guru.mapel || guru.MAPEL || guru.jabatan || 'Tenaga Pendidik';
+
+                return `
+                <div class="guru-card group">
+                    <div class="relative aspect-square overflow-hidden bg-slate-800">
+                        <img src="${fixUrl(guru.foto || guru.FOTO)}" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                             alt="${guru.nama}"
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60"></div>
                     </div>
-                    <div class="p-6 text-center">
-                        <h3 class="font-black text-[#1A2A6C] text-md leading-tight mb-2 truncate" title="${guru.nama}">
-                            ${guru.nama}
+                    
+                    <div class="px-5 pt-8 pb-8 text-center flex flex-col justify-center">
+                        <h3 class="font-extrabold text-yellow-500 text-[12px] md:text-[14px] leading-tight mb-2 uppercase italic tracking-tight line-clamp-2" title="${guru.nama}">
+                            ${guru.nama || guru.NAMA}
                         </h3>
-                        <p class="text-yellow-600 font-bold text-[9px] tracking-widest uppercase">${guru.jabatan || 'GTK'}</p>
+                        <div class="h-[1px] w-6 bg-white/20 mx-auto mb-3"></div>
+                        <p class="text-white/70 font-bold text-[9px] md:text-[10px] tracking-[0.2em] uppercase leading-none">
+                            ${mapelText}
+                        </p>
                     </div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
         }
 
         function filterGuru() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const filtered = dataGuru.filter(g => 
-                g.nama.toLowerCase().includes(query) || 
+                (g.nama && g.nama.toLowerCase().includes(query)) || 
+                (g.mapel && g.mapel.toLowerCase().includes(query)) ||
                 (g.jabatan && g.jabatan.toLowerCase().includes(query))
             );
             displayGuru(filtered);
         }
 
-        // Jalankan fungsi
         window.onload = () => {
             includeLayout();
             loadGuru();

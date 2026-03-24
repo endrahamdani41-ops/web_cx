@@ -7,201 +7,236 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
         
-        /* STYLING TABEL RAPOR */
-        table { width: 100%; border-collapse: collapse; background-color: white; border: 2px solid #000; }
-        th { 
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+        }
+        
+        /* Tabel Nilai Utama */
+        .table-nilai { width: 100%; border-collapse: collapse; background-color: white; border: 2px solid #000; }
+        .table-nilai th { 
             background-color: #f1f5f9; 
             font-weight: 900; 
             text-transform: uppercase; 
             font-size: 11px; 
-            padding: 10px 5px;
+            padding: 12px 5px;
             border: 1px solid #000;
+            text-align: center;
         }
-        td { border: 1px solid #000; padding: 8px 5px; text-align: center; font-size: 12px; color: #000; }
-        .text-left-mapel { text-align: left !important; padding-left: 12px; font-weight: 800; text-transform: uppercase; }
+        .table-nilai td { border: 1px solid #000; padding: 10px 5px; text-align: center; font-size: 13px; color: #000; }
+        
+        .text-center-mapel { 
+            text-align: center !important; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+        }
 
-        /* FLOATING BUTTONS (FAB) */
-        .fab-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-        }
-        .fab {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        .fab:hover { transform: scale(1.1) translateY(-5px); }
-        .bg-home { background-color: #0f172a; }
-        .bg-print { background-color: #2563eb; }
+        /* Tabel Info Siswa */
+        .table-info { border: none !important; width: auto; border-collapse: collapse; }
+        .table-info td { border: none !important; padding: 2px 0; font-size: 11px; vertical-align: top; }
+        .label-width { width: 100px; text-align: left; }
+        .label-width-kanan { width: 80px; text-align: left; }
+        .separator { width: 15px; text-align: center; }
 
-        /* CSS KHUSUS CETAK/PDF */
+        .nama-siswa-style {
+            color: #1d4ed8; 
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+
+        /* Warna Status Nilai */
+        .text-remedial { color: #dc2626 !important; font-weight: 900 !important; }
+        .text-tuntas { color: #1e40af !important; font-weight: 900 !important; }
+
+        /* Tombol Header */
+        .btn-header {
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; transition: all 0.2s; cursor: pointer;
+        }
+        .btn-header:hover { transform: translateY(-2px); filter: brightness(1.2); }
+
         @media print {
-            nav, .fab-container, #sync-status { display: none !important; }
+            nav, .no-print { display: none !important; }
             body { background-color: white !important; padding: 0 !important; }
-            .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; }
-            main { margin: 0 !important; }
-            table { border: 2px solid #000 !important; }
-            th, td { border: 1px solid #000 !important; color: black !important; }
-            /* Memaksa browser mencetak background warna pada kolom 'Akhir' */
-            .bg-akhir-print { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; }
+            main { margin: 0 !important; padding: 5mm !important; max-width: 100% !important; }
+            .table-nilai { border: 2px solid #000 !important; }
+            
+            .text-remedial { color: #dc2626 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .text-tuntas { color: #1e40af !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .info-container { 
+                display: flex !important; 
+                flex-direction: row !important; 
+                justify-content: space-between !important; 
+                align-items: flex-start !important;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="min-h-screen pb-10">
 
-    <nav class="bg-[#0f172a] text-white py-5 px-6 sticky top-0 z-50 shadow-xl mb-10 no-print">
+    <script>
+        const sessionData = localStorage.getItem('user_login') || localStorage.getItem('userSiswa');
+        if (!sessionData) { window.location.replace("index.html"); }
+        const user = JSON.parse(sessionData);
+    </script>
+
+    <nav class="bg-[#0f172a] text-white py-4 px-6 sticky top-0 z-50 shadow-xl mb-10 no-print">
         <div class="container mx-auto flex items-center justify-between">
-            <h1 class="font-black italic uppercase tracking-tighter text-xl">
-                E-REPORT <span class="text-yellow-400">STUDENT</span>
+            <h1 class="font-black italic uppercase tracking-tighter text-xl text-yellow-400">
+                E-REPORT <span class="text-white">STUDENT</span>
             </h1>
-            <div id="sync-status" class="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full">
-                <span class="h-2 w-2 bg-green-400 rounded-full animate-pulse"></span>
-                <span class="text-[9px] font-black uppercase tracking-widest text-green-400">Terhubung</span>
+            
+            <div class="flex gap-3">
+                <button onclick="window.location.href='halaman-siswa.html'" class="btn-header bg-slate-700 text-white" title="Kembali ke Halaman Sebelumnya">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </button>
+                <button onclick="window.print()" class="btn-header bg-blue-600 text-white" title="Cetak Laporan">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 max-w-4xl">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-black border-b-4 border-black inline-block pb-1 uppercase italic tracking-tighter">Laporan Hasil Belajar</h2>
+    <main class="container mx-auto px-4 max-w-5xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-black border-b-4 border-black inline-block pb-1 uppercase italic tracking-tighter text-slate-900">Laporan Hasil Belajar</h2>
         </div>
 
-        <div class="flex flex-row justify-between items-start mb-8 text-[12px] font-bold uppercase tracking-tight leading-relaxed">
-            
-            <div class="space-y-1">
-                <div class="grid grid-cols-[100px_15px_auto]">
-                    <span>NAMA SISWA</span><span>:</span><span id="display-nama" class="font-black text-blue-700">...</span>
-                </div>
-                <div class="grid grid-cols-[100px_15px_auto]">
-                    <span>NIS / NISN</span><span>:</span><span id="display-nis">...</span>
-                </div>
-                <div class="grid grid-cols-[100px_15px_auto]">
-                    <span>SEKOLAH</span><span>:</span><span>SMPN 110 JAKARTA</span>
-                </div>
-            </div>
+        <div class="info-container flex flex-row justify-between mb-6 font-bold uppercase tracking-tight">
+            <table class="table-info">
+                <tr>
+                    <td class="label-width">NAMA SISWA</td>
+                    <td class="separator">:</td>
+                    <td id="display-nama" class="nama-siswa-style">...</td>
+                </tr>
+                <tr>
+                    <td class="label-width">NIS / NISN</td>
+                    <td class="separator">:</td>
+                    <td id="display-nis">...</td>
+                </tr>
+                <tr>
+                    <td class="label-width">SEKOLAH</td>
+                    <td class="separator">:</td>
+                    <td>SMPN 110 JAKARTA</td>
+                </tr>
+            </table>
 
-            <div class="space-y-1">
-                <div class="grid grid-cols-[80px_15px_auto]">
-                    <span>KELAS</span><span>:</span><span id="display-kelas">...</span>
-                </div>
-                <div class="grid grid-cols-[80px_15px_auto]">
-                    <span>SEMESTER</span><span>:</span><span>GENAP (2)</span>
-                </div>
-                <div class="grid grid-cols-[80px_15px_auto]">
-                    <span>TAHUN</span><span>:</span><span>2025/2026</span>
-                </div>
-            </div>
+            <table class="table-info">
+                <tr>
+                    <td class="label-width-kanan">KELAS</td>
+                    <td class="separator">:</td>
+                    <td id="display-kelas">...</td>
+                </tr>
+                <tr>
+                    <td class="label-width-kanan">SEMESTER</td>
+                    <td class="separator">:</td>
+                    <td class="whitespace-nowrap">2 (GENAP)</td>
+                </tr>
+                <tr>
+                    <td class="label-width-kanan">TAHUN</td>
+                    <td class="separator">:</td>
+                    <td class="whitespace-nowrap">2025/2026</td>
+                </tr>
+            </table>
         </div>
 
-        <div class="overflow-hidden">
-            <table>
+        <div class="overflow-x-auto">
+            <table class="table-nilai">
                 <thead>
                     <tr>
                         <th width="5%">NO</th>
-                        <th class="text-left px-4">MATA PELAJARAN</th>
-                        <th width="12%">PH-1</th>
-                        <th width="12%">PH-2</th>
-                        <th width="12%">UTS</th>
-                        <th width="12%">UAS</th>
-                        <th width="15%" class="bg-akhir-print">AKHIR</th>
+                        <th>MATA PELAJARAN</th>
+                        <th width="8%" class="bg-yellow-50">KKM</th>
+                        <th width="10%">PH-1</th>
+                        <th width="10%">PH-2</th>
+                        <th width="10%">UTS</th>
+                        <th width="10%">UAS</th>
+                        <th width="15%" class="bg-slate-100 text-sm">AKHIR</th>
                     </tr>
                 </thead>
                 <tbody id="nilai-body">
-                    <tr><td colspan="7" class="py-12 text-slate-400 italic">Sinkronisasi data server...</td></tr>
+                    <tr><td colspan="8" class="py-12 text-slate-400 italic">Mengambil data...</td></tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="hidden print:grid grid-cols-2 mt-20 text-center text-[13px] font-bold">
+        <div class="hidden print:grid grid-cols-2 mt-16 text-center text-[13px] font-bold">
             <div>
-                <p>Mengetahui,</p>
-                <p>Orang Tua/Wali Murid</p>
+                <p>Mengetahui,</p><p>Orang Tua/Wali Murid</p>
                 <div class="h-24"></div>
                 <p>( ____________________ )</p>
             </div>
             <div>
-                <p>Jakarta, <span id="print-date"></span></p>
-                <p>Wali Kelas,</p>
+                <p>Jakarta, <span id="print-date"></span></p><p>Wali Kelas,</p>
                 <div class="h-24"></div>
                 <p>( ____________________ )</p>
             </div>
         </div>
     </main>
 
-    <div class="fab-container no-print">
-        <a href="dashboard-siswa.html" class="fab bg-home" title="Kembali">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-        </a>
-        <button onclick="window.print()" class="fab bg-print" title="Cetak Ke PDF">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-            </svg>
-        </button>
-    </div>
-
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxCHOmBjU3pQ9eRC76b4Xw1NoXQCM2_ugnsmYTXdBFEWdYauqvqBgRVPvMWBp0xOBU9/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
 
         async function init() {
-            const user = JSON.parse(localStorage.getItem('user_login'));
-            if (!user) { window.location.href = 'login.html'; return; }
-
-            document.getElementById('display-nama').innerText = user.nama;
-            document.getElementById('display-nis').innerText = user.nis;
-            document.getElementById('display-kelas').innerText = user.kelas;
+            document.getElementById('display-nama').innerText = user.nama || user.NAMA || "DATA SISWA";
+            document.getElementById('display-nis').innerText = user.nisn || user.NISN || user.nis || "-";
+            document.getElementById('display-kelas').innerText = user.kelas || user.KELAS || "-";
             document.getElementById('print-date').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-
-            loadData(user.nis);
+            loadNilai();
         }
 
-        async function loadData(nis) {
+        async function loadNilai() {
             const tbody = document.getElementById('nilai-body');
-            try {
-                const res = await fetch(`${API_URL}?sheet=Nilai`);
-                const data = await res.json();
-                const filtered = data.filter(i => String(i.nis).trim() === String(nis).trim());
+            const currentNISN = String(user.nisn || user.NISN || user.nis || "").trim().toLowerCase();
+            const KKM_STANDAR = 82;
 
-                if(filtered.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-red-500 font-bold uppercase">Belum Ada Data Nilai</td></tr>';
+            try {
+                const res = await fetch(`${API_URL}?sheet=Nilai&t=${Date.now()}`);
+                const data = await res.json();
+                const myNilai = data.filter(item => {
+                    const sheetNISN = String(item.nisn || item.nis || item.NISN || "").trim().toLowerCase();
+                    return sheetNISN !== "" && sheetNISN === currentNISN;
+                });
+
+                if(myNilai.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-500 font-bold uppercase text-center text-xs">Data nilai tidak ditemukan</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = filtered.map((item, i) => {
-                    const avg = Math.round((parseInt(item.nilai_ph1||0) + parseInt(item.nilai_ph2||0) + parseInt(item.nilai_uts||0) + parseInt(item.nilai_uas||0))/4);
+                tbody.innerHTML = myNilai.map((item, index) => {
+                    const n1 = Number(item.nilai_ph1 || 0);
+                    const n2 = Number(item.nilai_ph2 || 0);
+                    const n3 = Number(item.nilai_uts || 0);
+                    const n4 = Number(item.nilai_uas || 0);
+                    const rataRata = Math.round((n1 + n2 + n3 + n4) / 4);
+                    const colorClass = rataRata < KKM_STANDAR ? 'text-remedial' : 'text-tuntas';
+
                     return `
                         <tr>
-                            <td>${i+1}</td>
-                            <td class="text-left-mapel">${item.mapel}</td>
-                            <td>${item.nilai_ph1||0}</td>
-                            <td>${item.nilai_ph2||0}</td>
-                            <td>${item.nilai_uts||0}</td>
-                            <td>${item.nilai_uas||0}</td>
-                            <td class="font-black bg-blue-50 text-blue-800 text-lg">${avg}</td>
+                            <td>${index + 1}</td>
+                            <td class="text-center-mapel">${item.mapel || '-'}</td>
+                            <td class="bg-yellow-50 font-bold">${KKM_STANDAR}</td>
+                            <td>${n1}</td>
+                            <td>${n2}</td>
+                            <td>${n3}</td>
+                            <td>${n4}</td>
+                            <td class="bg-slate-50 text-lg ${colorClass}">${rataRata}</td>
                         </tr>
                     `;
                 }).join('');
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-red-500 font-bold">Gagal Menghubungkan ke Server</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="py-12 text-red-500 font-bold text-center">Gagal memuat data</td></tr>';
             }
         }
-
         window.onload = init;
     </script>
 </body>
