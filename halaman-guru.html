@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#eab308">
-<link rel="apple-touch-icon" href="icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Guru | SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
@@ -15,7 +13,6 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #020617; 
             color: #f8fafc;
-            overflow-x: hidden;
         }
 
         .glass-card {
@@ -28,26 +25,33 @@
         .glass-card:hover {
             border-color: rgba(234, 179, 8, 0.4);
             transform: translateY(-8px);
-            background: rgba(30, 41, 59, 0.8);
         }
 
-        /* ANIMASI LINGKARAN HIJAU BERKEDIP (STATUS ONLINE) */
+        .photo-container:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            border-radius: 42px;
+        }
+
         .status-online {
             animation: pulse-emerald 2s infinite;
         }
 
         @keyframes pulse-emerald {
             0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
             100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        .fade-in { 
-            animation: fadeIn 0.8s ease-out forwards; 
-        }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
         }
     </style>
 </head>
@@ -55,41 +59,38 @@
 
     <nav class="bg-slate-900/80 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-slate-800">
         <div class="container mx-auto flex justify-between items-center">
-		
-		
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12">
-                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
-                         alt="Logo SMPN 110" 
-                         class="w-10 h-10 object-contain">
-                </div>
+                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10 object-contain">
                 <div>
-                    <h1 class="text-xs font-black uppercase tracking-widest leading-none">Portal Guru</h1>
+                    <h1 class="text-xs font-black uppercase tracking-widest leading-none text-white">Portal Guru</h1>
                     <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
                 </div>
             </div>
-            
-			
-            <a href="index.html" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-yellow-500 transition-all group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-yellow-500 group-hover:text-slate-900 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                    </svg>
-                </div>
-                <span></span>
-            </a>
-			
+            <button onclick="logout()" class="p-2 bg-slate-800 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+            </button>
         </div>
     </nav>
 
     <main class="container mx-auto px-6 py-10 max-w-6xl">
         
-        <div class="flex flex-col md:flex-row items-center gap-10 mb-16 fade-in">
-            <div class="shrink-0 relative">
+        <div class="flex flex-col md:flex-row items-center gap-10 mb-16">
+            <div class="shrink-0 relative photo-container">
                 <div class="p-3 bg-slate-800 rounded-[50px] shadow-2xl border border-white/5">
-                    <div class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700">
+                    <div class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700 relative">
                         <img id="guru-foto" src="" alt="Profil" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                        
+                        <label for="upload-foto" class="photo-overlay">
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-white mx-auto mb-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                                </svg>
+                                <span class="text-[10px] font-black uppercase text-white tracking-widest">Ganti Foto</span>
+                            </div>
+                        </label>
+                        <input type="file" id="upload-foto" class="hidden" accept="image/*" onchange="handleFotoUpload(this)">
                     </div>
                 </div>
                 <div class="absolute bottom-6 right-6 bg-emerald-500 w-7 h-7 rounded-full border-4 border-slate-900 status-online z-10"></div>
@@ -100,77 +101,136 @@
                 <h1 id="guru-nama" class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter uppercase">...</h1>
                 <div class="flex flex-wrap justify-center md:justify-start gap-3">
                     <span id="guru-nip" class="px-4 py-2 bg-slate-800 rounded-full text-[10px] font-bold text-slate-400 border border-slate-700 uppercase tracking-widest">NIP: ---</span>
-                    <span id="guru-mapel" class="px-4 py-2 bg-yellow-500/10 rounded-full text-[10px] font-bold text-yellow-500 border border-yellow-500/20 uppercase tracking-widest">MAPEL: ---</span>
+                    <span id="guru-mapel" class="px-4 py-2 bg-yellow-500/10 rounded-full text-[10px] font-bold text-yellow-500 border border-yellow-500/20 uppercase tracking-widest">---</span>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.2s;">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <a href="guru-input-nilai.html" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group">
                 <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-yellow-500/20 group-hover:rotate-6 transition-transform">📝</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2">Input Nilai</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Input nilai PH, UTS, dan UAS massal langsung ke database.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Kelola nilai harian dan ujian siswa.</p>
                 </div>
             </a>
             
-            <div class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer opacity-60">
-                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl">📅</div>
+            <a href="guru.html" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group">
+                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">🌍</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2">Jadwal</h3>
-                    <p class="text-slate-400 text-sm font-medium">Fitur jadwal mengajar sedang dalam pengembangan.</p>
+                    <h3 class="text-xl font-black text-white mb-2">Profil Publik</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Lihat tampilan profil Anda di direktori.</p>
                 </div>
-            </div>
+            </a>
 
-            <div class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer opacity-60">
-                <div class="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl">⚙️</div>
+            <div onclick="logout()" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer">
+                <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-red-500/20 group-hover:-rotate-6 transition-transform">🚪</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2">Akun</h3>
-                    <p class="text-slate-400 text-sm font-medium">Pengaturan profil dan ganti kata sandi.</p>
+                    <h3 class="text-xl font-black text-white mb-2">Keluar</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Akhiri sesi akses portal guru.</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzFfAlkXIpMCLzmV1IEiOMKyCRMay3zQ1AtJBf-yBaWfOOOvSJzLS7B5cbJbIc686wN/exec'; 
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzoiC-mjER8XVB-QeWhcJJI0RAezTlOt2J6J_nPwfqAHjn0fh-rcvwpKiDwp8obYSD9/exec'; 
 
-        async function initDashboard() {
-            const sessionData = localStorage.getItem('user_login') || localStorage.getItem('userGuru');
-            if (!sessionData) { window.location.replace("index.html"); return; }
+        function initDashboard() {
+            const session = localStorage.getItem('user_login') || localStorage.getItem('userGuru');
+            if (!session) { window.location.replace("index.html"); return; }
             
-            const user = JSON.parse(sessionData);
-            const nipGuru = user.nip || user.NIP;
-            const namaGuru = user.nama || user.NAMA;
+            const user = JSON.parse(session);
+            document.getElementById('guru-nama').innerText = user.nama || user.NAMA;
+            document.getElementById('guru-nip').innerText = "NIP: " + (user.nip || user.NIP || "---");
+            document.getElementById('guru-mapel').innerText = (user.mapel || user.MAPEL || "Staff").toUpperCase();
 
-            document.getElementById('guru-nama').innerText = namaGuru;
-            document.getElementById('guru-nip').innerText = "NIP: " + (nipGuru || "---");
-            document.getElementById('guru-mapel').innerText = user.mapel || user.MATA_PELAJARAN;
-
+            // Load Foto (dari cache atau inisial)
             const imgElement = document.getElementById('guru-foto');
-            const cachedFoto = localStorage.getItem(`foto_guru_${nipGuru}`);
+            const cachedFoto = localStorage.getItem(`foto_guru_${user.nip || user.NIP}`);
+            imgElement.src = cachedFoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.nama || user.NAMA)}&background=334155&color=fff&size=256`;
+        }
+
+        async function handleFotoUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    // LOGIKA KOMPRESI CANVAS
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Maksimal dimensi 400px untuk menghemat ukuran
+                    let width = img.width;
+                    let height = img.height;
+                    const maxSize = 400;
+
+                    if (width > height) {
+                        if (width > maxSize) { height *= maxSize / width; width = maxSize; }
+                    } else {
+                        if (height > maxSize) { width *= maxSize / height; height = maxSize; }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Kompresi awal kualitas 0.6
+                    let quality = 0.6;
+                    let base64String = canvas.toDataURL('image/jpeg', quality);
+
+                    // Loop turunkan kualitas jika masih > 30KB (karakter base64 > ~40.000)
+                    while (base64String.length > 40000 && quality > 0.1) {
+                        quality -= 0.1;
+                        base64String = canvas.toDataURL('image/jpeg', quality);
+                    }
+
+                    executeUpload(base64String);
+                };
+            };
+        }
+
+        async function executeUpload(base64String) {
+            const user = JSON.parse(localStorage.getItem('user_login') || localStorage.getItem('userGuru'));
             
-            if (cachedFoto) {
-                imgElement.src = cachedFoto;
-            } else {
-                imgElement.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaGuru)}&background=334155&color=fff&size=256`;
-            }
+            Swal.fire({
+                title: 'Mengunggah...',
+                text: 'Mengompres foto ke ukuran optimal (< 30KB)',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
-                const response = await fetch(`${API_URL}?sheet=Guru&t=${Date.now()}`);
-                const allGuru = await response.json();
-                const profil = allGuru.find(g => (g.nip || g.NIP) == nipGuru);
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'update_foto_guru',
+                        nama: user.nama || user.NAMA,
+                        foto_base64: base64String
+                    })
+                });
 
-                if (profil && (profil.foto || profil.FOTO)) {
-                    const latestFoto = profil.foto || profil.FOTO;
-                    localStorage.setItem(`foto_guru_${nipGuru}`, latestFoto);
-                    if (imgElement.src !== latestFoto) {
-                        imgElement.src = latestFoto;
-                    }
+                const result = await response.text();
+                if (result.trim() === "Berhasil") {
+                    document.getElementById('guru-foto').src = base64String;
+                    localStorage.setItem(`foto_guru_${user.nip || user.NIP}`, base64String);
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Foto profil diperbarui!', timer: 1500, showConfirmButton: false });
+                } else {
+                    throw new Error(result);
                 }
             } catch (e) {
-                console.error("Gagal sinkronisasi foto:", e);
+                Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan foto.', 'error');
             }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.replace("index.html");
         }
 
         window.onload = initDashboard;

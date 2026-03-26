@@ -1,52 +1,65 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#eab308">
-    <link rel="apple-touch-icon" href="icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GTK | SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            margin: 0; padding: 0; 
             background-color: #020617; 
             color: #f8fafc;
+            background-image: radial-gradient(circle at 50% -20%, #1e293b, #020617);
+            min-height: 100vh;
         }
-        
+
         .guru-card {
-            background: rgba(15, 23, 42, 0.6); 
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 40px;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 32px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
         }
 
         .guru-card:hover {
-            transform: translateY(-15px);
-            border-color: rgba(234, 179, 8, 0.5);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
-            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-10px);
+            border-color: rgba(234, 179, 8, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #eab308; }
+        .photo-wrapper {
+            position: relative;
+            margin: -50px auto 0;
+            width: 130px;
+            height: 130px;
+            padding: 6px;
+            background: linear-gradient(135deg, #eab308 0%, #846504 100%);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
 
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
+        .photo-inner {
+            width: 100%; height: 100%;
+            border-radius: 50%;
             overflow: hidden;
+            background: #0f172a;
+            border: 3px solid #020617;
+        }
+
+        .badge-mapel {
+            background: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
         }
 
         .skeleton {
@@ -54,149 +67,138 @@
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
         }
+
         @keyframes loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
     </style>
 </head>
-<body class="text-slate-200">
+<body>
 
-    <div id="header-placeholder"></div>
+    <div id="header-include"></div>
 
-    <header class="relative py-24 text-center overflow-hidden bg-[#020617]">
-        <div class="relative z-10 container mx-auto px-6">
-            <h1 class="text-4xl md:text-6xl font-black italic tracking-tighter mb-4 leading-none text-white centralized">
-                Guru & <span class="text-yellow-500">Tenaga Kependidikan</span>
+    <header class="py-16 text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tighter">
+                Guru & Tenaga Kependidikan
             </h1>
-            <p class="text-yellow-500 font-bold tracking-[0.4em] text-[10px] md:text-xs centralized opacity-80">
-                Dedikasi Untuk Mencerdaskan Bangsa
+            <p class="text-yellow-500 font-bold tracking-[0.3em] text-[10px] uppercase mt-1 opacity-80">
+                SMP Negeri 110 Jakarta
             </p>
         </div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-500/10 blur-[120px] rounded-full"></div>
     </header>
 
-    <section class="container mx-auto px-6 -mt-12 relative z-20">
-        <div class="max-w-sm mx-auto">
-            <div class="bg-slate-900/95 backdrop-blur-xl p-1 rounded-3xl shadow-2xl flex items-center border border-white/10 focus-within:border-yellow-500/50 transition-all">
-                <input type="text" id="search-input" onkeyup="filterGuru()" 
-                       placeholder="Cari nama atau mapel..." 
-                       class="w-full bg-transparent outline-none py-3 font-semibold text-white placeholder:text-slate-600 text-xs text-center">
-            </div>
+    <section class="container mx-auto px-6 -mt-10 relative z-20">
+        <div class="max-w-md mx-auto">
+            <input type="text" id="search-input" onkeyup="filterGuru()" 
+                   placeholder="Cari nama atau mata pelajaran..." 
+                   class="w-full bg-slate-900/90 border border-white/10 rounded-full py-4 px-8 text-center text-white placeholder:text-slate-500 outline-none focus:border-yellow-500/50 transition-all shadow-2xl">
         </div>
     </section>
 
-    <section class="py-24 container mx-auto px-6">
-        <div id="guru-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
-            <div class="guru-card skeleton h-80 opacity-20"></div>
-            <div class="guru-card skeleton h-80 opacity-20"></div>
-            <div class="guru-card skeleton h-80 opacity-20"></div>
-            <div class="guru-card skeleton h-80 opacity-20"></div>
-        </div>
-        
-        <div id="error-state" class="hidden text-center py-20">
-            <p class="text-red-400 font-bold italic tracking-widest text-sm">Gagal sinkronisasi. Menampilkan data terakhir...</p>
+    <section class="py-20 container mx-auto px-6">
+        <div id="guru-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-24">
+            <div class="guru-card skeleton h-64 opacity-20 mt-12"></div>
+            <div class="guru-card skeleton h-64 opacity-20 mt-12"></div>
+            <div class="guru-card skeleton h-64 opacity-20 mt-12"></div>
+            <div class="guru-card skeleton h-64 opacity-20 mt-12"></div>
         </div>
     </section>
 
-    <div id="footer-placeholder"></div>
+    <div id="footer-include"></div>
 
     <script>
-        const API_BASE = 'https://script.google.com/macros/s/AKfycbzFfAlkXIpMCLzmV1IEiOMKyCRMay3zQ1AtJBf-yBaWfOOOvSJzLS7B5cbJbIc686wN/exec';
-        const CACHE_KEY = 'cache_guru_v1';
+        // GANTI URL INI DENGAN URL WEB APP GAS TERBARU ANDA
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzoiC-mjER8XVB-QeWhcJJI0RAezTlOt2J6J_nPwfqAHjn0fh-rcvwpKiDwp8obYSD9/exec';
         let dataGuru = [];
 
-        async function includeLayout() {
-            try {
-                const [hRes, fRes] = await Promise.all([fetch('header.html'), fetch('footer.html')]);
-                if(hRes.ok) document.getElementById('header-placeholder').innerHTML = await hRes.text();
-                if(fRes.ok) document.getElementById('footer-placeholder').innerHTML = await fRes.text();
-            } catch(e) { console.error("Layout error"); }
-        }
-
-        function fixUrl(url) {
-            if (!url) return 'https://i.ibb.co/Vv999Yp/no-profile.png';
-            if (url.includes('drive.google.com')) {
-                const id = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1];
-                return `https://drive.google.com/uc?export=view&id=${id}`;
+        async function includeHTML() {
+            const includes = document.querySelectorAll('[id$="-include"]');
+            for (const el of includes) {
+                const file = el.id.replace('-include', '.html');
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) el.innerHTML = await response.text();
+                } catch (e) { console.error("Gagal memuat " + file); }
             }
-            return url;
         }
 
-        function displayGuru(list) {
+        function toTitleCase(str) {
+            if (!str) return "";
+            return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+        }
+
+        async function loadData() {
+            try {
+                // Tambahkan parameter t=Date.now() agar browser tidak mengambil cache lama
+                const res = await fetch(`${API_URL}?sheet=Guru&t=${Date.now()}`);
+                dataGuru = await res.json();
+                renderCards(dataGuru);
+            } catch (e) {
+                console.error("Gagal memuat data guru:", e);
+                document.getElementById('guru-container').innerHTML = `
+                    <p class="col-span-full text-center text-slate-500 italic py-10">
+                        Gagal memuat data. Pastikan API URL sudah benar.
+                    </p>`;
+            }
+        }
+
+        function renderCards(list) {
             const container = document.getElementById('guru-container');
-            if (!list || list.length === 0) {
-                container.innerHTML = '<p class="text-center col-span-full text-slate-600 py-20 font-bold italic tracking-widest centralized text-xs">Data tidak ditemukan</p>';
+            
+            if (list.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-slate-500">Guru tidak ditemukan...</p>`;
                 return;
             }
 
-            container.innerHTML = list.map(guru => {
-                const nama = guru.nama || guru.NAMA || "GTK SMPN 110";
-                const mapelText = guru.mapel || guru.MAPEL || guru.jabatan || 'Tenaga Pendidik';
-                const fotoUrl = fixUrl(guru.foto || guru.FOTO);
+            container.innerHTML = list.map(g => {
+                const namaRaw = g.nama || g.NAMA || "Nama Guru";
+                const namaFormatted = toTitleCase(namaRaw);
+                const mapel = (g.mapel || g.MAPEL || g.mata_pelajaran || "Staff").toUpperCase();
+                
+                // Cek ketersediaan foto (Base64 atau URL)
+                const foto = g.foto || g.foto_base64 || g.FOTO || '';
 
                 return `
-                <div class="guru-card group">
-                    <div class="relative aspect-[4/5] overflow-hidden bg-slate-800">
-                        <img src="${fotoUrl}" 
-                             class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                             alt="${nama}"
-                             loading="lazy">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80"></div>
-                    </div>
-                    <div class="px-5 py-8 text-center flex flex-col items-center justify-center flex-grow min-h-[140px]">
-                        <h3 class="font-extrabold text-yellow-500 text-[13px] md:text-[15px] leading-tight mb-3 italic tracking-tight line-clamp-2 centralized">
-                            ${nama}
-                        </h3>
-                        <div class="h-[2px] w-8 bg-yellow-500/20 mb-4 rounded-full group-hover:w-16 group-hover:bg-yellow-500 transition-all"></div>
-                        <p class="text-slate-400 font-bold text-[9px] md:text-[10px] tracking-[0.2em] centralized leading-none">
-                            ${mapelText}
-                        </p>
+                <div class="guru-card mt-12 group">
+                    <div class="px-4 pb-10 pt-4 flex flex-col items-center">
+                        <div class="photo-wrapper">
+                            <div class="photo-inner">
+                                <img src="${foto}" 
+                                     alt="${namaFormatted}" 
+                                     class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(namaFormatted)}&background=334155&color=fff&size=256'">
+                            </div>
+                        </div>
+                        <div class="mt-8 text-center w-full">
+                            <div class="mb-4">
+                                <span class="badge-mapel">${mapel}</span>
+                            </div>
+                            <h3 class="font-extrabold text-white text-[15px] italic tracking-tight leading-tight px-4 group-hover:text-yellow-400 transition-colors">
+                                ${namaFormatted}
+                            </h3>
+                            <div class="h-[1px] w-12 bg-yellow-500/30 mx-auto mt-4 group-hover:w-20 group-hover:bg-yellow-500/50 transition-all"></div>
+                            <p class="mt-4 text-[9px] text-slate-500 font-bold tracking-[0.2em] uppercase">SMP Negeri 110 Jakarta</p>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        async function loadGuru() {
-            const cached = localStorage.getItem(CACHE_KEY);
-            if (cached) {
-                dataGuru = JSON.parse(cached);
-                displayGuru(dataGuru);
-            }
-
-            try {
-                const res = await fetch(`${API_BASE}?sheet=Guru`);
-                const freshData = await res.json();
-                
-                if (JSON.stringify(freshData) !== cached) {
-                    dataGuru = freshData;
-                    localStorage.setItem(CACHE_KEY, JSON.stringify(freshData));
-                    displayGuru(dataGuru);
-                }
-                document.getElementById('error-state').classList.add('hidden');
-            } catch(e) {
-                if (!cached) {
-                    document.getElementById('error-state').classList.remove('hidden');
-                    document.getElementById('guru-container').innerHTML = '';
-                }
-            }
-        }
-
         function filterGuru() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const filtered = dataGuru.filter(g => 
-                (g.nama && g.nama.toLowerCase().includes(query)) || 
-                (g.NAMA && g.NAMA.toLowerCase().includes(query)) ||
-                (g.mapel && g.mapel.toLowerCase().includes(query)) ||
-                (g.MAPEL && g.MAPEL.toLowerCase().includes(query)) ||
-                (g.jabatan && g.jabatan.toLowerCase().includes(query))
-            );
-            displayGuru(filtered);
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const filtered = dataGuru.filter(g => {
+                const nama = (g.nama || g.NAMA || "").toLowerCase();
+                const mapel = (g.mapel || g.MAPEL || "").toLowerCase();
+                return nama.includes(q) || mapel.includes(q);
+            });
+            renderCards(filtered);
         }
 
         window.onload = () => {
-            includeLayout();
-            loadGuru();
+            includeHTML();
+            loadData();
         };
     </script>
 </body>
