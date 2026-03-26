@@ -1,199 +1,245 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#eab308">
-<link rel="apple-touch-icon" href="icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Siswa | SMPN 110 Jakarta</title>
+    <title>Portal Siswa | SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; }
         
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #020617; 
-            color: #f8fafc;
-            overflow-x: hidden;
-        }
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .foto-profile-container {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 3px solid #eab308; padding: 3px; position: relative;
+            background: #1e293b; overflow: hidden;
         }
-
-        .navy-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        .foto-profile-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        
+        .upload-hint {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; opacity: 0; transition: 0.3s; cursor: pointer;
         }
+        .foto-profile-container:hover .upload-hint { opacity: 1; }
 
-        .hover-scale { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .hover-scale:hover { transform: scale(1.02); }
+        th { font-size: 10px !important; padding: 12px 8px !important; background-color: #1e293b; border: 1px solid #334155; text-transform: uppercase; text-align: center !important; }
+        td { padding: 12px 8px !important; border: 1px solid #334155; font-size: 11px !important; vertical-align: middle; text-align: center !important; }
     </style>
 </head>
-<body class="pb-20">
+<body class="p-4 md:p-8">
 
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/5">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-		
-		
-             <div class="flex items-center gap-4">
-                <div class="w-12 h-12">
-                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
-                         alt="Logo SMPN 110" 
-                         class="w-10 h-10 object-contain">
+    <div class="max-w-6xl mx-auto">
+        <div class="glass-card rounded-[40px] p-8 mb-8 relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                <div class="foto-profile-container">
+                    <img id="display-foto" src="https://via.placeholder.com/150">
+                    <label for="input-foto" class="upload-hint">
+                        <span class="text-[10px] text-white font-bold text-center">UBAH FOTO</span>
+                    </label>
+                    <input type="file" id="input-foto" class="hidden" accept="image/*" onchange="uploadFoto(this)">
                 </div>
-                <div>
-                    <h1 class="text-xs font-black uppercase tracking-widest leading-none">Portal Siswa</h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
-                </div>
-            </div>
-			
 
-             <a href="index.html" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-yellow-500 transition-all group">
-                <div class="p-2 bg-slate-800 rounded-lg group-hover:bg-yellow-500 group-hover:text-slate-900 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                    </svg>
-                </div>
-                <span></span>
-            </a>
-			
-        </div>
-    </nav>
-
-    <header class="pt-32 pb-10 container mx-auto px-6">
-        <div class="glass-card navy-gradient p-10 rounded-[45px] relative overflow-hidden">
-            <div class="relative z-10">
-                <p class="text-yellow-500 font-black text-[10px] uppercase tracking-[0.4em] mb-4">Selamat Datang !</p>
-                <h2 id="studentName" class="text-4xl md:text-5xl font-extrabold italic uppercase tracking-tighter mb-2">Memuat Nama...</h2>
-                <div class="flex items-center gap-4 text-slate-400 font-bold text-xs uppercase tracking-widest">
-                    <span id="studentNis">NISN: -</span>
-                    <span class="w-1.5 h-1.5 bg-slate-700 rounded-full"></span>
-                    <span id="studentClass">Kelas: -</span>
+                <div class="text-center md:text-left">
+                    <p class="text-yellow-500 font-bold text-xs uppercase tracking-widest mb-1">Selamat Datang !</p>
+                    <h1 id="nama-siswa" class="text-2xl md:text-3xl lg:text-4xl font-black italic uppercase tracking-tighter mb-2">MEMUAT...</h1>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 text-slate-400 font-bold text-sm uppercase">
+                        <span id="nisn-siswa">NISN: -</span>
+                        <span class="text-slate-700">|</span>
+                        <span id="kelas-tag">KELAS: -</span>
+                    </div>
                 </div>
             </div>
-            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl"></div>
-        </div>
-    </header>
 
-    <main class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <div class="glass-card p-8 rounded-[40px] hover-scale group">
-            <div class="w-14 h-14 bg-blue-600/20 rounded-2xl flex items-center justify-center text-blue-500 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <button onclick="logoutSiswa()" class="absolute top-8 right-8 z-20 p-3 bg-red-500/10 hover:bg-red-500 rounded-2xl group transition-all duration-300" title="Keluar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-            </div>
-            <h3 class="text-xl font-black italic uppercase mb-2">Jadwal Belajar</h3>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed mb-8">Lihat jadwal mata pelajaran harian dan ruangan kelas Anda.</p>
-            <button onclick="openJadwal()" class="w-full bg-slate-800 hover:bg-white hover:text-slate-950 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Lihat Jadwal</button>
+            </button>
         </div>
 
-        <div class="glass-card p-8 rounded-[40px] hover-scale group cursor-pointer" onclick="location.href='nilai.html'">
-            <div class="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center text-yellow-500 mb-6 group-hover:bg-yellow-500 group-hover:text-slate-950 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
+        <div class="bg-slate-900/60 rounded-[30px] border border-white/5 overflow-hidden shadow-2xl">
+            <div class="p-5 border-b border-white/5 bg-slate-900/40 flex justify-between items-center">
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Laporan Hasil Belajar Digital</h3>
+                <span id="status-semester" class="text-[9px] bg-blue-600 px-3 py-1 rounded-full font-black uppercase tracking-wider">Memuat...</span>
             </div>
-            <h3 class="text-xl font-black italic uppercase mb-2">Hasil Belajar</h3>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed mb-8">Pantau perkembangan nilai tugas, ulangan, dan rapor semester.</p>
-            <button class="w-full bg-slate-800 hover:bg-white hover:text-slate-950 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Cek Nilai</button>
-        </div>
-
-        <div class="glass-card p-8 rounded-[40px] hover-scale group">
-            <div class="w-14 h-14 bg-green-600/20 rounded-2xl flex items-center justify-center text-green-500 mb-6 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                </svg>
-            </div>
-            <h3 class="text-xl font-black italic uppercase mb-2">Pusat Info</h3>
-            <p class="text-slate-400 text-xs font-medium leading-relaxed mb-8">Informasi penting terkait sekolah dan kegiatan kesiswaan.</p>
-            <button onclick="location.href='berita.html'" class="w-full bg-slate-800 hover:bg-white hover:text-slate-950 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">Lihat Info</button>
-        </div>
-    </main>
-
-    <div id="modalJadwal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-slate-950/90 backdrop-blur-xl">
-        <div id="modalJadwalContent" class="bg-slate-900 border border-white/10 w-full max-w-2xl rounded-[45px] p-10 relative transform transition-all scale-95 opacity-0">
-            <button onclick="closeJadwalModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white transition-colors">✕</button>
-            <h2 class="text-2xl font-black italic uppercase mb-2">Jadwal <span class="text-blue-500">Kelas</span></h2>
-            <p id="labelKelas" class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-8 italic">Mencari Data...</p>
-            
-            <div id="jadwalImageContainer" class="rounded-[30px] overflow-hidden bg-slate-950 border border-white/5 min-h-[300px] flex items-center justify-center">
-                <div class="text-center p-10" id="loaderJadwal">
-                    <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-600">Sinkronisasi Server...</p>
-                </div>
-                <img id="imgJadwal" src="" class="hidden w-full h-auto shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="text-slate-400">
+                            <th class="w-12">No</th>
+                            <th>Mata Pelajaran</th>
+                            <th class="w-16 bg-white/5">KKM</th>
+                            <th class="w-16 text-yellow-500">PH1</th>
+                            <th class="w-16 text-yellow-500">PH2</th>
+                            <th class="w-16 text-blue-400">UTS</th>
+                            <th class="w-16 text-green-400">UAS</th>
+                            <th class="w-20 text-sky-400 bg-sky-500/10 italic">AKHIR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-nilai">
+                        <tr>
+                            <td colspan="8" class="p-16 text-center text-slate-600 italic font-bold uppercase text-[10px] tracking-widest">
+                                <div class="animate-pulse">Menyingkronkan Data...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE = 'https://script.google.com/macros/s/AKfycbzWnQfAM6ManP39n_jk07IpeahocJXW0nyFGJSEJ3B4YR3LPR-pLFnt6gKsXLI3FtLf/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyz86tP8PSpideJv_31YnGAAEiwE7lD02cbokWw9rY-Dy4xHUCoE-hlbnc1P4VyB7p_/exec';
+        let USER = JSON.parse(localStorage.getItem('userSiswa'));
 
-        // Cek Login & Tampilkan Data
-        const user = JSON.parse(localStorage.getItem('userSiswa'));
-        if(!user) {
-            window.location.replace("index.html");
-        } else {
-            document.getElementById('studentName').innerText = user.nama || user.NAMA;
-            document.getElementById('studentNis').innerText = `NISN: ${user.nisn || user.NISN}`;
-            document.getElementById('studentClass').innerText = `Kelas: ${user.kelas || user.KELAS}`;
+        if (!USER) window.location.href = 'index.html';
+
+        // Tampilkan Identitas
+        document.getElementById('nama-siswa').innerText = USER.nama || USER.NAMA || "DATA KOSONG";
+        document.getElementById('nisn-siswa').innerText = `NISN: ${USER.nisn || USER.NISN || "-"}`;
+        document.getElementById('kelas-tag').innerText = `KELAS: ${USER.kelas || USER.KELAS || "-"}`;
+        if (USER.foto || USER.FOTO) {
+            document.getElementById('display-foto').src = USER.foto || USER.FOTO;
         }
 
-        function goHome() {
-            window.location.href = "index.html";
-        }
-
-        async function openJadwal() {
-            const modal = document.getElementById('modalJadwal');
-            const content = document.getElementById('modalJadwalContent');
-            const img = document.getElementById('imgJadwal');
-            const loader = document.getElementById('loaderJadwal');
-            const label = document.getElementById('labelKelas');
-            const studentClass = (user.kelas || user.KELAS).trim().toUpperCase();
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-
-            label.innerText = `Memuat Jadwal Kelas ${studentClass}...`;
-
-            try {
-                const r = await fetch(`${API_BASE}?sheet=Jadwal_Siswa`);
-                const data = await r.json();
-                const match = data.find(j => String(j.kelas || j.KELAS).trim().toUpperCase() === studentClass);
-
-                if(match && (match.url_gambar || match.URL_GAMBAR)) {
-                    img.src = match.url_gambar || match.URL_GAMBAR;
-                    img.onload = () => {
-                        loader.classList.add('hidden');
-                        img.classList.remove('hidden');
-                        label.innerText = `Jadwal Pelajaran Kelas ${studentClass}`;
-                    };
-                } else {
-                    loader.innerHTML = '<span class="text-red-500 font-bold uppercase tracking-widest text-[10px]">Jadwal Belum Tersedia</span>';
-                }
-            } catch (e) {
-                loader.innerHTML = '<span class="text-red-500 font-bold uppercase tracking-widest text-[10px]">Gagal Menghubungkan ke Server</span>';
+        // 1. Fungsi Semester Otomatis
+        function setOtomatisSemester() {
+            const bulan = new Date().getMonth() + 1;
+            const el = document.getElementById('status-semester');
+            if (bulan >= 7 && bulan <= 12) {
+                el.innerText = "Semester Ganjil";
+                el.className = "text-[9px] bg-indigo-600 px-3 py-1 rounded-full font-black uppercase tracking-wider";
+            } else {
+                el.innerText = "Semester Genap";
+                el.className = "text-[9px] bg-emerald-600 px-3 py-1 rounded-full font-black uppercase tracking-wider";
             }
         }
 
-        function closeJadwalModal() {
-            const content = document.getElementById('modalJadwalContent');
-            content.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                document.getElementById('modalJadwal').classList.add('hidden');
-                document.getElementById('imgJadwal').classList.add('hidden');
-                document.getElementById('loaderJadwal').classList.remove('hidden');
-            }, 300);
+        // 2. Fungsi Upload dengan Auto-Compress
+        async function uploadFoto(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            Swal.fire({ 
+                title: 'Memproses Foto...', 
+                text: 'Mengecilkan ukuran agar sesuai limit database',
+                allowOutsideClick: false, 
+                didOpen: () => Swal.showLoading() 
+            });
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = async () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max_size = 300; 
+
+                    if (width > height) {
+                        if (width > max_size) { height *= max_size / width; width = max_size; }
+                    } else {
+                        if (height > max_size) { width *= max_size / height; height = max_size; }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Kompresi kualitas 0.6 (60%) agar Base64 pendek
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                    
+                    try {
+                        const res = await fetch(API_URL, {
+                            method: 'POST',
+                            body: JSON.stringify({ 
+                                action: "update_foto", 
+                                nisn: String(USER.nisn || USER.NISN).trim(), 
+                                foto_base64: compressedBase64 
+                            })
+                        });
+                        
+                        const msg = await res.text();
+                        if (msg.trim() === "Berhasil") {
+                            document.getElementById('display-foto').src = compressedBase64;
+                            USER.foto = compressedBase64;
+                            localStorage.setItem('userSiswa', JSON.stringify(USER));
+                            Swal.fire("Berhasil!", "Foto profil diperbarui.", "success");
+                        } else {
+                            throw new Error(msg);
+                        }
+                    } catch (err) { 
+                        Swal.fire("Gagal", "Server Error: " + err.message, "error"); 
+                    } finally {
+                        input.value = "";
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
         }
+
+        async function loadNilai() {
+            try {
+                const response = await fetch(`${API_URL}?sheet=Nilai`);
+                const allNilai = await response.json();
+                const loggedInNisn = String(USER.nisn || USER.NISN).trim();
+                const myNilai = allNilai.filter(n => String(n.nisn || n.NISN).trim() === loggedInNisn);
+                const container = document.getElementById('tabel-nilai');
+
+                if (myNilai.length === 0) {
+                    container.innerHTML = '<tr><td colspan="8" class="p-10 text-center text-slate-500 font-bold uppercase text-[10px]">Nilai belum diinput.</td></tr>';
+                    return;
+                }
+
+                container.innerHTML = myNilai.map((n, i) => {
+                    const ph1 = Number(n.nilai_ph1 || n.PH1 || 0);
+                    const ph2 = Number(n.nilai_ph2 || n.PH2 || 0);
+                    const uts = Number(n.nilai_uts || n.UTS || 0);
+                    const uas = Number(n.nilai_uas || n.UAS || 0);
+                    const akhir = Math.round((((ph1 + ph2) / 2 * 2) + uts + uas) / 4);
+                    
+                    return `
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="text-center text-slate-500 font-mono">${i+1}</td>
+                            <td class="text-center font-bold text-white uppercase px-4">${n.mapel || n.MAPEL || "-"}</td>
+                            <td class="text-center text-slate-400 bg-white/5 font-bold">82</td>
+                            <td class="text-center text-yellow-500 font-bold">${ph1}</td>
+                            <td class="text-center text-yellow-500 font-bold">${ph2}</td>
+                            <td class="text-center text-blue-400 font-bold">${uts}</td>
+                            <td class="text-center text-green-400 font-bold">${uas}</td>
+                            <td class="text-center bg-sky-500/5">
+                                <span class="${akhir < 82 ? 'text-red-500' : 'text-sky-400'} font-black text-sm">${akhir}</span>
+                            </td>
+                        </tr>`;
+                }).join('');
+            } catch (error) { console.error("Gagal memuat nilai"); }
+        }
+
+        function logoutSiswa() {
+            Swal.fire({
+                title: 'Logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Ya, Keluar'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    localStorage.clear();
+                    window.location.replace('index.html');
+                }
+            });
+        }
+
+        window.onload = () => {
+            setOtomatisSemester(); // Jalankan semester otomatis
+            loadNilai();
+        };
     </script>
 </body>
 </html>
