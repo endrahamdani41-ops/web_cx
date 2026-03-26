@@ -44,14 +44,15 @@
             border-radius: 42px;
         }
 
-        .status-online {
-            animation: pulse-emerald 2s infinite;
+        /* Animasi loading kecil untuk foto */
+        .shimmer {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
         }
-
-        @keyframes pulse-emerald {
-            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
 </head>
@@ -66,11 +67,14 @@
                     <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
                 </div>
             </div>
-            <button onclick="logout()" class="p-2 bg-slate-800 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                </svg>
-            </button>
+            <div class="flex items-center gap-4">
+                <a href="guru.html" class="hidden md:block text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Web Publik</a>
+                <button onclick="logout()" class="p-2 bg-slate-800 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -79,29 +83,28 @@
         <div class="flex flex-col md:flex-row items-center gap-10 mb-16">
             <div class="shrink-0 relative photo-container">
                 <div class="p-3 bg-slate-800 rounded-[50px] shadow-2xl border border-white/5">
-                    <div class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700 relative">
-                        <img id="guru-foto" src="" alt="Profil" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    <div id="photo-box" class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700 relative shimmer">
+                        <img id="guru-foto" src="" alt="Profil" class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
                         
                         <label for="upload-foto" class="photo-overlay">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-white mx-auto mb-1">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                                 </svg>
-                                <span class="text-[10px] font-black uppercase text-white tracking-widest">Ganti Foto</span>
+                                <span class="text-[10px] font-black uppercase text-white tracking-widest">Update Foto</span>
                             </div>
                         </label>
                         <input type="file" id="upload-foto" class="hidden" accept="image/*" onchange="handleFotoUpload(this)">
                     </div>
                 </div>
-                <div class="absolute bottom-6 right-6 bg-emerald-500 w-7 h-7 rounded-full border-4 border-slate-900 status-online z-10"></div>
             </div>
 
             <div class="text-center md:text-left">
-                <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-500 mb-2">Selamat Datang !</h2>
-                <h1 id="guru-nama" class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter uppercase">...</h1>
+                <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-500 mb-2 italic">Dashboard Guru</h2>
+                <h1 id="guru-nama" class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter uppercase italic">...</h1>
                 <div class="flex flex-wrap justify-center md:justify-start gap-3">
                     <span id="guru-nip" class="px-4 py-2 bg-slate-800 rounded-full text-[10px] font-bold text-slate-400 border border-slate-700 uppercase tracking-widest">NIP: ---</span>
-                    <span id="guru-mapel" class="px-4 py-2 bg-yellow-500/10 rounded-full text-[10px] font-bold text-yellow-500 border border-yellow-500/20 uppercase tracking-widest">---</span>
+                    <span id="guru-mapel" class="px-4 py-2 bg-yellow-500/10 rounded-full text-[10px] font-bold text-yellow-500 border border-yellow-500/20 uppercase tracking-widest italic">---</span>
                 </div>
             </div>
         </div>
@@ -111,7 +114,7 @@
                 <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-yellow-500/20 group-hover:rotate-6 transition-transform">📝</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2">Input Nilai</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Kelola nilai harian dan ujian siswa.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Masukkan atau perbarui nilai siswa per kelas.</p>
                 </div>
             </a>
             
@@ -119,7 +122,7 @@
                 <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">🌍</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2">Profil Publik</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Lihat tampilan profil Anda di direktori.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Cek tampilan profil Anda di mata siswa/wali murid.</p>
                 </div>
             </a>
 
@@ -127,28 +130,56 @@
                 <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-red-500/20 group-hover:-rotate-6 transition-transform">🚪</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2">Keluar</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Akhiri sesi akses portal guru.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Logout dan amankan akun Anda.</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzoiC-mjER8XVB-QeWhcJJI0RAezTlOt2J6J_nPwfqAHjn0fh-rcvwpKiDwp8obYSD9/exec'; 
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzoiC-mjER8XVB-QeWhcJJI0RAezTlOt2J6J_nPwfqAHjn0fh-rcvwpKiDwp8obYSD9/exec'; // GANTI DENGAN URL GAS TERBARU ANDA
 
-        function initDashboard() {
+        async function initDashboard() {
             const session = localStorage.getItem('user_login') || localStorage.getItem('userGuru');
             if (!session) { window.location.replace("index.html"); return; }
             
             const user = JSON.parse(session);
-            document.getElementById('guru-nama').innerText = user.nama || user.NAMA;
-            document.getElementById('guru-nip').innerText = "NIP: " + (user.nip || user.NIP || "---");
+            const nipUser = (user.nip || user.NIP || "").toString();
+            const namaUser = user.nama || user.NAMA;
+
+            document.getElementById('guru-nama').innerText = namaUser;
+            document.getElementById('guru-nip').innerText = "NIP: " + (nipUser || "---");
             document.getElementById('guru-mapel').innerText = (user.mapel || user.MAPEL || "Staff").toUpperCase();
 
-            // Load Foto (dari cache atau inisial)
             const imgElement = document.getElementById('guru-foto');
-            const cachedFoto = localStorage.getItem(`foto_guru_${user.nip || user.NIP}`);
-            imgElement.src = cachedFoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.nama || user.NAMA)}&background=334155&color=fff&size=256`;
+            const photoBox = document.getElementById('photo-box');
+
+            // 1. Tampilkan avatar inisial dulu
+            imgElement.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaUser)}&background=334155&color=fff&size=256`;
+            imgElement.style.opacity = "1";
+
+            // 2. Tarik data TERBARU dari Google Sheets (Agar foto tidak hilang)
+            try {
+                const response = await fetch(`${API_URL}?sheet=Guru&t=${Date.now()}`);
+                const allGuru = await response.json();
+                
+                // Cari data diri berdasarkan NIP atau Nama
+                const myData = allGuru.find(g => 
+                    (g.nip || g.NIP || "").toString() === nipUser || 
+                    (g.nama || g.NAMA || "").toLowerCase() === namaUser.toLowerCase()
+                );
+
+                if (myData && (myData.foto || myData.foto_base64 || myData.FOTO)) {
+                    const latestFoto = myData.foto || myData.foto_base64 || myData.FOTO;
+                    imgElement.src = latestFoto;
+                    photoBox.classList.remove('shimmer'); // Matikan animasi loading
+                } else {
+                    photoBox.classList.remove('shimmer');
+                }
+            } catch (e) { 
+                console.error("Gagal sinkron foto:", e);
+                photoBox.classList.remove('shimmer');
+            }
         }
 
         async function handleFotoUpload(input) {
@@ -161,14 +192,12 @@
                 const img = new Image();
                 img.src = e.target.result;
                 img.onload = function() {
-                    // LOGIKA KOMPRESI CANVAS
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // Maksimal dimensi 400px untuk menghemat ukuran
                     let width = img.width;
                     let height = img.height;
-                    const maxSize = 400;
+                    const maxSize = 400; // Perkecil dimensi agar file ringan
 
                     if (width > height) {
                         if (width > maxSize) { height *= maxSize / width; width = maxSize; }
@@ -180,11 +209,10 @@
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Kompresi awal kualitas 0.6
+                    // KOMPRESI DI BAWAH 30KB
                     let quality = 0.6;
                     let base64String = canvas.toDataURL('image/jpeg', quality);
 
-                    // Loop turunkan kualitas jika masih > 30KB (karakter base64 > ~40.000)
                     while (base64String.length > 40000 && quality > 0.1) {
                         quality -= 0.1;
                         base64String = canvas.toDataURL('image/jpeg', quality);
@@ -200,7 +228,7 @@
             
             Swal.fire({
                 title: 'Mengunggah...',
-                text: 'Mengompres foto ke ukuran optimal (< 30KB)',
+                text: 'Mengamankan foto ke database sekolah',
                 allowOutsideClick: false,
                 didOpen: () => Swal.showLoading()
             });
@@ -218,19 +246,29 @@
                 const result = await response.text();
                 if (result.trim() === "Berhasil") {
                     document.getElementById('guru-foto').src = base64String;
-                    localStorage.setItem(`foto_guru_${user.nip || user.NIP}`, base64String);
-                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Foto profil diperbarui!', timer: 1500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Foto profil diperbarui selamanya!', timer: 2000, showConfirmButton: false });
                 } else {
                     throw new Error(result);
                 }
             } catch (e) {
-                Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan foto.', 'error');
+                Swal.fire('Gagal', 'Pastikan koneksi internet stabil.', 'error');
             }
         }
 
         function logout() {
-            localStorage.clear();
-            window.location.replace("index.html");
+            Swal.fire({
+                title: 'Keluar?',
+                text: "Anda harus login kembali nanti.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Ya, Keluar'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    localStorage.clear();
+                    window.location.replace("index.html");
+                }
+            });
         }
 
         window.onload = initDashboard;
