@@ -13,6 +13,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #020617; 
             color: #f8fafc;
+            background-image: radial-gradient(circle at top right, #1e293b, #020617);
         }
 
         .glass-card {
@@ -27,9 +28,7 @@
             transform: translateY(-8px);
         }
 
-        .photo-container:hover .photo-overlay {
-            opacity: 1;
-        }
+        .photo-container:hover .photo-overlay { opacity: 1; }
 
         .photo-overlay {
             position: absolute;
@@ -44,7 +43,6 @@
             border-radius: 42px;
         }
 
-        /* Animasi loading kecil untuk foto */
         .shimmer {
             background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
             background-size: 200% 100%;
@@ -56,27 +54,9 @@
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen antialiased">
 
-    <nav class="bg-slate-900/80 backdrop-blur-md py-4 px-6 sticky top-0 z-50 border-b border-slate-800">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10 object-contain">
-                <div>
-                    <h1 class="text-xs font-black uppercase tracking-widest leading-none text-white">Portal Guru</h1>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="guru.html" class="hidden md:block text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Web Publik</a>
-                <button onclick="logout()" class="p-2 bg-slate-800 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </nav>
+
 
     <main class="container mx-auto px-6 py-10 max-w-6xl">
         
@@ -85,7 +65,6 @@
                 <div class="p-3 bg-slate-800 rounded-[50px] shadow-2xl border border-white/5">
                     <div id="photo-box" class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700 relative shimmer">
                         <img id="guru-foto" src="" alt="Profil" class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
-                        
                         <label for="upload-foto" class="photo-overlay">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-white mx-auto mb-1">
@@ -98,7 +77,11 @@
                     </div>
                 </div>
             </div>
-
+           <button onclick="logoutSiswa()" class="absolute top-8 right-8 z-20 p-3 bg-red-500/10 hover:bg-red-500 rounded-2xl group transition-all duration-300" title="Keluar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </button>
             <div class="text-center md:text-left">
                 <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-500 mb-2 italic">Dashboard Guru</h2>
                 <h1 id="guru-nama" class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter uppercase italic">...</h1>
@@ -113,31 +96,31 @@
             <a href="guru-input-nilai.html" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group">
                 <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-yellow-500/20 group-hover:rotate-6 transition-transform">📝</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2">Input Nilai</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Masukkan atau perbarui nilai siswa per kelas.</p>
+                    <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">Input Nilai</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Kelola nilai harian, UTS, dan UAS siswa.</p>
                 </div>
             </a>
             
-            <a href="guru.html" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group">
-                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">🌍</div>
+            <div onclick="bukaEizin()" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer">
+                <div class="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">📋</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2">Profil Publik</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Cek tampilan profil Anda di mata siswa/wali murid.</p>
+                    <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">E-Izin Siswa</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Pantau absensi dan surat izin digital siswa.</p>
                 </div>
-            </a>
+            </div>
 
             <div onclick="logout()" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer">
                 <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-red-500/20 group-hover:-rotate-6 transition-transform">🚪</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2">Keluar</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Logout dan amankan akun Anda.</p>
+                    <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">Keluar</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Selesaikan sesi dan amankan akun Anda.</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwdW39-guY0CZCEntxIrt1135EJPdvyZzfIMGVx9LUApaY6REBSmxJMGjITQk2edMrW/exec'; // GANTI DENGAN URL GAS TERBARU ANDA
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwdW39-guY0CZCEntxIrt1135EJPdvyZzfIMGVx9LUApaY6REBSmxJMGjITQk2edMrW/exec';
 
         async function initDashboard() {
             const session = localStorage.getItem('user_login') || localStorage.getItem('userGuru');
@@ -154,38 +137,35 @@
             const imgElement = document.getElementById('guru-foto');
             const photoBox = document.getElementById('photo-box');
 
-            // 1. Tampilkan avatar inisial dulu
             imgElement.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaUser)}&background=334155&color=fff&size=256`;
             imgElement.style.opacity = "1";
 
-            // 2. Tarik data TERBARU dari Google Sheets (Agar foto tidak hilang)
             try {
                 const response = await fetch(`${API_URL}?sheet=Guru&t=${Date.now()}`);
                 const allGuru = await response.json();
-                
-                // Cari data diri berdasarkan NIP atau Nama
-                const myData = allGuru.find(g => 
-                    (g.nip || g.NIP || "").toString() === nipUser || 
-                    (g.nama || g.NAMA || "").toLowerCase() === namaUser.toLowerCase()
-                );
+                const myData = allGuru.find(g => (g.nip || g.NIP || "").toString() === nipUser || (g.nama || g.NAMA || "").toLowerCase() === namaUser.toLowerCase());
 
                 if (myData && (myData.foto || myData.foto_base64 || myData.FOTO)) {
-                    const latestFoto = myData.foto || myData.foto_base64 || myData.FOTO;
-                    imgElement.src = latestFoto;
-                    photoBox.classList.remove('shimmer'); // Matikan animasi loading
-                } else {
-                    photoBox.classList.remove('shimmer');
+                    imgElement.src = myData.foto || myData.foto_base64 || myData.FOTO;
                 }
+                photoBox.classList.remove('shimmer');
             } catch (e) { 
-                console.error("Gagal sinkron foto:", e);
                 photoBox.classList.remove('shimmer');
             }
+        }
+
+        // FUNGSI NAVIGASI LANGSUNG KE E-IZIN.HTML
+        function bukaEizin() {
+            const user = JSON.parse(localStorage.getItem('user_login') || localStorage.getItem('userGuru'));
+            // Ambil kode/password untuk auto login
+            const authCode = user.password || user.KODE || "";
+            // Navigasi ke eizin.html dengan parameter auth
+            window.location.href = `eizin.html?auth=${authCode}`;
         }
 
         async function handleFotoUpload(input) {
             const file = input.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e) {
@@ -194,71 +174,34 @@
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    
-                    let width = img.width;
-                    let height = img.height;
-                    const maxSize = 400; // Perkecil dimensi agar file ringan
-
-                    if (width > height) {
-                        if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-                    } else {
-                        if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
+                    let width = img.width, height = img.height, maxSize = 400;
+                    if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } }
+                    else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+                    canvas.width = width; canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
-
-                    // KOMPRESI DI BAWAH 30KB
-                    let quality = 0.6;
-                    let base64String = canvas.toDataURL('image/jpeg', quality);
-
-                    while (base64String.length > 40000 && quality > 0.1) {
-                        quality -= 0.1;
-                        base64String = canvas.toDataURL('image/jpeg', quality);
-                    }
-
-                    executeUpload(base64String);
+                    executeUpload(canvas.toDataURL('image/jpeg', 0.6));
                 };
             };
         }
 
         async function executeUpload(base64String) {
             const user = JSON.parse(localStorage.getItem('user_login') || localStorage.getItem('userGuru'));
-            
-            Swal.fire({
-                title: 'Mengunggah...',
-                text: 'Mengamankan foto ke database sekolah',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-
+            Swal.fire({ title: 'Mengunggah...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: 'update_foto_guru',
-                        nama: user.nama || user.NAMA,
-                        foto_base64: base64String
-                    })
+                    body: JSON.stringify({ action: 'update_foto_guru', nama: user.nama || user.NAMA, foto_base64: base64String })
                 });
-
-                const result = await response.text();
-                if (result.trim() === "Berhasil") {
+                if ((await response.text()).trim() === "Berhasil") {
                     document.getElementById('guru-foto').src = base64String;
-                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Foto profil diperbarui selamanya!', timer: 2000, showConfirmButton: false });
-                } else {
-                    throw new Error(result);
+                    Swal.fire({ icon: 'success', title: 'Berhasil', timer: 1500, showConfirmButton: false });
                 }
-            } catch (e) {
-                Swal.fire('Gagal', 'Pastikan koneksi internet stabil.', 'error');
-            }
+            } catch (e) { Swal.fire('Gagal', 'Koneksi bermasalah', 'error'); }
         }
 
         function logout() {
             Swal.fire({
                 title: 'Keluar?',
-                text: "Anda harus login kembali nanti.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ef4444',
