@@ -17,292 +17,303 @@
         :root {
             --bg-main: #020617;
             --bg-card: #0f172a;
-            --border-color: #334155;
+            --border-color: #1e293b;
             --accent-yellow: #eab308;
-            --accent-blue: #38bdf8;
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: #f8fafc; }
-        .swal2-popup { border-radius: 24px !important; background: #1e293b !important; color: white !important; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: #f8fafc; scroll-behavior: smooth; }
         
-        input[type=number] { -moz-appearance: textfield; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
         .input-nilai {
-            width: 42px; padding: 4px 2px; background-color: #1e293b;
-            border: 1px solid var(--border-color); border-radius: 6px;
+            width: 52px; padding: 7px 2px; background-color: #0f172a;
+            border: 1px solid #334155; border-radius: 8px;
             text-align: center; font-weight: 800; color: var(--accent-yellow);
-            font-size: 11px; outline: none; transition: all 0.2s;
+            font-size: 14px; outline: none; transition: all 0.2s;
         }
-        .input-nilai:focus { border-color: var(--accent-yellow); background-color: #020617; }
+        .input-nilai:focus { border-color: var(--accent-yellow); background-color: #020617; box-shadow: 0 0 8px rgba(234, 179, 8, 0.3); }
         
         th { 
-            font-size: 10px !important; 
-            padding: 8px 4px !important; 
-            background-color: #1e293b;
-            border: 1px solid var(--border-color);
-            text-transform: uppercase;
-            text-align: center;
+            font-size: 12px !important; padding: 14px 8px !important; 
+            background-color: #0f172a; border: 1px solid var(--border-color);
+            text-transform: uppercase; color: #94a3b8; text-align: center !important;
         }
 
         td { 
-            padding: 6px 4px !important; 
-            border: 1px solid var(--border-color); 
-            font-size: 11px !important; 
-            vertical-align: middle;
-            text-align: center;
+            padding: 10px 6px !important; border: 1px solid var(--border-color); 
+            font-size: 13px !important; vertical-align: middle; text-align: center;
         }
 
-        .text-nama { text-align: left !important; padding-left: 12px !important; }
-        tr:hover { background-color: rgba(51, 65, 85, 0.3); }
-        
-        .btn-back {
-            display: flex; align-items: center; justify-content: center;
-            width: 36px; height: 36px; background-color: #1e293b; 
-            border-radius: 10px; transition: all 0.3s; color: white;
-            border: 1px solid var(--border-color);
-        }
+        .text-nama { text-align: left !important; padding-left: 15px !important; font-weight: 700; }
+        .glass-card { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
-<body class="p-2 md:p-4">
+<body class="p-2 md:p-6 min-h-screen">
 
     <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-6 px-1">
              <div class="flex items-center gap-3">
-                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10 object-contain">
+                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-12 h-12 object-contain">
                 <div>
-                    <h1 class="text-xs font-black uppercase text-yellow-500 tracking-tighter leading-none">Portal Guru</h1>
-                    <p class="text-[9px] text-slate-500 font-bold uppercase">SMPN 110 Jakarta</p>
+                    <h1 class="text-sm font-black uppercase text-yellow-500 tracking-tighter leading-none">Portal Guru</h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">SMPN 110 Jakarta</p>
                 </div>
             </div>
-
             <div class="flex flex-col items-end">
-                <button onclick="window.history.back()" class="btn-back mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                    </svg>
+                <button onclick="window.history.back()" class="bg-slate-900 p-2.5 rounded-xl hover:bg-slate-800 transition-all text-white mb-1 border border-slate-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                 </button>
-                <p id="info-guru" class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Memuat...</p>
+                <p id="info-guru" class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Memuat Profil...</p>
             </div>
         </div>
 
-        <div class="bg-slate-900/60 rounded-[24px] border border-white/5 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-white/5 bg-slate-900/40">
-                <label class="block text-[9px] font-black text-slate-500 uppercase mb-1">Pilih Target Kelas</label>
-                <select id="select-kelas" onchange="loadSiswaDanNilai()" class="bg-slate-950 border border-slate-700 text-white px-3 py-2 rounded-lg font-bold text-[11px] outline-none focus:border-yellow-500">
-                    <option value="">-- PILIH KELAS --</option>
-                    <optgroup label="KELAS 7" class="bg-slate-900 text-yellow-500">
-                        <option value="7A">7A</option><option value="7B">7B</option>
-                        <option value="7C">7C</option><option value="7D">7D</option>
-                        <option value="7E">7E</option><option value="7F">7F</option>
-                    </optgroup>
-                    <optgroup label="KELAS 8" class="bg-slate-900 text-yellow-500">
-                        <option value="8A">8A</option><option value="8B">8B</option>
-                        <option value="8C">8C</option><option value="8D">8D</option>
-                        <option value="8E">8E</option><option value="8F">8F</option>
-                    </optgroup>
-                    <optgroup label="KELAS 9" class="bg-slate-900 text-yellow-500">
-                        <option value="9A">9A</option><option value="9B">9B</option>
-                        <option value="9C">9C</option><option value="9D">9D</option>
-                        <option value="9E">9E</option><option value="9F">9F</option>
-                    </optgroup>
-                </select>
+        <div class="mb-6">
+            <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 ml-1">Progres Kelas Anda</h3>
+            <div id="status-progres" class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2">
+                </div>
+        </div>
+
+        <div class="glass-card rounded-[24px] overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-white/5 bg-slate-900/40">
+                <h2 class="text-2xl md:text-3xl font-black text-yellow-500 italic uppercase tracking-tighter mb-8 text-center drop-shadow-lg">INPUT NILAI SISWA</h2>
+                
+                <div class="flex justify-start">
+                    <div class="inline-block">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase mb-2 tracking-widest">Pilih Kelas</label>
+                        <div class="relative">
+                            <select id="select-kelas" onchange="loadSiswaDanNilai()" class="bg-slate-950 border border-slate-800 text-white pl-4 pr-10 py-2 rounded-xl font-bold text-xs outline-none focus:border-yellow-600 transition-all cursor-pointer appearance-none w-auto min-w-[150px]">
+                                <option value="">-- PILIH KELAS --</option>
+                                <optgroup label="KELAS 7" class="bg-slate-900 text-yellow-500">
+                                    <option value="7A">7A</option><option value="7B">7B</option><option value="7C">7C</option><option value="7D">7D</option><option value="7E">7E</option><option value="7F">7F</option>
+                                </optgroup>
+                                <optgroup label="KELAS 8" class="bg-slate-900 text-yellow-500">
+                                    <option value="8A">8A</option><option value="8B">8B</option><option value="8C">8C</option><option value="8D">8D</option><option value="8E">8E</option><option value="8F">8F</option>
+                                </optgroup>
+                                <optgroup label="KELAS 9" class="bg-slate-900 text-yellow-500">
+                                    <option value="9A">9A</option><option value="9B">9B</option><option value="9C">9C</option><option value="9D">9D</option><option value="9E">9E</option><option value="9F">9F</option>
+                                </optgroup>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="text-slate-400">
-                            <th class="w-10">No</th>
-                            <th class="w-24">NISN</th>
-                            <th class="text-nama px-4 text-left">Nama Lengkap Siswa</th>
-                            <th class="w-12 bg-white/5">KKM</th>
-                            <th class="w-14 text-yellow-500">PH1</th>
-                            <th class="w-14 text-yellow-500">PH2</th>
-                            <th class="w-14 text-blue-400">UTS</th>
-                            <th class="w-14 text-green-400">UAS</th>
-                            <th class="w-16 text-sky-400 bg-sky-500/10">AKHIR</th>
+                            <th class="w-14">NO</th>
+                            <th class="w-32">NISN</th>
+                            <th class="text-nama px-4">NAMA LENGKAP SISWA</th>
+                            <th class="w-20 bg-white/5">KKM</th>
+                            <th class="w-24 text-yellow-500">PH1</th>
+                            <th class="w-24 text-yellow-500">PH2</th>
+                            <th class="w-24 text-blue-400">UTS</th>
+                            <th class="w-24 text-green-400">UAS</th>
+                            <th class="w-28 text-sky-400 bg-sky-500/10 font-black">AKHIR</th>
                         </tr>
                     </thead>
                     <tbody id="siswa-list">
-                        <tr><td colspan="9" class="p-10 text-center text-slate-600 italic font-bold">Pilih kelas untuk menginput nilai...</td></tr>
+                        <tr><td colspan="9" class="p-20 text-center text-slate-600 italic font-bold text-sm">Pilih kelas untuk memuat data...</td></tr>
                     </tbody>
                 </table>
             </div>
             
-            <div class="p-4 bg-slate-900/80 border-t border-white/5 flex justify-between items-center">
+            <div class="p-6 bg-slate-900/60 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex gap-3">
-                    <button onclick="downloadExcel()" class="bg-emerald-600/20 text-emerald-500 border border-emerald-600/30 font-bold px-4 py-2 rounded-lg text-[9px] uppercase hover:bg-emerald-600 hover:text-white transition-all">Excel</button>
-                    <button id="btn-hapus" onclick="konfirmasiHapusMassal()" class="hidden bg-red-600/20 text-red-500 border border-red-600/30 font-bold px-4 py-2 rounded-lg text-[9px] uppercase hover:bg-red-600 hover:text-white transition-all">Hapus Baris</button>
+                    <label class="cursor-pointer bg-blue-600/10 text-blue-500 border border-blue-600/20 font-bold px-5 py-3 rounded-xl text-[10px] uppercase hover:bg-blue-600 hover:text-white transition-all">
+                        Impor Excel <input type="file" id="upload-excel" accept=".xlsx, .xls" class="hidden" onchange="importFromExcel(this)">
+                    </label>
+                    <button onclick="downloadExcel()" class="bg-emerald-600/10 text-emerald-500 border border-emerald-600/20 font-bold px-5 py-3 rounded-xl text-[10px] uppercase hover:bg-emerald-600 hover:text-white transition-all">Format</button>
+                    <button id="btn-hapus" onclick="konfirmasiHapusMassal()" class="hidden bg-red-600/10 text-red-500 border border-red-600/20 font-bold px-5 py-3 rounded-xl text-[10px] uppercase hover:bg-red-600 hover:text-white transition-all">Bersihkan</button>
                 </div>
-                <button id="btn-simpan" onclick="konfirmasiSimpan()" class="hidden bg-yellow-500 text-slate-950 font-black px-8 py-2 rounded-lg text-[9px] uppercase shadow-lg hover:scale-105 transition-all">Simpan ke Cloud</button>
+                <button id="btn-simpan" onclick="konfirmasiSimpan()" class="hidden w-full md:w-auto bg-yellow-500 text-slate-950 font-black px-12 py-4 rounded-2xl text-[10px] uppercase shadow-xl hover:scale-105 transition-all tracking-widest">Simpan ke Cloud</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Ganti dengan URL Web App Anda yang baru setelah Deploy
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzFfAlkXIpMCLzmV1IEiOMKyCRMay3zQ1AtJBf-yBaWfOOOvSJzLS7B5cbJbIc686wN/exec';
-        const GURU = JSON.parse(localStorage.getItem('userGuru')) || { nama: "GURU", mapel_aktif: "MAPEL" };
-        document.getElementById('info-guru').innerText = `${GURU.nama} | ${GURU.mapel_aktif}`;
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwdW39-guY0CZCEntxIrt1135EJPdvyZzfIMGVx9LUApaY6REBSmxJMGjITQk2edMrW/exec';
+        const GURU = JSON.parse(localStorage.getItem('userGuru') || localStorage.getItem('user_login')) || { nama: "GURU", mapel: "MAPEL", MAPEL: "MAPEL" };
+        const MAPEL_AKTIF = GURU.mapel || GURU.MAPEL || "MAPEL";
+        document.getElementById('info-guru').innerText = `${GURU.nama || GURU.NAMA} | ${MAPEL_AKTIF}`;
 
+        // --- DASHBOARD PROGRES TERFILTER ---
+        async function cekProgresSemuaKelas() {
+            const container = document.getElementById('status-progres');
+            try {
+                const [resSiswa, resNilai] = await Promise.all([
+                    fetch(`${API_URL}?sheet=Siswa&t=${Date.now()}`),
+                    fetch(`${API_URL}?sheet=Nilai&t=${Date.now()}`)
+                ]);
+                const allSiswa = await resSiswa.json();
+                const allNilai = await resNilai.json();
+
+                // Dapatkan kelas unik yang ada di data siswa
+                const daftarKelas = [...new Set(allSiswa.map(s => s.kelas || s.KELAS))].sort();
+
+                // Filter: Hanya tampilkan kelas jika sudah ada baris di sheet 'Nilai' 
+                // untuk guru ini, atau tampilkan semua kelas jika ingin memantau ampuannya.
+                container.innerHTML = daftarKelas.map(kelas => {
+                    const siswaDiKelas = allSiswa.filter(s => (s.kelas || s.KELAS) === kelas);
+                    const totalSiswa = siswaDiKelas.length;
+                    
+                    // Hitung hanya baris yang punya nilai > 0 untuk mapel guru ini
+                    const sudahInput = allNilai.filter(n => {
+                        const isMatch = String(n.kelas).toUpperCase() === String(kelas).toUpperCase() && 
+                                        String(n.mapel).toUpperCase() === String(MAPEL_AKTIF).toUpperCase();
+                        const hasValue = (Number(n.nilai_ph1) > 0 || Number(n.nilai_ph2) > 0 || 
+                                          Number(n.nilai_uts) > 0 || Number(n.nilai_uas) > 0);
+                        return isMatch && hasValue;
+                    }).length;
+
+                    // Lewati kelas yang bukan bagian ampuannya (0% dan belum pernah diinput sama sekali)
+                    // Jika ingin menampilkan SEMUA kelas, hapus baris if di bawah ini.
+                    if (sudahInput === 0 && totalSiswa > 0) {
+                        // Cek apakah guru ini pernah menginput data lain di kelas ini? 
+                        // Jika tidak ada data sama sekali di sheet Nilai untuk mapel ini di kelas ini, sembunyikan.
+                        const pernahInput = allNilai.some(n => String(n.kelas).toUpperCase() === String(kelas).toUpperCase() && String(n.mapel).toUpperCase() === String(MAPEL_AKTIF).toUpperCase());
+                        if (!pernahInput) return ''; 
+                    }
+
+                    let persen = totalSiswa > 0 ? Math.round((sudahInput / totalSiswa) * 100) : 0;
+                    if (persen > 100) persen = 100;
+
+                    const color = persen === 100 ? 'bg-emerald-500' : (persen > 0 ? 'bg-yellow-500' : 'bg-slate-700');
+                    const text = persen === 100 ? 'text-emerald-400' : (persen > 0 ? 'text-yellow-500' : 'text-slate-500');
+
+                    return `
+                        <div class="bg-slate-900/80 border border-white/5 p-2 rounded-xl text-center shadow-lg">
+                            <div class="text-[9px] font-black text-slate-500 uppercase leading-none mb-1">${kelas}</div>
+                            <div class="text-[10px] font-black ${text}">${persen}%</div>
+                            <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                <div class="h-full ${color}" style="width: ${persen}%"></div>
+                            </div>
+                        </div>`;
+                }).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        // --- LOGIKA TABEL ---
         function hitungAkhir(row) {
             const ph1 = parseFloat(row.querySelector('.ph1').value) || 0;
             const ph2 = parseFloat(row.querySelector('.ph2').value) || 0;
             const uts = parseFloat(row.querySelector('.uts').value) || 0;
             const uas = parseFloat(row.querySelector('.uas').value) || 0;
             const rataPH = (ph1 + ph2) / 2;
-            const akhir = ( (2 * rataPH) + uts + uas ) / 4;
+            const akhir = Math.round(( (2 * rataPH) + uts + uas ) / 4);
             const display = row.querySelector('.nilai-akhir');
-            const skorFinal = Math.round(akhir);
-            display.innerText = skorFinal;
-            display.className = skorFinal < 82 ? "nilai-akhir text-red-500 font-bold" : "nilai-akhir text-sky-400 font-bold";
+            display.innerText = akhir;
+            display.className = akhir < 82 ? "nilai-akhir text-red-500 font-black" : "nilai-akhir text-sky-400 font-black";
         }
 
         async function loadSiswaDanNilai() {
             const kelas = document.getElementById('select-kelas').value;
             const container = document.getElementById('siswa-list');
             if(!kelas) return;
-            
-            container.innerHTML = '<tr><td colspan="9" class="p-10 text-center text-yellow-500 animate-pulse font-black text-[10px]">SINKRONISASI CLOUD...</td></tr>';
-            
+            container.innerHTML = '<tr><td colspan="9" class="p-20 text-center text-yellow-500 animate-pulse font-black text-xs uppercase">Sinkronisasi...</td></tr>';
             try {
-                const [resSiswa, resNilai] = await Promise.all([
-                    fetch(`${API_URL}?sheet=Siswa`), fetch(`${API_URL}?sheet=Nilai`)
-                ]);
+                const [resSiswa, resNilai] = await Promise.all([fetch(`${API_URL}?sheet=Siswa`), fetch(`${API_URL}?sheet=Nilai`)]);
                 const allSiswa = await resSiswa.json();
                 const allNilai = await resNilai.json();
-                const filtered = allSiswa.filter(s => String(s.kelas || '').toUpperCase() === kelas.toUpperCase());
-
-                container.innerHTML = filtered.map((s, i) => {
-                    const nisn = s.nisn || '-'; 
-                    const nama = s.nama || 'Tanpa Nama';
-                    const exist = allNilai.find(n => String(n.nisn) === String(nisn) && n.mapel === GURU.mapel_aktif);
-                    
-                    return `
-                        <tr class="item-siswa" data-nisn="${nisn}" data-nama="${nama}" data-kelas="${kelas}">
-                            <td>${i+1}</td>
-                            <td class="font-mono text-slate-400 text-[10px]">${nisn}</td>
-                            <td class="text-nama font-bold text-white uppercase">${nama}</td>
-                            <td class="bg-white/5">82</td>
-                            <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai ph1" value="${exist?.nilai_ph1 || ''}"></td>
-                            <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai ph2" value="${exist?.nilai_ph2 || ''}"></td>
-                            <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai uts" value="${exist?.nilai_uts || ''}"></td>
-                            <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai uas" value="${exist?.nilai_uas || ''}"></td>
-                            <td class="nilai-akhir">0</td>
-                        </tr>`;
-                }).join('');
+                const filtered = allSiswa.filter(s => String(s.kelas || s.KELAS || '').toUpperCase() === kelas.toUpperCase());
                 
+                container.innerHTML = filtered.map((s, i) => {
+                    const nisn = s.nisn || s.NISN || '-'; 
+                    const nama = s.nama || s.NAMA || 'Tanpa Nama';
+                    const exist = allNilai.find(n => String(n.nisn) === String(nisn) && n.mapel === MAPEL_AKTIF);
+                    return `<tr class="item-siswa" data-nisn="${nisn}" data-nama="${nama}" data-kelas="${kelas}">
+                        <td class="text-slate-500 font-bold">${i+1}</td>
+                        <td class="font-mono text-slate-500 text-[11px]">${nisn}</td>
+                        <td class="text-nama text-slate-100 uppercase italic tracking-tight">${nama}</td>
+                        <td class="bg-white/5 text-slate-500 font-bold">82</td>
+                        <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai ph1" value="${exist?.nilai_ph1 || ''}"></td>
+                        <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai ph2" value="${exist?.nilai_ph2 || ''}"></td>
+                        <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai uts" value="${exist?.nilai_uts || ''}"></td>
+                        <td><input type="number" oninput="hitungAkhir(this.closest('tr'))" class="input-nilai uas" value="${exist?.nilai_uas || ''}"></td>
+                        <td class="bg-sky-500/5"><span class="nilai-akhir">0</span></td>
+                    </tr>`;
+                }).join('');
                 document.querySelectorAll('.item-siswa').forEach(row => hitungAkhir(row));
                 document.getElementById('btn-simpan').classList.remove('hidden');
                 document.getElementById('btn-hapus').classList.remove('hidden');
-            } catch(e) { 
-                container.innerHTML = '<tr><td colspan="9" class="p-10 text-center text-red-500 font-bold">KONEKSI GAGAL!</td></tr>'; 
-            }
+            } catch(e) { container.innerHTML = '<tr><td colspan="9" class="p-10 text-center text-red-500 font-bold">Gagal!</td></tr>'; }
         }
 
-        async function hapusDariCloud() {
-            const kelas = document.getElementById('select-kelas').value;
-            const rows = document.querySelectorAll('.item-siswa');
-            const btn = document.getElementById('btn-hapus');
-            
-            if(!kelas) return;
-
-            btn.innerText = "MENGHAPUS..."; btn.disabled = true;
-
-            // Payload disesuaikan dengan 'action: hapus' pada Apps Script
-            const payload = {
-                action: "hapus",
-                kelas: kelas,
-                mapel: GURU.mapel_aktif
+        // --- IMPOR & EKSPOR ---
+        function importFromExcel(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                const tableRows = document.querySelectorAll('.item-siswa');
+                let matchCount = 0;
+                excelRows.forEach(excelRow => {
+                    const nisnExcel = String(excelRow.NISN || excelRow.nisn || '').trim();
+                    tableRows.forEach(htmlRow => {
+                        if (nisnExcel === htmlRow.getAttribute('data-nisn').trim() && nisnExcel !== '') {
+                            htmlRow.querySelector('.ph1').value = excelRow.PH1 || excelRow.ph1 || 0;
+                            htmlRow.querySelector('.ph2').value = excelRow.PH2 || excelRow.ph2 || 0;
+                            htmlRow.querySelector('.uts').value = excelRow.UTS || excelRow.uts || 0;
+                            htmlRow.querySelector('.uas').value = excelRow.UAS || excelRow.uas || 0;
+                            hitungAkhir(htmlRow); matchCount++;
+                        }
+                    });
+                });
+                Swal.fire(matchCount > 0 ? 'Berhasil!' : 'Gagal', matchCount + ' data dicocokkan.', matchCount > 0 ? 'success' : 'error');
+                input.value = '';
             };
-
-            try {
-                const response = await fetch(API_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify(payload) 
-                });
-                
-                const result = await response.text();
-
-                // MEMBERSIHKAN TAMPILAN TABEL SECARA INSTAN
-                rows.forEach(row => {
-                    row.querySelectorAll('input').forEach(input => input.value = ''); 
-                    const display = row.querySelector('.nilai-akhir');
-                    display.innerText = '0';
-                    display.className = "nilai-akhir text-red-500 font-bold";
-                });
-
-                Swal.fire('Berhasil!', result, 'success');
-            } catch (err) { 
-                Swal.fire('Error', 'Gagal menghapus data di server.', 'error'); 
-            } finally { 
-                btn.innerText = "Hapus Baris"; btn.disabled = false; 
-            }
-        }
-
-        function konfirmasiHapusMassal() {
-            Swal.fire({
-                title: 'Hapus Semua Nilai?',
-                text: "Nilai satu kelas untuk mapel ini akan dihapus permanen dari server!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Ya, Hapus Semua'
-            }).then((result) => {
-                if (result.isConfirmed) hapusDariCloud();
-            });
+            reader.readAsArrayBuffer(file);
         }
 
         async function simpanKeCloud() {
             const btn = document.getElementById('btn-simpan');
-            const rows = document.querySelectorAll('.item-siswa');
             const dataKirim = [];
-            btn.innerText = "SINKRON..."; btn.disabled = true;
-
-            rows.forEach(row => {
+            btn.innerText = "MENYIMPAN..."; btn.disabled = true;
+            document.querySelectorAll('.item-siswa').forEach(row => {
                 dataKirim.push({
-                    nisn: row.getAttribute('data-nisn'), 
-                    nama: row.getAttribute('data-nama'),
-                    kelas: row.getAttribute('data-kelas'), 
-                    mapel: GURU.mapel_aktif,
-                    nilai_ph1: row.querySelector('.ph1').value || 0,
-                    nilai_ph2: row.querySelector('.ph2').value || 0,
-                    nilai_uts: row.querySelector('.uts').value || 0,
-                    nilai_uas: row.querySelector('.uas').value || 0
+                    nisn: row.getAttribute('data-nisn'), nama: row.getAttribute('data-nama'), kelas: row.getAttribute('data-kelas'), 
+                    mapel: MAPEL_AKTIF, nilai_ph1: row.querySelector('.ph1').value || 0, nilai_ph2: row.querySelector('.ph2').value || 0,
+                    nilai_uts: row.querySelector('.uts').value || 0, nilai_uas: row.querySelector('.uas').value || 0
                 });
             });
-
             try {
-                await fetch(API_URL, { method: 'POST', body: JSON.stringify(dataKirim) });
-                Swal.fire('Berhasil!', 'Data tersimpan ke Cloud.', 'success');
-            } catch (err) { Swal.fire('Error', 'Gagal menyimpan', 'error'); }
+                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpan_massal", data: dataKirim }) });
+                if((await response.text()).includes("Berhasil")) {
+                    Swal.fire('Tersimpan!', 'Database Cloud diperbarui.', 'success');
+                    cekProgresSemuaKelas();
+                }
+            } catch (err) { Swal.fire('Error', 'Koneksi terputus.', 'error'); }
             finally { btn.innerText = "Simpan ke Cloud"; btn.disabled = false; }
         }
 
-        function konfirmasiSimpan() {
-            Swal.fire({
-                title: 'Simpan Nilai?', icon: 'question', showCancelButton: true, confirmButtonText: 'Ya, Simpan'
-            }).then((res) => { if (res.isConfirmed) simpanKeCloud(); });
-        }
-
+        function konfirmasiSimpan() { Swal.fire({ title: 'Simpan ke Cloud?', icon: 'question', showCancelButton: true, confirmButtonColor: '#eab308' }).then((res) => { if (res.isConfirmed) simpanKeCloud(); }); }
+        
         function downloadExcel() {
             const rows = document.querySelectorAll('.item-siswa');
             if (rows.length === 0) return;
-            const data = [["NISN", "NAMA", "KELAS", "MAPEL", "KKM", "PH1", "PH2", "UTS", "UAS", "AKHIR"]];
-            rows.forEach(r => {
-                data.push([
-                    r.getAttribute('data-nisn'), r.getAttribute('data-nama'), r.getAttribute('data-kelas'), 
-                    GURU.mapel_aktif, "82", r.querySelector('.ph1').value || 0, r.querySelector('.ph2').value || 0,
-                    r.querySelector('.uts').value || 0, r.querySelector('.uas').value || 0,
-                    r.querySelector('.nilai-akhir').innerText
-                ]);
+            const data = [["NO", "NISN", "NAMA", "KELAS", "MAPEL", "KKM", "PH1", "PH2", "UTS", "UAS", "AKHIR"]];
+            rows.forEach((r, idx) => {
+                data.push([idx+1, r.getAttribute('data-nisn'), r.getAttribute('data-nama'), r.getAttribute('data-kelas'), MAPEL_AKTIF, "82", r.querySelector('.ph1').value || 0, r.querySelector('.ph2').value || 0, r.querySelector('.uts').value || 0, r.querySelector('.uas').value || 0, r.querySelector('.nilai-akhir').innerText]);
             });
             const ws = XLSX.utils.aoa_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Rekap");
-            XLSX.writeFile(wb, `Nilai_${GURU.mapel_aktif}_${document.getElementById('select-kelas').value}.xlsx`);
+            XLSX.writeFile(wb, `Format_Nilai_${MAPEL_AKTIF}_${document.getElementById('select-kelas').value}.xlsx`);
         }
+
+        function konfirmasiHapusMassal() {
+            Swal.fire({ title: 'Bersihkan Layar?', text: 'Menghapus tampilan nilai di layar (bukan di cloud)', icon: 'warning', showCancelButton: true }).then((result) => {
+                if (result.isConfirmed) { document.querySelectorAll('.input-nilai').forEach(i => i.value = ''); document.querySelectorAll('.nilai-akhir').forEach(a => a.innerText = '0'); }
+            });
+        }
+
+        window.onload = cekProgresSemuaKelas;
     </script>
 </body>
 </html>
