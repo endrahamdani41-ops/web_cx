@@ -11,12 +11,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        /* Ubah background body menjadi sedikit lebih terang (slate-950) agar serasi dengan foto cerah */
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
-        #hero-section { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f1f5f9; /* Background cerah saat loading */ }
+        #hero-section { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f1f5f9; }
         
-        /* --- PERBAIKAN FOTO CERAH --- */
         .slide { 
             position: absolute; 
             inset: 0; 
@@ -26,16 +24,13 @@
             opacity: 0; 
             transition: opacity 1.2s; 
             z-index: 0; 
-            /* HAPUS FILTER BRIGHTNESS GELAP */
-            filter: none; /* Foto tampil cerah asli */
+            filter: none; 
         }
         .slide.active { opacity: 1; }
         
-        /* --- HAPUS OVERLAY GELAP --- */
         .hero-overlay { 
             position: absolute; 
             inset: 0; 
-            /* Ubah gradasi menjadi sangat transparan, hanya sedikit di bawah untuk estetika */
             background: linear-gradient(to bottom, rgba(255,255,255,0) 60%, rgba(2,6,23,0.3)); 
             z-index: 1; 
         }
@@ -52,9 +47,7 @@
         select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.5rem center; background-size: 1rem; }
         .centralized { text-align: center; }
 
-        /* --- PERBAIKAN KONTRAS TEKS (Agar terbaca di foto cerah) --- */
         .hero-content h1, .hero-content p {
-            /* Tambahkan shadow tipis pada teks agar tetap terbaca jelas di background putih/cerah */
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
     </style>
@@ -83,7 +76,7 @@
                 <div class="text-5xl mb-4">👨‍🏫</div>
                 <h2 class="text-3xl font-black text-white italic mb-8 centralized">Portal <span class="text-blue-500">Guru</span></h2>
                 <div class="space-y-4">
-                    <input type="text" id="nipInput" placeholder="USERNAME" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-blue-500 outline-none uppercase">
+                    <input type="text" id="nipInput" placeholder="USERNAME" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-blue-500 outline-none capitalize">
                     <button id="btnVerifyGuru" onclick="verifyGuruNip()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl text-sm tracking-widest hover:bg-blue-500 transition-all">Lanjut Verifikasi</button>
                     <p id="errorGuru" class="text-red-500 text-[10px] font-black hidden animate-pulse">⚠️ Data Tidak Ditemukan!</p>
                 </div>
@@ -114,16 +107,7 @@
     <header id="hero-section">
         <div id="slide-container" class="absolute inset-0 w-full h-full bg-slate-900"></div>
         <div class="hero-overlay"></div>
-        <div class="hero-content text-center px-6 relative z-10">
-
-
-
-
-
-
-
- 
-        </div>
+        <div class="hero-content text-center px-6 relative z-10"></div>
     </header>
 
     <section class="relative z-20 py-16 container mx-auto px-6 -mt-32">
@@ -149,22 +133,30 @@
 
     <section id="sambutan" class="py-20">
         <div class="container mx-auto px-6">
-            <div class="bg-slate-900 rounded-[60px] p-10 flex flex-col md:flex-row items-center gap-12 border border-white/5 shadow-2xl">
-                <div class="w-full md:w-[30%] bg-slate-800 p-6 rounded-[40px]">
-                    <div class="relative h-[400px] rounded-[30px] overflow-hidden bg-slate-950 p-4 border border-white/5 flex flex-col justify-between">
-                        <div class="w-full h-[82%] rounded-[20px] overflow-hidden bg-black border border-slate-700 shadow-inner skeleton">
-                            <img id="foto-kepala-img" src="" class="w-full h-full object-cover opacity-0 transition-opacity duration-700" onload="this.style.opacity='1'">
-                        </div>
-                        <div class="flex items-center justify-center pt-2">
-                            <h3 id="nama-kepala-text" class="text-white font-black text-center italic text-xs tracking-wider leading-tight">Memuat...</h3>
+            <div class="bg-slate-900 rounded-[60px] p-8 md:p-12 flex flex-col md:flex-row items-center gap-12 border border-white/5 shadow-2xl">
+                
+                <div class="w-full md:w-[35%] group">
+                    <div class="relative rounded-[45px] overflow-hidden shadow-2xl border border-white/10 aspect-[4/5] bg-slate-800">
+                        <img id="foto-kepala-img" src="" 
+                             class="w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:scale-105" 
+                             onload="this.style.opacity='1'">
+                        
+                        <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent">
+                            <h3 id="nama-kepala-text" class="text-white font-black italic text-center text-sm md:text-base tracking-wider capitalize leading-tight">Memuat...</h3>
+                            <p class="text-yellow-500 text-[9px] font-bold text-center capitalize tracking-[0.3em] mt-1">Kepala Sekolah</p>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-[70%]">
-                    <p id="teks-sambutan" class="text-slate-300 text-lg md:text-xl leading-relaxed italic border-l-8 border-yellow-500 pl-8">
-                        Memuat sambutan...
-                    </p>
+
+                <div class="w-full md:w-[65%]">
+                    <div class="relative">
+                        <span class="text-yellow-500 text-5xl font-serif absolute -top-8 -left-4 opacity-20"></span>
+                        <p id="teks-sambutan" class="text-slate-400 text-base md:text-lg leading-relaxed italic border-l-4 border-yellow-500 pl-8 py-2 font-medium">
+                            Memuat sambutan...
+                        </p>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
