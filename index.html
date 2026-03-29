@@ -16,21 +16,13 @@
         #hero-section { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f1f5f9; }
         
         .slide { 
-            position: absolute; 
-            inset: 0; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            opacity: 0; 
-            transition: opacity 1.2s; 
-            z-index: 0; 
-            filter: none; 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
+            opacity: 0; transition: opacity 1.2s; z-index: 0; 
         }
         .slide.active { opacity: 1; }
         
         .hero-overlay { 
-            position: absolute; 
-            inset: 0; 
+            position: absolute; inset: 0; 
             background: linear-gradient(to bottom, rgba(255,255,255,0) 60%, rgba(2,6,23,0.3)); 
             z-index: 1; 
         }
@@ -44,12 +36,7 @@
         .skeleton { background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; animation: skeleton-load 1.5s infinite; }
         @keyframes skeleton-load { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
-        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.5rem center; background-size: 1rem; }
         .centralized { text-align: center; }
-
-        .hero-content h1, .hero-content p {
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
     </style>
 </head>
 <body>
@@ -63,43 +50,7 @@
             <h2 class="text-3xl font-black text-white italic mb-8 centralized">Portal <span class="text-yellow-500">Siswa</span></h2>
             <div class="space-y-4">
                 <input type="text" id="nisnInput" placeholder="MASUKKAN NIS" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-yellow-500 outline-none">
-                <button id="btnSiswa" onclick="validateLogin('Siswa', 'nisnInput', 'errorSiswa', 'btnSiswa', 'userSiswa', 'halaman-siswa.html')" class="w-full bg-yellow-500 text-slate-950 font-black py-5 rounded-2xl text-sm tracking-widest hover:bg-yellow-400 transition-all">Masuk Portal</button>
-                <p id="errorSiswa" class="text-red-500 text-[10px] font-black hidden animate-pulse">⚠️ NIS Tidak Ditemukan!</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalGuru" class="modal-overlay p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-[40px] p-10 relative text-center">
-            <button onclick="closeModal('modalGuru')" class="absolute top-6 right-6 text-slate-500 hover:text-white">✕</button>
-            <div id="guruStep1">
-                <div class="text-5xl mb-4">👨‍🏫</div>
-                <h2 class="text-3xl font-black text-white italic mb-8 centralized">Portal <span class="text-blue-500">Guru</span></h2>
-                <div class="space-y-4">
-                    <input type="text" id="nipInput" placeholder="USERNAME" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white text-center font-bold tracking-widest focus:border-blue-500 outline-none capitalize">
-                    <button id="btnVerifyGuru" onclick="verifyGuruNip()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl text-sm tracking-widest hover:bg-blue-500 transition-all">Lanjut Verifikasi</button>
-                    <p id="errorGuru" class="text-red-500 text-[10px] font-black hidden animate-pulse">⚠️ Data Tidak Ditemukan!</p>
-                </div>
-            </div>
-            <div id="guruStep2" class="hidden">
-                <h2 class="text-2xl font-black text-white italic mb-2 centralized">Pilih <span class="text-blue-500">Mapel</span></h2>
-                <p id="welcomeGuru" class="text-slate-400 text-xs font-bold mb-8 tracking-widest centralized"></p>
-                <div class="space-y-4 text-left">
-                    <select id="mapelSelect" class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-5 text-white font-bold outline-none focus:border-blue-500 cursor-pointer">
-                        <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
-                        <option value="PENDIDIKAN AGAMA ISLAM">PENDIDIKAN AGAMA ISLAM</option>
-                        <option value="PENDIDIKAN PANCASILA">PENDIDIKAN PANCASILA</option>
-                        <option value="MATEMATIKA">MATEMATIKA</option>
-                        <option value="BAHASA INDONESIA">BAHASA INDONESIA</option>
-                        <option value="IPA">IPA</option>
-                        <option value="IPS">IPS</option>
-                        <option value="BAHASA INGGRIS">BAHASA INGGRIS</option>
-                        <option value="PJOK">PJOK</option>
-                        <option value="INFORMATIKA">INFORMATIKA</option>
-                        <option value="SENI BUDAYA">SENI BUDAYA</option>
-                    </select>
-                    <button onclick="finalLoginGuru()" class="w-full bg-green-600 text-white font-black py-5 rounded-2xl text-sm tracking-widest hover:bg-green-500 transition-all">Masuk Dashboard</button>
-                </div>
+                <button id="btnSiswa" class="w-full bg-yellow-500 text-slate-950 font-black py-5 rounded-2xl text-sm tracking-widest hover:bg-yellow-400 transition-all">Masuk Portal</button>
             </div>
         </div>
     </div>
@@ -112,21 +63,21 @@
 
     <section class="relative z-20 py-16 container mx-auto px-6 -mt-32">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div onclick="openModal('modalSiswa')" class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-yellow-500 group">
-                <h3 class="text-5xl font-black text-white group-hover:text-yellow-500 transition-colors centralized">600+</h3>
-                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized">Jumlah Murid</p>
+            <div onclick="openModal('modalSiswa')" class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-yellow-500">
+                <h3 class="text-5xl font-black text-white centralized">600+</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized capitalize">Jumlah Murid</p>
             </div>
-            <div onclick="openModal('modalGuru')" class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-blue-600 group">
-                <h3 class="text-5xl font-black text-white group-hover:text-blue-500 transition-colors centralized">45</h3>
-                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized">Jumah Guru & Tenaga Kependidikan</p>
+            <div class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-blue-600">
+                <h3 class="text-5xl font-black text-white centralized">45</h3>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized capitalize">Guru & GTK</p>
             </div>
             <div class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-yellow-500">
                 <h3 class="text-5xl font-black text-white centralized">18</h3>
-                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized">Jumlah Ruang Kelas</p>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized capitalize">Ruang Kelas</p>
             </div>
             <div class="dark-card bg-slate-800/95 p-10 rounded-[45px] text-center border-b-8 border-blue-600">
                 <h3 class="text-5xl font-black text-white centralized">A</h3>
-                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized">Akreditasi</p>
+                <p class="text-slate-400 font-bold text-[10px] mt-2 italic centralized capitalize">Akreditasi</p>
             </div>
         </div>
     </section>
@@ -134,47 +85,48 @@
     <section id="sambutan" class="py-20">
         <div class="container mx-auto px-6">
             <div class="bg-slate-900 rounded-[60px] p-8 md:p-12 flex flex-col md:flex-row items-center gap-12 border border-white/5 shadow-2xl">
-                
                 <div class="w-full md:w-[35%] group">
                     <div class="relative rounded-[45px] overflow-hidden shadow-2xl border border-white/10 aspect-[4/5] bg-slate-800">
-                        <img id="foto-kepala-img" src="" 
-                             class="w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:scale-105" 
-                             onload="this.style.opacity='1'">
-                        
+                        <img id="foto-kepala-img" src="" class="w-full h-full object-cover opacity-0 transition-all duration-700 group-hover:scale-105" onload="this.style.opacity='1'">
                         <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent">
-                            <h3 id="nama-kepala-text" class="text-white font-black italic text-center text-sm md:text-base tracking-wider capitalize leading-tight">Memuat...</h3>
-                            <p class="text-yellow-500 text-[9px] font-bold text-center capitalize tracking-[0.3em] mt-1">Kepala Sekolah</p>
+                            <h3 id="nama-kepala-text" class="text-white font-black italic text-center text-xs md:text-sm tracking-wider capitalize leading-tight">Memuat...</h3>
+                            <p class="text-yellow-500 text-[8px] font-bold text-center capitalize tracking-[0.3em] mt-1">Kepala Sekolah</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="w-full md:w-[65%]">
                     <div class="relative">
-                        <span class="text-yellow-500 text-5xl font-serif absolute -top-8 -left-4 opacity-20"></span>
-                        <p id="teks-sambutan" class="text-slate-400 text-base md:text-lg leading-relaxed italic border-l-4 border-yellow-500 pl-8 py-2 font-medium">
+                        <span class="text-yellow-500 text-5xl font-serif absolute -top-8 -left-4 opacity-20">“</span>
+                        <p id="teks-sambutan" class="text-slate-400 text-sm md:text-base leading-relaxed italic border-l-4 border-yellow-500 pl-8 py-2 font-medium">
                             Memuat sambutan...
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
+    <section id="prestasi" class="py-20 bg-slate-900/30">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-12">
+                <h2 class="text-4xl font-black text-white italic tracking-tighter capitalize">Prestasi <span class="text-yellow-500">Siswa</span></h2>
+                <p class="text-slate-500 text-xs font-bold tracking-[0.3em] mt-2 capitalize"></p>
+            </div>
+            <div id="prestasi-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="h-80 rounded-[40px] skeleton"></div>
+                <div class="h-80 rounded-[40px] skeleton"></div>
+                <div class="h-80 rounded-[40px] skeleton"></div>
             </div>
         </div>
     </section>
 
     <section id="berita" class="py-20">
         <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl font-black text-white italic mb-12 tracking-tighter">
-                Warta <span class="text-yellow-500">Sekolah</span>
-            </h2>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <h2 class="text-4xl font-black text-white italic mb-12 tracking-tighter capitalize">Warta <span class="text-yellow-500">Sekolah</span></h2>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div class="h-80 rounded-[40px] skeleton"></div>
                 <div class="h-80 rounded-[40px] skeleton"></div>
                 <div class="h-80 rounded-[40px] skeleton"></div>
-            </div>
-            <div class="mt-16">
-                <a href="berita.html" class="inline-flex items-center gap-4 bg-slate-800/50 hover:bg-yellow-500 text-white hover:text-slate-950 font-black px-12 py-5 rounded-[25px] border border-white/10 transition-all duration-300 shadow-xl">
-                    <span class="tracking-[0.2em] text-xs">Lihat Semua Berita</span>
-                </a>
             </div>
         </div>
     </section>
@@ -183,55 +135,9 @@
 
     <script>
         const API_BASE = 'https://script.google.com/macros/s/AKfycbxLc0YGJ9HrE9YDv94qy83PlHUkSKVbs1A5vK1vI94LG0mpTwILpzEJq91y5IfRaGtD/exec';
-        let temporaryGuruData = null;
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = 'auto'; }
-
-        async function verifyGuruNip() {
-            const val = document.getElementById('nipInput').value.trim();
-            if(!val) return alert("Isi Username!");
-            if (val === "110") {
-                const btn = document.getElementById('btnVerifyGuru');
-                btn.innerText = "Membuka Admin...";
-                setTimeout(() => { window.location.href = "admin.html"; }, 800);
-                return;
-            }
-            const btn = document.getElementById('btnVerifyGuru');
-            btn.innerText = "Sabar ya !"; btn.disabled = true;
-            try {
-                const r = await fetch(`${API_BASE}?sheet=Guru`);
-                const data = await r.json();
-                const user = data.find(u => String(u.nip || u.NIP || u.username).trim() === val);
-                if(user) {
-                    temporaryGuruData = user;
-                    document.getElementById('guruStep1').classList.add('hidden');
-                    document.getElementById('guruStep2').classList.remove('hidden');
-                    document.getElementById('welcomeGuru').innerText = `Halo, ${user.nama || user.NAMA}`;
-                } else { document.getElementById('errorGuru').classList.remove('hidden'); btn.innerText = "Lanjut Verifikasi"; btn.disabled = false; }
-            } catch (e) { alert("Error Server"); btn.disabled = false; }
-        }
-
-        async function validateLogin(sheetName, inputId, errorId, btnId, storageKey, redirectUrl) {
-            const val = document.getElementById(inputId).value.trim();
-            if(!val) return alert("Harap isi ID!");
-            const btn = document.getElementById(btnId);
-            btn.innerText = "Sabar ya !"; btn.disabled = true;
-            try {
-                const r = await fetch(`${API_BASE}?sheet=${sheetName}`);
-                const data = await r.json();
-                const user = data.find(u => String(u.nisn || u.NISN).trim() === val);
-                if(user) { localStorage.setItem(storageKey, JSON.stringify(user)); window.location.href = redirectUrl;
-                } else { document.getElementById(errorId).classList.remove('hidden'); btn.innerText = "Masuk Portal"; btn.disabled = false; }
-            } catch (e) { alert("Error Server"); btn.disabled = false; }
-        }
-
-        function finalLoginGuru() {
-            const mapel = document.getElementById('mapelSelect').value;
-            if(!mapel) return alert("Pilih Mata Pelajaran!");
-            localStorage.setItem('userGuru', JSON.stringify({ ...temporaryGuruData, mapel_aktif: mapel }));
-            window.location.href = 'halaman-guru.html';
-        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         async function fastFetch(sheet) {
             try {
@@ -252,7 +158,6 @@
                 const slides = data.filter(i => (i.url_gambar || i.URL_GAMBAR)).map(i => i.url_gambar || i.URL_GAMBAR);
                 const slideHTML = slides.map((s, i) => `<img src="${s}" class="slide ${i === 0 ? 'active' : ''}" loading="lazy">`).join('');
                 document.getElementById('slide-container').innerHTML = slideHTML;
-                
                 let current = 0;
                 setInterval(() => {
                     const imgs = document.querySelectorAll('.slide');
@@ -262,14 +167,33 @@
                     imgs[current].classList.add('active');
                 }, 5000);
             }
+
+            if (type === 'prestasi') {
+                document.getElementById('prestasi-container').innerHTML = data.reverse().slice(0, 3).map(p => {
+                    const judul = p.nama_prestasi || p.NAMA_PRESTASI || "Prestasi Siswa";
+                    const nama = p.nama_siswa || p.NAMA_SISWA || "Siswa Berprestasi";
+                    const foto = p.url_foto || p.URL_FOTO || "";
+                    const peringkat = p.peringkat || p.PERINGKAT || "Juara";
+                    return `
+                        <div class="dark-card p-6 rounded-[40px] group">
+                            <div class="overflow-hidden rounded-[30px] mb-4 bg-slate-900 relative">
+                                <img src="${foto}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400x300?text=SMPN110'">
+                                <div class="absolute top-4 right-4 bg-yellow-500 text-slate-950 text-[9px] font-black px-4 py-1.5 rounded-full capitalize italic shadow-lg">${peringkat}</div>
+                            </div>
+                            <h3 class="text-white font-black italic leading-tight text-sm capitalize mb-2">${judul}</h3>
+                            <p class="text-slate-500 text-[10px] font-bold capitalize tracking-widest">${nama}</p>
+                        </div>`;
+                }).join('');
+            }
+
             if (type === 'berita') {
                 document.getElementById('news-container').innerHTML = data.reverse().slice(0, 3).map(n => `
-                    <a href="detail-berita.html?judul=${encodeURIComponent(n.judul || n.JUDUL)}" class="dark-card p-6 rounded-[40px] group text-center no-underline">
+                    <a href="detail-berita.html?judul=${encodeURIComponent(n.judul || n.JUDUL)}" class="dark-card p-6 rounded-[40px] group">
                         <div class="overflow-hidden rounded-[30px] mb-4 bg-slate-900">
-                            <img src="${n.url_foto || n.URL_FOTO}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
+                            <img src="${n.url_foto || n.URL_FOTO}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
                         </div>
-                        <p class="text-yellow-500 text-[9px] font-black tracking-widest mb-2 centralised">Informasi Terbaru</p>
-                        <h3 class="text-white font-black italic leading-tight text-sm centralized">${n.judul || n.JUDUL}</h3>
+                        <p class="text-yellow-500 text-[9px] font-black tracking-widest mb-2 capitalize">Informasi Terbaru</p>
+                        <h3 class="text-white font-black italic leading-tight text-sm capitalize">${n.judul || n.JUDUL}</h3>
                     </a>`).join('');
             }
         }
@@ -284,7 +208,7 @@
             });
         }
 
-        window.onload = () => { includeLayouts(); fastFetch('Hero'); fastFetch('Berita'); };
+        window.onload = () => { includeLayouts(); fastFetch('Hero'); fastFetch('Berita'); fastFetch('Prestasi'); };
     </script>
 </body>
 </html>

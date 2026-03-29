@@ -3,52 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel Multi-Menu | SMPN 110</title>
+    <title>Admin Panel SMPN 110 Jakarta</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .nav-btn.active { background: #10b981; color: white; }
+        .nav-btn.active { background: #10b981; color: white; border-color: #10b981; }
+        .table-container { border-radius: 20px; overflow: hidden; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(30, 41, 59, 0.5); color: #94a3b8; font-size: 11px; text-transform: uppercase; padding: 15px; text-align: left; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; color: #e2e8f0; }
     </style>
 </head>
 <body class="min-h-screen pb-20">
 
     <header class="p-6 border-b border-white/5 mb-6">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-
-			
-		<div class="container mx-auto px-4 py-3 flex justify-between items-center"> <a href="index.html" class="flex items-center gap-4 group">
-            <div class="relative">
-                <div class="w-10 h-10 flex items-center justify-center"> 
-                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
-                         alt="Logo SMPN 110" 
-                         class="w-10 h-10 object-contain">
-                </div>
-            </div>
-            
-            <div class="flex flex-col">
-                <h1 class="text-lg font-black text-[#1E90FF] tracking-tighter italic uppercase leading-none">
-                    Admin  <span class="text-yellow-500">SMPN 110 Jakarta</span>
-                </h1>
-                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Maju Bersama Raih Prestasi</p>
-            </div>
-        </a>	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+            <div class="flex items-center gap-4">
+                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10">
+                <h1 class="text-lg font-black text-[#1E90FF] italic">ADMIN <span class="text-yellow-500">SMPN 110</span></h1>
+            </div>	
             <div class="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-white/5">
                 <button onclick="switchTab('ekskul')" id="btn-ekskul" class="nav-btn active px-6 py-2 rounded-xl text-xs font-bold transition-all">EKSKUL</button>
                 <button onclick="switchTab('berita')" id="btn-berita" class="nav-btn px-6 py-2 rounded-xl text-xs font-bold transition-all text-slate-400">BERITA</button>
@@ -58,134 +35,160 @@
     </header>
 
     <main class="container mx-auto px-6">
-        
-        <div class="glass p-6 rounded-3xl mb-8 flex flex-col md:flex-row items-center gap-6 shadow-xl">
+        <div class="glass p-6 rounded-3xl mb-8 flex flex-col md:flex-row items-center gap-6">
             <div class="flex-1">
-                <h3 class="text-sm font-bold text-emerald-400 mb-2 uppercase tracking-widest">Step 1: Upload Gambar</h3>
-                <input type="file" id="file-upload" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 cursor-pointer">
+                <h3 class="text-xs font-bold text-emerald-400 mb-2 uppercase">Step 1: Upload Gambar</h3>
+                <input type="file" id="file-upload" class="block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:bg-emerald-500/10 file:text-emerald-400 cursor-pointer">
             </div>
-            <button id="btn-upload" onclick="uploadKeImgBB()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-2xl transition-all flex items-center gap-2">
-                <i data-lucide="upload-cloud" size="18"></i> UPLOAD
-            </button>
+            <button id="btn-upload" onclick="uploadKeImgBB()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 rounded-2xl transition-all">UPLOAD</button>
             <div class="flex-1">
-                <label class="text-[10px] text-slate-500 uppercase font-bold">Link Hasil Upload:</label>
-                <input type="text" id="url-hasil" readonly class="w-full bg-black/20 border border-white/5 p-2 rounded-lg text-xs text-emerald-300 outline-none" placeholder="https://i.ibb.co.com/...">
+                <input type="text" id="url-hasil" readonly class="w-full bg-black/20 border border-white/5 p-2 rounded-lg text-xs text-emerald-300" placeholder="URL Gambar akan muncul di sini...">
             </div>
         </div>
 
-        <div id="tab-berita" class="tab-content hidden animate-in fade-in duration-500">
-            <div class="glass p-8 rounded-3xl shadow-2xl border-t-4 border-blue-500">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="newspaper" class="text-blue-400"></i> INPUT BERITA BARU</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="news-judul" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Judul Berita">
-                    <select id="news-kategori" class="bg-slate-900 p-4 rounded-xl outline-none text-slate-400">
-                        <option value="Kegiatan">Kegiatan Sekolah</option>
-                        <option value="Pengumuman">Pengumuman</option>
-                        <option value="Akademik">Akademik</option>
-                    </select>
-                    <textarea id="news-ringkasan" class="bg-slate-900 p-4 rounded-xl outline-none md:col-span-2" placeholder="Ringkasan Berita (Singkat)"></textarea>
-                    <textarea id="news-isi" class="bg-slate-900 p-4 rounded-xl outline-none md:col-span-2 h-32" placeholder="Isi Berita Lengkap"></textarea>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 space-y-6">
+                <div id="form-ekskul" class="tab-content glass p-8 rounded-3xl border-t-4 border-emerald-500">
+                    <h2 class="text-xl font-bold mb-6">INPUT EKSKUL</h2>
+                    <input type="text" id="eks-nama" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none" placeholder="Nama Ekskul">
+                    <input type="text" id="eks-jadwal" class="w-full bg-slate-900 p-4 rounded-xl mb-6 outline-none" placeholder="Jadwal (Contoh: Sabtu, 08:00)">
+                    <button onclick="simpanData('Ekskul')" class="w-full bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-bold">SIMPAN EKSKUL</button>
                 </div>
-                <button onclick="simpanData('Berita')" class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl flex items-center gap-2">
-                    POST BERITA <i data-lucide="send" size="18"></i>
-                </button>
-            </div>
-        </div>
 
-        <div id="tab-prestasi" class="tab-content hidden animate-in fade-in duration-500">
-            <div class="glass p-8 rounded-3xl shadow-2xl border-t-4 border-yellow-500">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="trophy" class="text-yellow-400"></i> INPUT PRESTASI SISWA</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="pres-nama" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Nama Siswa">
-                    <input type="text" id="pres-juara" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Juara / Nama Lomba">
-                    <input type="number" id="pres-tahun" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Tahun (Contoh: 2024)">
+                <div id="form-berita" class="tab-content hidden glass p-8 rounded-3xl border-t-4 border-blue-500">
+                    <h2 class="text-xl font-bold mb-6">INPUT BERITA</h2>
+                    <input type="text" id="news-judul" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none" placeholder="Judul Berita">
+                    <textarea id="news-isi" class="w-full bg-slate-900 p-4 rounded-xl mb-6 h-32 outline-none" placeholder="Isi Berita"></textarea>
+                    <button onclick="simpanData('Berita')" class="w-full bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-bold">POST BERITA</button>
                 </div>
-                <button onclick="simpanData('Prestasi')" class="mt-6 bg-yellow-600 hover:bg-yellow-700 text-white font-bold px-10 py-4 rounded-2xl flex items-center gap-2">
-                    SIMPAN PRESTASI <i data-lucide="star" size="18"></i>
-                </button>
-            </div>
-        </div>
 
-        <div id="tab-ekskul" class="tab-content animate-in fade-in duration-500">
-            <div class="glass p-8 rounded-3xl shadow-2xl border-t-4 border-emerald-500">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="award" class="text-emerald-400"></i> DETAIL EKSKUL</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="eks-nama" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Nama Ekskul">
-                    <input type="text" id="eks-jadwal" class="bg-slate-900 p-4 rounded-xl outline-none" placeholder="Jadwal Latihan">
+                <div id="form-prestasi" class="tab-content hidden glass p-8 rounded-3xl border-t-4 border-yellow-500">
+                    <h2 class="text-xl font-bold mb-6">INPUT PRESTASI</h2>
+                    <input type="text" id="pres-nama" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none" placeholder="Nama Siswa">
+                    <input type="text" id="pres-juara" class="w-full bg-slate-900 p-4 rounded-xl mb-6 outline-none" placeholder="Juara / Nama Lomba">
+                    <button onclick="simpanData('Prestasi')" class="w-full bg-yellow-600 hover:bg-yellow-700 py-4 rounded-2xl font-bold text-slate-900">SIMPAN PRESTASI</button>
                 </div>
-                <button onclick="simpanData('Ekskul')" class="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-10 py-4 rounded-2xl">SIMPAN EKSKUL</button>
+            </div>
+
+            <div class="lg:col-span-8">
+                <div class="glass p-8 rounded-3xl min-h-[400px]">
+                    <h2 id="table-title" class="text-xl font-bold mb-6 uppercase">DAFTAR EKSKUL</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead id="table-head"></thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-
     </main>
 
     <script>
-        const API_KEY = "c16189c010ac8a05f3cda76f66e9b59b";
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxLc0YGJ9HrE9YDv94qy83PlHUkSKVbs1A5vK1vI94LG0mpTwILpzEJq91y5IfRaGtD/exec";
+        const API_KEY = "c16189c010ac8a05f3cda76f66e9b59bb";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6LifRZU8ZTH0Jok3IG26W8sBL-4NAWYulSfDrVft8hjP_-kBWXczTpg0bDamzZEQq/exec"; 
 
-        // LOGIKA TAB
-        function switchTab(tabName) {
+        function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active', 'text-white'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.add('text-slate-400'));
-            
-            document.getElementById('tab-' + tabName).classList.remove('hidden');
-            document.getElementById('btn-' + tabName).classList.add('active', 'text-white');
-            document.getElementById('btn-' + tabName).classList.remove('text-slate-400');
-            lucide.createIcons();
+            document.getElementById('form-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active', 'text-white');
+            document.getElementById('table-title').innerText = "DAFTAR " + tab;
+            loadListData(tab);
         }
 
-        // UPLOAD GLOBAL
         async function uploadKeImgBB() {
             const file = document.getElementById('file-upload').files[0];
-            if(!file) return alert("Pilih file!");
-            const btn = document.getElementById('btn-upload');
-            btn.innerHTML = "PROSES...";
-            
+            if(!file) return Swal.fire("Pilih File!", "", "warning");
+            document.getElementById('btn-upload').innerText = "PROSES...";
             const formData = new FormData();
             formData.append("image", file);
-            
             try {
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: formData });
                 const json = await res.json();
-                if(json.success) {
-                    const directUrl = json.data.url.replace("ibb.co", "ibb.co.com");
-                    document.getElementById('url-hasil').value = directUrl;
-                    btn.innerHTML = "BERHASIL ✓";
-                    alert("Gambar siap! Sekarang isi detail menu di bawah.");
-                }
-            } catch(e) { alert("Upload gagal!"); }
+                document.getElementById('url-hasil').value = json.data.url;
+                document.getElementById('btn-upload').innerText = "UPLOAD";
+                Swal.fire("Berhasil!", "Gambar siap digunakan.", "success");
+            } catch(e) { Swal.fire("Gagal!", "Coba lagi.", "error"); }
         }
 
-        // SIMPAN DATA UNIVERSAL
+        async function loadListData(tipe) {
+            const tbody = document.getElementById('table-body');
+            const thead = document.getElementById('table-head');
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-10 opacity-50">Memuat data...</td></tr>';
+            
+            const sheetMap = { ekskul: 'Ekskul', berita: 'Berita', prestasi: 'Prestasi' };
+            
+            try {
+                const res = await fetch(`${WEB_APP_URL}?sheet=${sheetMap[tipe]}`);
+                const data = await res.json();
+                
+                if(tipe === 'ekskul') {
+                    thead.innerHTML = '<tr><th>Nama</th><th>Jadwal</th><th>Aksi</th></tr>';
+                    tbody.innerHTML = data.map(item => `<tr><td>${item.nama_ekskul || '-'}</td><td>${item.jadwal || '-'}</td><td><button onclick="hapusData('${item.nama_ekskul}', 'ekskul')" class="text-red-500"><i data-lucide="trash-2"></i></button></td></tr>`).join('');
+                } else if(tipe === 'berita') {
+                    thead.innerHTML = '<tr><th>Judul</th><th>Isi</th><th>Aksi</th></tr>';
+                    tbody.innerHTML = data.map(item => `<tr><td>${item.judul || '-'}</td><td>${(item.isi_berita || '').substring(0,20)}...</td><td><button onclick="hapusData('${item.judul}', 'berita')" class="text-red-500"><i data-lucide="trash-2"></i></button></td></tr>`).join('');
+                } else if(tipe === 'prestasi') {
+                    thead.innerHTML = '<tr><th>Siswa</th><th>Prestasi</th><th>Aksi</th></tr>';
+                    tbody.innerHTML = data.map(item => `<tr><td>${item.nama_siswa || '-'}</td><td>${item.prestasi || '-'}</td><td><button onclick="hapusData('${item.nama_siswa}', 'prestasi')" class="text-red-500"><i data-lucide="trash-2"></i></button></td></tr>`).join('');
+                }
+                lucide.createIcons();
+            } catch(e) { tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-400">Gagal memuat data.</td></tr>'; }
+        }
+
         async function simpanData(tipe) {
-            const urlFoto = document.getElementById('url-hasil').value;
-            if(!urlFoto) return alert("Upload foto dulu!");
+            const foto = document.getElementById('url-hasil').value;
+            if(!foto) return Swal.fire("Upload Foto Dulu!", "", "warning");
 
-            let payload = { type: tipe, foto: urlFoto };
-
-            if(tipe === 'Berita') {
+            let payload = { type: tipe, foto: foto };
+            if(tipe === 'Ekskul') {
+                payload.nama = document.getElementById('eks-nama').value;
+                payload.jadwal = document.getElementById('eks-jadwal').value;
+            } else if(tipe === 'Berita') {
                 payload.judul = document.getElementById('news-judul').value;
-                payload.ringkasan = document.getElementById('news-ringkasan').value;
                 payload.isi = document.getElementById('news-isi').value;
-                payload.kategori = document.getElementById('news-kategori').value;
+                payload.ringkasan = payload.isi.substring(0, 50);
             } else if(tipe === 'Prestasi') {
                 payload.nama = document.getElementById('pres-nama').value;
                 payload.juara = document.getElementById('pres-juara').value;
-                payload.tahun = document.getElementById('pres-tahun').value;
-            } else {
-                payload.nama = document.getElementById('eks-nama').value;
-                payload.jadwal = document.getElementById('eks-jadwal').value;
+                payload.tahun = new Date().getFullYear().toString();
             }
 
+            Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading() });
             try {
-                const response = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
-                alert(await response.text());
-                location.reload();
-            } catch (e) { alert("Gagal kirim data!"); }
+                await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
+                Swal.fire("Berhasil!", "Data tersimpan.", "success");
+                switchTab(tipe.toLowerCase());
+            } catch(e) { Swal.fire("Error", "Gagal koneksi.", "error"); }
         }
 
-        lucide.createIcons();
+        async function hapusData(kunci, tipe) {
+            const confirm = await Swal.fire({
+                title: 'Hapus data ini?',
+                text: kunci,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                background: '#0f172a',
+                color: '#fff'
+            });
+
+            if (confirm.isConfirmed) {
+                Swal.fire({ title: 'Menghapus...', didOpen: () => Swal.showLoading() });
+                try {
+                    // Payload sesuai logic GAS (actionType = "hapus")
+                    await fetch(WEB_APP_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "hapus", kelas: kunci })
+                    });
+                    Swal.fire("Terhapus!", "", "success");
+                    loadListData(tipe);
+                } catch(e) { Swal.fire("Gagal", "", "error"); }
+            }
+        }
+
+        window.onload = () => { lucide.createIcons(); loadListData('ekskul'); };
     </script>
 </body>
 </html>
