@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Prestasi | SMPN 110 Jakarta</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #020617; 
+            color: #f8fafc; 
+        }
+        .skeleton { 
+            background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%); 
+            background-size: 200% 100%; 
+            animation: skeleton-load 1.5s infinite linear; 
+        }
+        @keyframes skeleton-load { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Overlay Gradasi: Dibuat lebih tipis agar foto lebih terlihat */
+        .card-overlay {
+            background: linear-gradient(to top, 
+                rgba(2, 6, 23, 0.95) 0%, 
+                rgba(2, 6, 23, 0.5) 40%, 
+                transparent 100%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="header-placeholder"></div>
+
+    <section class="pt-32 pb-10 px-6 text-center">
+        <h1 class="text-5l md:text-5xl font-black italic mb-3 tracking-tighter capitalize">
+            Prestasi<span class="text-yellow-500"> Siswa</span>
+        </h1>
+        <p class="text-slate-400 max-w-xl mx-auto text-sm opacity-70">
+ 
+        </p>
+    </section>
+
+    <section class="pb-32 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div id="prestasi-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="aspect-video rounded-[30px] skeleton"></div>
+                <div class="aspect-video rounded-[30px] skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const API_BASE = 'https://script.google.com/macros/s/AKfycbz6LifRZU8ZTH0Jok3IG26W8sBL-4NAWYulSfDrVft8hjP_-kBWXczTpg0bDamzZEQq/exec';
+
+        async function fetchPrestasi() {
+            const container = document.getElementById('prestasi-grid');
+            try {
+                const response = await fetch(`${API_BASE}?sheet=Prestasi&t=${Date.now()}`);
+                const data = await response.json();
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = `<p class="col-span-full text-center text-slate-500 py-20 italic">Belum ada data prestasi.</p>`;
+                    return;
+                }
+
+                container.innerHTML = data.reverse().map((p, index) => `
+                    <div class="relative aspect-video rounded-[35px] overflow-hidden border border-white/10 group shadow-xl transition-all duration-500 hover:border-yellow-500/50">
+                        
+                        <img src="${p.url_foto || p.foto || 'https://via.placeholder.com/1200x675'}" 
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        
+                        <div class="absolute inset-0 card-overlay opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                        
+                        <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+
+                            
+                            <h3 class="text-xl md:text-2xl font-extrabold text-white italic leading-tight mb-3 capitalize tracking-tighter group-hover:text-yellow-400 transition-colors line-clamp-2">
+                                ${p.prestasi || p.juara}
+                            </h3>
+                            
+                            <div class="flex items-center gap-2 text-slate-300">
+                                <i data-lucide="award" class="w-4 h-4 text-yellow-500"></i>
+                                <span class="font-bold text-xs md:text-sm tracking-wide capitalize">${p.nama_siswa || p.nama}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                lucide.createIcons();
+            } catch (error) {
+                container.innerHTML = `<p class="col-span-full text-center text-red-500">Gagal memuat data.</p>`;
+            }
+        }
+
+        async function includeLayouts() {
+            const sections = [
+                { id: 'header-placeholder', file: 'header.html' },
+                { id: 'footer-placeholder', file: 'footer.html' }
+            ];
+            for (const s of sections) {
+                try {
+                    const r = await fetch(s.file);
+                    if (r.ok) document.getElementById(s.id).innerHTML = await r.text();
+                } catch (e) {}
+            }
+            lucide.createIcons();
+        }
+
+        window.onload = () => {
+            includeLayouts();
+            fetchPrestasi();
+        };
+    </script>
+</body>
+</html>

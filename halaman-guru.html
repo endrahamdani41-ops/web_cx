@@ -56,11 +56,9 @@
 </head>
 <body class="min-h-screen antialiased">
 
-
-
     <main class="container mx-auto px-6 py-10 max-w-6xl">
         
-        <div class="flex flex-col md:flex-row items-center gap-10 mb-16">
+        <div class="flex flex-col md:flex-row items-center gap-10 mb-16 relative">
             <div class="shrink-0 relative photo-container">
                 <div class="p-3 bg-slate-800 rounded-[50px] shadow-2xl border border-white/5">
                     <div id="photo-box" class="w-44 h-44 md:w-52 md:h-52 bg-slate-900 rounded-[42px] overflow-hidden border-2 border-slate-700 relative shimmer">
@@ -77,11 +75,7 @@
                     </div>
                 </div>
             </div>
-           <button onclick="logoutSiswa()" class="absolute top-8 right-8 z-20 p-3 bg-red-500/10 hover:bg-red-500 rounded-2xl group transition-all duration-300" title="Keluar">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-            </button>
+
             <div class="text-center md:text-left">
                 <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-yellow-500 mb-2 italic">Dashboard Guru</h2>
                 <h1 id="guru-nama" class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tighter uppercase italic">...</h1>
@@ -90,6 +84,12 @@
                     <span id="guru-mapel" class="px-4 py-2 bg-yellow-500/10 rounded-full text-[10px] font-bold text-yellow-500 border border-yellow-500/20 uppercase tracking-widest italic">---</span>
                 </div>
             </div>
+
+            <button onclick="logout()" class="md:absolute top-0 right-0 p-4 bg-red-500/10 hover:bg-red-500 rounded-2xl group transition-all duration-300 mt-6 md:mt-0" title="Keluar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -97,7 +97,7 @@
                 <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-yellow-500/20 group-hover:rotate-6 transition-transform">📝</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">Input Nilai</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Kelola nilai harian, UTS, dan UAS siswa.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Masukkan nilai harian, UTS, dan UAS siswa secara terintegrasi.</p>
                 </div>
             </a>
             
@@ -105,67 +105,69 @@
                 <div class="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">📋</div>
                 <div>
                     <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">E-Izin Siswa</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Pantau absensi dan surat izin digital siswa.</p>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Pantau absensi dan verifikasi surat izin digital siswa.</p>
                 </div>
             </div>
 
             <div onclick="logout()" class="glass-card p-8 rounded-[40px] flex flex-col gap-6 group cursor-pointer">
                 <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-red-500/20 group-hover:-rotate-6 transition-transform">🚪</div>
                 <div>
-                    <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">Keluar</h3>
-                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Selesaikan sesi dan amankan akun Anda.</p>
+                    <h3 class="text-xl font-black text-white mb-2 uppercase italic tracking-tighter">Logout</h3>
+                    <p class="text-slate-400 text-sm font-medium leading-relaxed">Keluar dari sesi dashboard dan amankan data akun Anda.</p>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
+        // GANTI DENGAN URL APPS SCRIPT ANDA
         const API_URL = 'https://script.google.com/macros/s/AKfycbwdW39-guY0CZCEntxIrt1135EJPdvyZzfIMGVx9LUApaY6REBSmxJMGjITQk2edMrW/exec';
 
         async function initDashboard() {
-            const session = localStorage.getItem('user_login') || localStorage.getItem('userGuru');
+            const session = localStorage.getItem('userGuru') || localStorage.getItem('user_login');
             if (!session) { window.location.replace("index.html"); return; }
             
             const user = JSON.parse(session);
             const nipUser = (user.nip || user.NIP || "").toString();
             const namaUser = user.nama || user.NAMA;
 
+            // Update Teks di UI
             document.getElementById('guru-nama').innerText = namaUser;
             document.getElementById('guru-nip').innerText = "NIP: " + (nipUser || "---");
-            document.getElementById('guru-mapel').innerText = (user.mapel || user.MAPEL || "Staff").toUpperCase();
+            document.getElementById('guru-mapel').innerText = (user.mapel || user.MAPEL || user.mapel_aktif || "STAFF").toUpperCase();
 
+            // Setup Foto Default (Avatar Inisial)
             const imgElement = document.getElementById('guru-foto');
             const photoBox = document.getElementById('photo-box');
-
             imgElement.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(namaUser)}&background=334155&color=fff&size=256`;
             imgElement.style.opacity = "1";
 
+            // Ambil Foto dari Database
             try {
                 const response = await fetch(`${API_URL}?sheet=Guru&t=${Date.now()}`);
                 const allGuru = await response.json();
-                const myData = allGuru.find(g => (g.nip || g.NIP || "").toString() === nipUser || (g.nama || g.NAMA || "").toLowerCase() === namaUser.toLowerCase());
+                const myData = allGuru.find(g => 
+                    (g.nip || g.NIP || "").toString() === nipUser || 
+                    (g.nama || g.NAMA || "").toLowerCase() === namaUser.toLowerCase()
+                );
 
                 if (myData && (myData.foto || myData.foto_base64 || myData.FOTO)) {
                     imgElement.src = myData.foto || myData.foto_base64 || myData.FOTO;
                 }
-                photoBox.classList.remove('shimmer');
-            } catch (e) { 
-                photoBox.classList.remove('shimmer');
-            }
+            } catch (e) { console.error("Gagal memuat foto profil."); }
+            finally { photoBox.classList.remove('shimmer'); }
         }
 
-        // FUNGSI NAVIGASI LANGSUNG KE E-IZIN.HTML
         function bukaEizin() {
-            const user = JSON.parse(localStorage.getItem('user_login') || localStorage.getItem('userGuru'));
-            // Ambil kode/password untuk auto login
-            const authCode = user.password || user.KODE || "";
-            // Navigasi ke eizin.html dengan parameter auth
+            const user = JSON.parse(localStorage.getItem('userGuru') || localStorage.getItem('user_login'));
+            const authCode = user.password || user.KODE || user.nip || "";
             window.location.href = `eizin.html?auth=${authCode}`;
         }
 
         async function handleFotoUpload(input) {
             const file = input.files[0];
             if (!file) return;
+            
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e) {
@@ -185,30 +187,42 @@
         }
 
         async function executeUpload(base64String) {
-            const user = JSON.parse(localStorage.getItem('user_login') || localStorage.getItem('userGuru'));
-            Swal.fire({ title: 'Mengunggah...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const user = JSON.parse(localStorage.getItem('userGuru') || localStorage.getItem('user_login'));
+            Swal.fire({ title: 'Memperbarui Foto...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'update_foto_guru', nama: user.nama || user.NAMA, foto_base64: base64String })
+                    body: JSON.stringify({ 
+                        action: 'update_foto_guru', 
+                        nama: user.nama || user.NAMA, 
+                        foto_base64: base64String 
+                    })
                 });
-                if ((await response.text()).trim() === "Berhasil") {
+                const result = await response.text();
+                if (result.includes("Berhasil")) {
                     document.getElementById('guru-foto').src = base64String;
-                    Swal.fire({ icon: 'success', title: 'Berhasil', timer: 1500, showConfirmButton: false });
+                    Swal.fire({ icon: 'success', title: 'Foto Berhasil Diperbarui', timer: 1500, showConfirmButton: false });
                 }
-            } catch (e) { Swal.fire('Gagal', 'Koneksi bermasalah', 'error'); }
+            } catch (e) { Swal.fire('Gagal', 'Terjadi kesalahan koneksi.', 'error'); }
         }
 
         function logout() {
             Swal.fire({
                 title: 'Keluar?',
+                text: "Anda harus login kembali untuk mengakses dashboard.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Ya, Keluar'
+                cancelButtonColor: '#334155',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal',
+                background: '#0f172a',
+                color: '#fff'
             }).then((res) => {
                 if (res.isConfirmed) {
-                    localStorage.clear();
+                    localStorage.removeItem('userGuru');
+                    localStorage.removeItem('user_login');
                     window.location.replace("index.html");
                 }
             });
