@@ -1,7 +1,7 @@
 {
-  "name": "Portal Siswa SMPN 110 Jakarta",
-  "short_name": "Siswa110",
-  "description": "Aplikasi Jadwal dan Informasi Siswa SMPN 110 Jakarta",
+  "name": "SMPN 110 Jakarta",
+  "short_name": "Portal110",
+  "description": "Aplikasi Informasi SMPN 110 Jakarta",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#020617",

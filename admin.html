@@ -45,8 +45,21 @@
         .bg-card img { width: 100%; height: 100%; object-fit: cover; }
         .bg-card.selected { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
         
-        /* Tombol Hapus di Gallery */
-        .btn-delete-bg { position: absolute; top: 8px; right: 8px; background: #ef4444; color: white; padding: 6px; border-radius: 8px; opacity: 0; transition: 0.3s; z-index: 10; }
+        /* Tombol Hapus di Gallery - DIPERBAIKI */
+        .btn-delete-bg { 
+            position: absolute; 
+            top: 8px; 
+            right: 8px; 
+            background: #ef4444; 
+            color: white; 
+            padding: 8px; 
+            border-radius: 8px; 
+            opacity: 0; 
+            transition: 0.3s; 
+            z-index: 20; 
+            border: none;
+            cursor: pointer;
+        }
         .bg-card:hover .btn-delete-bg { opacity: 1; }
     </style>
 </head>
@@ -55,21 +68,14 @@
     <header class="p-6 border-b border-white/5 mb-6 glass sticky top-0 z-50">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <a href="index.html" class="flex items-center gap-4 group">
-            <div class="relative">
-                <div class="w-10 h-10 flex items-center justify-center"> 
-                    <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" 
-                         alt="Logo SMPN 110" 
-                         class="w-10 h-10 object-contain">
+                <img src="https://i.ibb.co.com/MDTybQJn/LOGO-CX-OK.png" alt="Logo" class="w-10 h-10 object-contain">
+                <div class="flex flex-col">
+                    <h1 class="text-lg font-black text-[#1E90FF] tracking-tighter italic uppercase leading-none">
+                        SMPN 110 <span class="text-yellow-500">Jakarta</span>
+                    </h1>
+                    <p class="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Maju Bersama Raih Prestasi</p>
                 </div>
-            </div>
-            
-            <div class="flex flex-col">
-                <h1 class="text-lg font-black text-[#1E90FF] tracking-tighter italic uppercase leading-none">
-                    SMPN 110 <span class="text-yellow-500">Jakarta</span>
-                </h1>
-                <p class="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Maju Bersama Raih Prestasi</p>
-            </div>
-        </a> 
+            </a> 
             <div class="flex items-center gap-3">
                 <div class="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-white/5">
                     <button onclick="switchTab('ekskul')" id="btn-ekskul" class="nav-btn active px-6 py-2 rounded-xl text-xs font-bold uppercase">Ekskul</button>
@@ -109,7 +115,7 @@
                 <div id="form-berita" class="tab-content hidden glass p-8 rounded-3xl border-t-4 border-blue-500 h-full flex flex-col">
                     <h2 class="text-xl font-bold mb-6 italic uppercase text-blue-400">Input Berita</h2>
                     <input type="text" id="news-judul" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none border border-white/5" placeholder="Judul Berita">
-                    <textarea id="news-isi" class="w-full bg-slate-900 p-4 rounded-xl mb-6 flex-grow resize-none outline-none border border-white/5" placeholder="Isi berita..."></textarea>
+                    <textarea id="news-isi" class="w-full bg-slate-900 p-4 rounded-xl mb-6 flex-grow resize-none outline-none border border-white/5" placeholder="Isi Berita"></textarea>
                     <button onclick="simpanData('Berita')" class="w-full bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-black text-xs tracking-widest mt-auto">POSTING BERITA</button>
                 </div>
 
@@ -122,12 +128,13 @@
 
                 <div id="form-background" class="tab-content hidden glass p-8 rounded-3xl border-t-4 border-purple-500 h-full flex flex-col">
                     <h2 class="text-xl font-bold mb-6 italic uppercase text-purple-400">Manajemen Background</h2>
-                    <p class="text-[11px] text-slate-400 mb-4">Tambahkan URL dari Step 1 ke galeri, atau hapus background aktif.</p>
-                    <input type="text" id="bg-url-input" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none border border-white/5" placeholder="Masukkan URL Gambar">
-                    <button onclick="tambahBackground()" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-2xl font-black text-xs tracking-widest uppercase mb-4">Tambah Ke Galeri</button>
+                    <p class="text-[11px] text-slate-400 mb-4">Link otomatis terisi dari Step 1. Klik tombol untuk simpan ke Sheets Hero.</p>
+                    <input type="text" id="bg-url-input" class="w-full bg-slate-900 p-4 rounded-xl mb-4 outline-none border border-white/5" placeholder="URL Gambar Hero">
+                    
+                    <button onclick="simpanData('Hero')" class="w-full bg-purple-600 hover:bg-purple-700 py-4 rounded-2xl font-black text-xs tracking-widest uppercase mb-4">Simpan ke Sheet Hero</button>
                     
                     <button onclick="resetActiveBg()" class="w-full bg-red-500/10 text-red-500 border border-red-500/30 py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase hover:bg-red-500 hover:text-white transition-all mt-auto">
-                        Reset Background Aktif
+                        Reset Tampilan Admin
                     </button>
                 </div>
             </div>
@@ -136,7 +143,7 @@
                 <div class="glass p-8 rounded-3xl h-full flex flex-col">
                     <div class="flex justify-between items-center mb-6">
                         <h2 id="table-title" class="text-xl font-bold uppercase italic text-emerald-400">DAFTAR EKSKUL</h2>
-                        <button onclick="loadListData(currentTab)" class="text-slate-400 hover:text-white transition-all">
+                        <button onclick="refreshData()" class="text-slate-400 hover:text-white transition-all">
                             <i data-lucide="refresh-cw" size="18"></i>
                         </button>
                     </div>
@@ -158,13 +165,11 @@
 
     <script>
         const API_KEY_IMGBB = "c16189c010ac8a05f3cda76f66e9b59b"; 
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwqAXsLCyBh3iM8JYqjhGbHCnQUdiinG6eWAX7joWOme6SAudOZgU7kSKdARBbgTdnF/exec"; 
+        // PASTIIN URL INI ADALAH URL DEPLOYMENT GAS TERBARU ANDA
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz22SMTpeUNN3SGduXJbMUJPVGtvsmMpP4TGV17nXWPiu0gLc8ZXFxjyJITKtV9Dq_H/exec"; 
 
         let currentTab = 'ekskul';
-        let bgList = JSON.parse(localStorage.getItem('my_bgs')) || [
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba',
-            'https://images.unsplash.com/photo-1451187580459-43490279c0fa'
-        ];
+        let bgList = JSON.parse(localStorage.getItem('my_bgs')) || [];
 
         function switchTab(tab) {
             currentTab = tab;
@@ -175,88 +180,98 @@
             
             const titles = { 'ekskul': 'text-emerald-400', 'berita': 'text-blue-400', 'prestasi': 'text-yellow-400', 'background': 'text-purple-400' };
             const titleEl = document.getElementById('table-title');
-            titleEl.innerText = (tab === 'background') ? "PILIH BACKGROUND TEMA" : "DAFTAR " + tab;
+            titleEl.innerText = (tab === 'background') ? "PREVIEW BACKGROUND" : "DAFTAR " + tab;
             titleEl.className = `text-xl font-bold uppercase italic ${titles[tab]}`;
             
-            if(tab === 'background') {
+            refreshData();
+        }
+
+        function refreshData() {
+            if(currentTab === 'background') {
                 document.getElementById('list-container').classList.add('hidden');
                 document.getElementById('gallery-container').classList.remove('hidden');
-                renderBgGallery();
+                fetchBgFromSheets();
             } else {
                 document.getElementById('list-container').classList.remove('hidden');
                 document.getElementById('gallery-container').classList.add('hidden');
-                loadListData(tab);
+                loadListData(currentTab);
             }
         }
 
-        // --- MANAJEMEN BACKGROUND ---
+        async function fetchBgFromSheets() {
+            try {
+                const res = await fetch(`${WEB_APP_URL}?sheet=Hero&t=${Date.now()}`);
+                const data = await res.json();
+                // Gabungkan data dari Sheets dengan data lokal agar sinkron
+                bgList = data.map(item => item.url_gambar || item.foto);
+                renderBgGallery();
+            } catch(e) { 
+                console.error("Gagal ambil background dari sheets", e);
+                renderBgGallery(); // Tetap render dari lokal jika gagal
+            }
+        }
+
         function renderBgGallery() {
             const grid = document.getElementById('bg-grid');
             const activeBg = localStorage.getItem('selected_bg');
+            
+            if (bgList.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center py-10 opacity-50 italic text-xs">Belum ada background di Gallery.</p>';
+                return;
+            }
+
             grid.innerHTML = bgList.map((url, idx) => `
                 <div class="bg-card ${activeBg === url ? 'selected' : ''}" onclick="setBg('${url}')">
-                    <img src="${url}" onerror="this.src='https://via.placeholder.com/300x169?text=Image+Error'">
-                    <button onclick="hapusKoleksiBg(event, ${idx})" class="btn-delete-bg">
+                    <img src="${url}" onerror="this.src='https://via.placeholder.com/300x169?text=Error+Image'">
+                    <button onclick="event.stopPropagation(); hapusData('${url}', 'Hero')" class="btn-delete-bg">
                         <i data-lucide="trash-2" size="16"></i>
                     </button>
-                </div>
-            `).join('');
+                </div>`).join('');
             lucide.createIcons();
         }
 
-        function setBg(url) {
-            document.body.style.backgroundImage = `url('${url}')`;
-            localStorage.setItem('selected_bg', url);
-            renderBgGallery();
-            Swal.fire({ title: "Background Aktif!", icon: "success", toast: true, position: "top-end", timer: 2000, showConfirmButton: false });
-        }
-
-        function tambahBackground() {
-            const url = document.getElementById('bg-url-input').value.trim();
-            if(!url) return Swal.fire("URL Kosong!", "Upload di Step 1 dulu", "warning");
-            bgList.push(url);
-            localStorage.setItem('my_bgs', JSON.stringify(bgList));
-            document.getElementById('bg-url-input').value = "";
-            renderBgGallery();
-            Swal.fire("Berhasil!", "Masuk ke galeri", "success");
-        }
-
-        function hapusKoleksiBg(e, idx) {
-            e.stopPropagation(); // Biar gak kepilih pas mau hapus
-            Swal.fire({
-                title: 'Hapus dari koleksi?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Ya, Hapus'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    bgList.splice(idx, 1);
-                    localStorage.setItem('my_bgs', JSON.stringify(bgList));
-                    renderBgGallery();
+        async function simpanData(tipe) {
+            const foto = document.getElementById('url-hasil').value;
+            const bgLink = document.getElementById('bg-url-input').value;
+            
+            let payload = { type: tipe };
+            
+            if(tipe === 'Hero') {
+                if(!bgLink) return Swal.fire("URL Kosong!", "Upload atau isi URL dulu", "error");
+                payload.url_gambar = bgLink;
+                payload.nama_kunci = "Slider_Baru";
+            } else {
+                if(!foto) return Swal.fire("Upload Foto Dulu!", "Cek Step 1", "warning");
+                payload.foto = foto;
+                if(tipe === 'Ekskul') { 
+                    payload.nama = document.getElementById('eks-nama').value; 
+                    payload.jadwal = document.getElementById('eks-jadwal').value; 
                 }
-            });
-        }
-
-        function resetActiveBg() {
-            Swal.fire({
-                title: 'Kembali ke Default?',
-                text: "Background gambar akan dihapus dari layar.",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Ya, Reset'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('selected_bg');
-                    document.body.style.backgroundImage = 'none';
-                    renderBgGallery();
-                    Swal.fire("Berhasil!", "Background dikembalikan ke standar.", "success");
+                else if(tipe === 'Berita') { 
+                    payload.judul = document.getElementById('news-judul').value; 
+                    payload.isi = document.getElementById('news-isi').value; 
                 }
-            });
+                else if(tipe === 'Prestasi') { 
+                    payload.nama = document.getElementById('pres-nama').value; 
+                    payload.prestasi = document.getElementById('pres-juara').value; 
+                }
+            }
+            
+            Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            try {
+                await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
+                Swal.fire("Berhasil!", "Data telah masuk ke Google Sheets.", "success");
+                
+                // Reset
+                document.getElementById('url-hasil').value = "";
+                document.getElementById('preview-img').style.display = 'none';
+                document.querySelectorAll('input, textarea').forEach(el => el.value = "");
+                
+                refreshData();
+            } catch(e) { Swal.fire("Gagal!", "Server tidak merespon.", "error"); }
         }
 
-        // --- UPLOAD & AUTO DOMAIN .CO.COM ---
         async function uploadKeImgBB() {
             const file = document.getElementById('file-upload').files[0];
             if(!file) return Swal.fire("Pilih File!", "", "warning");
@@ -267,99 +282,84 @@
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY_IMGBB}`, { method: "POST", body: formData });
                 const json = await res.json();
                 if(json.success) {
-                    let originalUrl = json.data.url;
-                    let modifiedUrl = originalUrl.replace("i.ibb.co/", "i.ibb.co.com/");
+                    let modifiedUrl = json.data.url.replace("i.ibb.co/", "i.ibb.co.com/");
                     document.getElementById('url-hasil').value = modifiedUrl;
                     document.getElementById('preview-img').src = modifiedUrl;
                     document.getElementById('preview-img').style.display = 'block';
                     if(currentTab === 'background') document.getElementById('bg-url-input').value = modifiedUrl;
-                    Swal.fire("Berhasil!", "Link .co.com siap digunakan.", "success");
+                    Swal.fire("Upload Berhasil!", "Link siap digunakan.", "success");
                 }
             } catch(e) { Swal.fire("Gagal!", "Cek Koneksi", "error"); }
             finally { btn.innerText = "UPLOAD"; btn.disabled = false; }
         }
 
-        // --- MANAJEMEN DATA SHEETS ---
         async function loadListData(tipe) {
             const tbody = document.getElementById('table-body');
             const thead = document.getElementById('table-head');
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-10 opacity-50 italic">Sinkronisasi data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-10 opacity-50 italic">Memuat data...</td></tr>';
             const sheetMap = { ekskul: 'Ekskul', berita: 'Berita', prestasi: 'Prestasi' };
             try {
                 const res = await fetch(`${WEB_APP_URL}?sheet=${sheetMap[tipe]}&t=${Date.now()}`);
                 const data = await res.json();
+                
                 if(tipe === 'ekskul') {
                     thead.innerHTML = '<tr><th>Foto</th><th>Nama</th><th>Jadwal</th><th class="text-center">Aksi</th></tr>';
-                    tbody.innerHTML = data.map(item => `
-                        <tr>
-                            <td><img src="${item.url_foto || item.foto}" class="img-table"></td>
-                            <td><b>${item.nama_ekskul || item.nama}</b></td>
-                            <td>${item.jadwal}</td>
-                            <td class="text-center"><button onclick="hapusData('${item.nama_ekskul || item.nama}', 'Ekskul')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td>
-                        </tr>`).join('');
+                    tbody.innerHTML = data.map(item => `<tr><td><img src="${item.url_foto || item.foto}" class="img-table"></td><td><b>${item.nama_ekskul || item.nama}</b></td><td>${item.jadwal}</td><td class="text-center"><button onclick="hapusData('${item.nama_ekskul || item.nama}', 'Ekskul')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td></tr>`).join('');
                 } else if(tipe === 'berita') {
                     thead.innerHTML = '<tr><th>Foto</th><th>Judul</th><th>Isi</th><th class="text-center">Aksi</th></tr>';
-                    tbody.innerHTML = data.map(item => `
-                        <tr>
-                            <td><img src="${item.url_foto || item.foto}" class="img-table"></td>
-                            <td><b>${item.judul}</b></td>
-                            <td>${(item.isi_berita || item.isi || '').substring(0,30)}...</td>
-                            <td class="text-center"><button onclick="hapusData('${item.judul}', 'Berita')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td>
-                        </tr>`).join('');
+                    tbody.innerHTML = data.map(item => `<tr><td><img src="${item.url_foto || item.foto}" class="img-table"></td><td><b>${item.judul}</b></td><td>${(item.isi_berita || item.isi || '').substring(0,30)}...</td><td class="text-center"><button onclick="hapusData('${item.judul}', 'Berita')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td></tr>`).join('');
                 } else if(tipe === 'prestasi') {
                     thead.innerHTML = '<tr><th>Foto</th><th>Siswa</th><th>Prestasi</th><th class="text-center">Aksi</th></tr>';
-                    tbody.innerHTML = data.map(item => `
-                        <tr>
-                            <td><img src="${item.url_foto || item.foto}" class="img-table"></td>
-                            <td><b>${item.nama_siswa || item.nama}</b></td>
-                            <td>${item.prestasi || item.juara}</td>
-                            <td class="text-center"><button onclick="hapusData('${item.nama_siswa || item.nama}', 'Prestasi')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td>
-                        </tr>`).join('');
+                    tbody.innerHTML = data.map(item => `<tr><td><img src="${item.url_foto || item.foto}" class="img-table"></td><td><b>${item.nama_siswa || item.nama}</b></td><td>${item.prestasi || item.juara}</td><td class="text-center"><button onclick="hapusData('${item.nama_siswa || item.nama}', 'Prestasi')" class="text-red-500"><i data-lucide="trash-2" size="16"></i></button></td></tr>`).join('');
                 }
                 lucide.createIcons();
-            } catch(e) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-red-400 py-10 italic">Data kosong.</td></tr>'; }
-        }
-
-        async function simpanData(tipe) {
-            const foto = document.getElementById('url-hasil').value;
-            if(!foto) return Swal.fire("Upload Foto Dulu!", "Cek Step 1", "warning");
-            let payload = { type: tipe, foto: foto };
-            if(tipe === 'Ekskul') { payload.nama = document.getElementById('eks-nama').value; payload.jadwal = document.getElementById('eks-jadwal').value; }
-            else if(tipe === 'Berita') { payload.judul = document.getElementById('news-judul').value; payload.isi = document.getElementById('news-isi').value; }
-            else if(tipe === 'Prestasi') { payload.nama = document.getElementById('pres-nama').value; payload.prestasi = document.getElementById('pres-juara').value; }
-            
-            if(!payload.nama && !payload.judul) return Swal.fire("Data Belum Lengkap!", "", "error");
-            
-            Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            try {
-                await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) });
-                Swal.fire("Tersimpan!", "Data berhasil diposting.", "success");
-                document.getElementById('url-hasil').value = "";
-                document.getElementById('preview-img').style.display = 'none';
-                document.querySelectorAll('input, textarea').forEach(el => el.value = "");
-                loadListData(tipe.toLowerCase());
-            } catch(e) { Swal.fire("Gagal!", "Masalah pada server.", "error"); }
+            } catch(e) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-red-400 py-10 italic">Gagal memuat.</td></tr>'; }
         }
 
         async function hapusData(kunci, sheetName) {
-            const res = await Swal.fire({ title: 'Hapus Data?', text: kunci, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'Ya, Hapus' });
-            if (res.isConfirmed) {
-                Swal.fire({ title: 'Menghapus...', didOpen: () => Swal.showLoading() });
+            const confirm = await Swal.fire({ 
+                title: 'Hapus Data?', 
+                text: "Data akan dihapus dari Google Sheets secara permanen.", 
+                icon: 'warning', 
+                showCancelButton: true, 
+                confirmButtonColor: '#ef4444', 
+                confirmButtonText: 'Ya, Hapus' 
+            });
+            
+            if (confirm.isConfirmed) {
+                Swal.fire({ title: 'Menghapus...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                 try {
-                    await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "hapus", sheet: sheetName, key: kunci }) });
+                    await fetch(WEB_APP_URL, { 
+                        method: "POST", 
+                        body: JSON.stringify({ action: "hapus", sheet: sheetName, key: kunci }) 
+                    });
                     Swal.fire("Terhapus!", "", "success"); 
-                    loadListData(sheetName.toLowerCase());
+                    refreshData();
                 } catch(e) { Swal.fire("Gagal", "Server sibuk.", "error"); }
             }
+        }
+
+        function setBg(url) {
+            document.body.style.backgroundImage = `url('${url}')`;
+            localStorage.setItem('selected_bg', url);
+            renderBgGallery();
+            Swal.fire({ title: "Background Diubah!", icon: "success", toast: true, position: "top-end", timer: 2000, showConfirmButton: false });
+        }
+
+        function resetActiveBg() {
+            localStorage.removeItem('selected_bg');
+            document.body.style.backgroundImage = 'none';
+            renderBgGallery();
+            Swal.fire("Reset!", "Tampilan admin kembali standar.", "success");
         }
 
         function logoutAdmin() { localStorage.removeItem('userGuru'); window.location.href = 'index.html'; }
 
         window.onload = () => { 
             lucide.createIcons(); 
-            loadListData('ekskul'); 
             const saved = localStorage.getItem('selected_bg');
             if(saved) document.body.style.backgroundImage = `url('${saved}')`;
+            refreshData(); 
         };
     </script>
 </body>

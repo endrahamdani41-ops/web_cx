@@ -69,8 +69,7 @@
 
         <div class="mb-6">
             <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 ml-1">Progres Kelas Anda</h3>
-            <div id="status-progres" class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2">
-                </div>
+            <div id="status-progres" class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2"></div>
         </div>
 
         <div class="glass-card rounded-[24px] overflow-hidden shadow-2xl">
@@ -136,12 +135,11 @@
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwdW39-guY0CZCEntxIrt1135EJPdvyZzfIMGVx9LUApaY6REBSmxJMGjITQk2edMrW/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbz22SMTpeUNN3SGduXJbMUJPVGtvsmMpP4TGV17nXWPiu0gLc8ZXFxjyJITKtV9Dq_H/exec';
         const GURU = JSON.parse(localStorage.getItem('userGuru') || localStorage.getItem('user_login')) || { nama: "GURU", mapel: "MAPEL", MAPEL: "MAPEL" };
         const MAPEL_AKTIF = GURU.mapel || GURU.MAPEL || "MAPEL";
         document.getElementById('info-guru').innerText = `${GURU.nama || GURU.NAMA} | ${MAPEL_AKTIF}`;
 
-        // --- DASHBOARD PROGRES TERFILTER ---
         async function cekProgresSemuaKelas() {
             const container = document.getElementById('status-progres');
             try {
@@ -151,17 +149,11 @@
                 ]);
                 const allSiswa = await resSiswa.json();
                 const allNilai = await resNilai.json();
-
-                // Dapatkan kelas unik yang ada di data siswa
                 const daftarKelas = [...new Set(allSiswa.map(s => s.kelas || s.KELAS))].sort();
 
-                // Filter: Hanya tampilkan kelas jika sudah ada baris di sheet 'Nilai' 
-                // untuk guru ini, atau tampilkan semua kelas jika ingin memantau ampuannya.
                 container.innerHTML = daftarKelas.map(kelas => {
                     const siswaDiKelas = allSiswa.filter(s => (s.kelas || s.KELAS) === kelas);
                     const totalSiswa = siswaDiKelas.length;
-                    
-                    // Hitung hanya baris yang punya nilai > 0 untuk mapel guru ini
                     const sudahInput = allNilai.filter(n => {
                         const isMatch = String(n.kelas).toUpperCase() === String(kelas).toUpperCase() && 
                                         String(n.mapel).toUpperCase() === String(MAPEL_AKTIF).toUpperCase();
@@ -170,18 +162,13 @@
                         return isMatch && hasValue;
                     }).length;
 
-                    // Lewati kelas yang bukan bagian ampuannya (0% dan belum pernah diinput sama sekali)
-                    // Jika ingin menampilkan SEMUA kelas, hapus baris if di bawah ini.
                     if (sudahInput === 0 && totalSiswa > 0) {
-                        // Cek apakah guru ini pernah menginput data lain di kelas ini? 
-                        // Jika tidak ada data sama sekali di sheet Nilai untuk mapel ini di kelas ini, sembunyikan.
                         const pernahInput = allNilai.some(n => String(n.kelas).toUpperCase() === String(kelas).toUpperCase() && String(n.mapel).toUpperCase() === String(MAPEL_AKTIF).toUpperCase());
                         if (!pernahInput) return ''; 
                     }
 
                     let persen = totalSiswa > 0 ? Math.round((sudahInput / totalSiswa) * 100) : 0;
                     if (persen > 100) persen = 100;
-
                     const color = persen === 100 ? 'bg-emerald-500' : (persen > 0 ? 'bg-yellow-500' : 'bg-slate-700');
                     const text = persen === 100 ? 'text-emerald-400' : (persen > 0 ? 'text-yellow-500' : 'text-slate-500');
 
@@ -197,14 +184,17 @@
             } catch (e) { console.error(e); }
         }
 
-        // --- LOGIKA TABEL ---
+        // --- FUNGSI PEMBULATAN (REVISI) ---
         function hitungAkhir(row) {
             const ph1 = parseFloat(row.querySelector('.ph1').value) || 0;
             const ph2 = parseFloat(row.querySelector('.ph2').value) || 0;
             const uts = parseFloat(row.querySelector('.uts').value) || 0;
             const uas = parseFloat(row.querySelector('.uas').value) || 0;
             const rataPH = (ph1 + ph2) / 2;
-            const akhir = Math.round(( (2 * rataPH) + uts + uas ) / 4);
+            
+            // Menggunakan Math.round agar angka bulat (tidak desimal)
+            const akhir = Math.round(((2 * rataPH) + uts + uas) / 4);
+            
             const display = row.querySelector('.nilai-akhir');
             display.innerText = akhir;
             display.className = akhir < 82 ? "nilai-akhir text-red-500 font-black" : "nilai-akhir text-sky-400 font-black";
@@ -243,7 +233,6 @@
             } catch(e) { container.innerHTML = '<tr><td colspan="9" class="p-10 text-center text-red-500 font-bold">Gagal!</td></tr>'; }
         }
 
-        // --- IMPOR & EKSPOR ---
         function importFromExcel(input) {
             const file = input.files[0];
             const reader = new FileReader();
@@ -257,10 +246,11 @@
                     const nisnExcel = String(excelRow.NISN || excelRow.nisn || '').trim();
                     tableRows.forEach(htmlRow => {
                         if (nisnExcel === htmlRow.getAttribute('data-nisn').trim() && nisnExcel !== '') {
-                            htmlRow.querySelector('.ph1').value = excelRow.PH1 || excelRow.ph1 || 0;
-                            htmlRow.querySelector('.ph2').value = excelRow.PH2 || excelRow.ph2 || 0;
-                            htmlRow.querySelector('.uts').value = excelRow.UTS || excelRow.uts || 0;
-                            htmlRow.querySelector('.uas').value = excelRow.UAS || excelRow.uas || 0;
+                            // Bulatkan saat impor
+                            htmlRow.querySelector('.ph1').value = Math.round(excelRow.PH1 || excelRow.ph1 || 0);
+                            htmlRow.querySelector('.ph2').value = Math.round(excelRow.PH2 || excelRow.ph2 || 0);
+                            htmlRow.querySelector('.uts').value = Math.round(excelRow.UTS || excelRow.uts || 0);
+                            htmlRow.querySelector('.uas').value = Math.round(excelRow.UAS || excelRow.uas || 0);
                             hitungAkhir(htmlRow); matchCount++;
                         }
                     });
@@ -277,14 +267,24 @@
             btn.innerText = "MENYIMPAN..."; btn.disabled = true;
             document.querySelectorAll('.item-siswa').forEach(row => {
                 dataKirim.push({
-                    nisn: row.getAttribute('data-nisn'), nama: row.getAttribute('data-nama'), kelas: row.getAttribute('data-kelas'), 
-                    mapel: MAPEL_AKTIF, nilai_ph1: row.querySelector('.ph1').value || 0, nilai_ph2: row.querySelector('.ph2').value || 0,
-                    nilai_uts: row.querySelector('.uts').value || 0, nilai_uas: row.querySelector('.uas').value || 0
+                    nisn: row.getAttribute('data-nisn'), 
+                    nama: row.getAttribute('data-nama'), 
+                    kelas: row.getAttribute('data-kelas'), 
+                    mapel: MAPEL_AKTIF, 
+                    nilai_ph1: Math.round(row.querySelector('.ph1').value || 0), 
+                    nilai_ph2: Math.round(row.querySelector('.ph2').value || 0),
+                    nilai_uts: Math.round(row.querySelector('.uts').value || 0), 
+                    nilai_uas: Math.round(row.querySelector('.uas').value || 0)
                 });
             });
             try {
-                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "simpan_massal", data: dataKirim }) });
-                if((await response.text()).includes("Berhasil")) {
+                // Sesuai action di GAS Anda: "simpan_massal"
+                const response = await fetch(API_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: "simpan_massal", data: dataKirim }) 
+                });
+                const resTxt = await response.text();
+                if(resTxt.includes("Berhasil")) {
                     Swal.fire('Tersimpan!', 'Database Cloud diperbarui.', 'success');
                     cekProgresSemuaKelas();
                 }
